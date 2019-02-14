@@ -1,1 +1,1 @@
-web2p1
+Social Network Project for Web Development II class
