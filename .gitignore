@@ -1,0 +1,6 @@
+.idea
+.settings
+out
+target
+react-app/node_modules
+.project
