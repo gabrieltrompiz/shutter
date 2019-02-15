@@ -27,14 +27,12 @@ public class LoginServlet extends HttpServlet {
     ObjectMapper mapper = new ObjectMapper();
     String json = req.getReader().lines().collect(Collectors.joining());
     User user = mapper.readValue(json, User.class);
-    Connection connection = ConnManager.getConnection();
     try {
       Response<String> response = new Response<>();
       HttpSession session = req.getSession();
       session.setAttribute("user", json);
       response.setStatus(200);
-      response.setMessage("Servlet working correctly");
-      response.setData("user sent: " + user.getUserName() + ", password sent: " + user.getPassword());
+      response.setMessage("Logged in successfully as " + user.getUserName());
       resp.getWriter().print(mapper.writeValueAsString(response));
     }
     catch (IOException e) {

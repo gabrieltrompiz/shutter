@@ -29,8 +29,9 @@ public class LogoutFilter implements Filter {
       chain.doFilter(req, resp);
     }
     else {
-      responseObject.setStatus(401);
       responseObject.setMessage("Not Logged In");
+      responseObject.setStatus(401);
+      response.setStatus(401);
       response.getWriter().print(mapper.writeValueAsString(responseObject));
     }
   }
