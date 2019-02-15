@@ -13,27 +13,29 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import models.Response;
 import models.User;
 import utilities.ConnManager;
 
-@WebServlet(urlPatterns = "/login", name = "Servlet")
+@WebServlet(urlPatterns = "/login", name = "Login Servlet")
 public class LoginServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
-
-  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+  protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     ObjectMapper mapper = new ObjectMapper();
-    String json = request.getReader().lines().collect(Collectors.joining());
+    String json = req.getReader().lines().collect(Collectors.joining());
     User user = mapper.readValue(json, User.class);
     Connection connection = ConnManager.getConnection();
     try {
-      Response<String> responseObject = new Response<>();
-      responseObject.setStatus(200);
-      responseObject.setMessage("Servlet working correctly");
-      responseObject.setData("user sent: " + user.getUserName() + ", password sent: " + user.getPassword());
-      response.getWriter().print(mapper.writeValueAsString(responseObject));
+      Response<String> response = new Response<>();
+      HttpSession session = req.getSession();
+      session.setAttribute("user", json);
+      response.setStatus(200);
+      response.setMessage("Servlet working correctly");
+      response.setData("user sent: " + user.getUserName() + ", password sent: " + user.getPassword());
+      resp.getWriter().print(mapper.writeValueAsString(response));
     }
     catch (IOException e) {
       e.printStackTrace();

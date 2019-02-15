@@ -6,6 +6,7 @@
 </head>
 <body>
     <button onclick="yay()">probar login</button>
+    <button onclick="fack()">probar logout</button>
     <script>
         function yay() {
             let body = {
@@ -13,6 +14,14 @@
                 password: 'chabes123'
             }
             fetch('./login', { method: 'POST', body: JSON.stringify(body) })
+            .then(response => response.json().then(data => console.log(data)))
+        }
+        function fack() {
+            let body = {
+                userName: 'marditasea',
+                password: 'chabes123'
+            }
+            fetch('./logout', { method: 'POST', body: JSON.stringify(body) })
             .then(response => response.json().then(data => console.log(data)))
         }
     </script>
