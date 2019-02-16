@@ -17,7 +17,6 @@ public class Encryptor {
         sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
       }
       generatedPassword = sb.toString();
-      System.out.println(generatedPassword);
     }
     catch (NoSuchAlgorithmException e){
       e.printStackTrace();
