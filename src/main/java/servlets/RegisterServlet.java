@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import handlers.RegisterHandler;
 import models.Response;
 import models.User;
+import utilities.Encryptor;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,13 +23,9 @@ public class RegisterServlet extends HttpServlet {
     ObjectMapper mapper = new ObjectMapper();
     String json =  req.getReader().lines().collect(Collectors.joining());
     User user = mapper.readValue(json, User.class);
+    user.setPassword(Encryptor.getSHA256(user.getPassword(), user.getUserName()));
     Response<?> response = RegisterHandler.register(user);
-    try {
-      resp.setStatus(response.getStatus());
-      resp.getWriter().print(mapper.writeValueAsString(response));
-    }
-    catch (IOException e) {
-      e.printStackTrace();
-    }
+    resp.setStatus(response.getStatus());
+    resp.getWriter().print(mapper.writeValueAsString(response));
   }
 }

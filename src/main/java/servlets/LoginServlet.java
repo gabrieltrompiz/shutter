@@ -15,32 +15,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import handlers.LoginHandler;
 import models.Response;
 import models.User;
-import utilities.ConnManager;
+import utilities.Encryptor;
 
 @WebServlet(urlPatterns = "/login", name = "Login Servlet")
 public class LoginServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
+  @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     ObjectMapper mapper = new ObjectMapper();
     String json = req.getReader().lines().collect(Collectors.joining());
     User user = mapper.readValue(json, User.class);
-    try {
-      Response<String> response = new Response<>();
-      HttpSession session = req.getSession();
-      session.setAttribute("user", json);
-      response.setStatus(200);
-      response.setMessage("Logged in successfully as " + user.getUserName());
-      resp.getWriter().print(mapper.writeValueAsString(response));
-    }
-    catch (IOException e) {
-      e.printStackTrace();
-    }
-  }
-
-  protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+    user.setPassword(Encryptor.getSHA256(user.getPassword(), user.getUserName()));
+    Response<?> response = LoginHandler.login(user);
+    resp.setStatus(response.getStatus());
+    resp.getWriter().print(mapper.writeValueAsString(response));
   }
 }
