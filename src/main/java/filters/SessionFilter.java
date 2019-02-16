@@ -30,8 +30,8 @@ public class SessionFilter implements Filter {
     }
     else {
       responseObject.setMessage("Session expired");
-      responseObject.setStatus(401);
-      response.setStatus(401);
+      responseObject.setStatus(403);
+      response.setStatus(403);
       response.getWriter().print(mapper.writeValueAsString(responseObject));
     }
   }

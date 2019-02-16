@@ -19,12 +19,12 @@ public class RegisterHandler {
     Response<?> response = new Response<>();
     String query = prop.getValue("registerUser");
     if(checkUsername(user.getUserName())) {
-      response.setStatus(400);
+      response.setStatus(409);
       response.setMessage("Username already registered");
       return response;
     }
     if(checkEmail(user.getEmail())) {
-      response.setStatus(400);
+      response.setStatus(409);
       response.setMessage("Email already in use");
       return response;
     }

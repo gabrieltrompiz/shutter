@@ -30,8 +30,8 @@ public class LogoutFilter implements Filter {
     }
     else {
       responseObject.setMessage("Not Logged In");
-      responseObject.setStatus(401);
-      response.setStatus(401);
+      responseObject.setStatus(403);
+      response.setStatus(403);
       response.getWriter().print(mapper.writeValueAsString(responseObject));
     }
   }

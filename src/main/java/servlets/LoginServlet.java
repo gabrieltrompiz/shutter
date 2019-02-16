@@ -31,6 +31,7 @@ public class LoginServlet extends HttpServlet {
     User user = mapper.readValue(json, User.class);
     user.setPassword(Encryptor.getSHA256(user.getPassword(), user.getUserName()));
     Response<?> response = LoginHandler.login(user);
+    req.getSession();
     resp.setStatus(response.getStatus());
     resp.getWriter().print(mapper.writeValueAsString(response));
   }
