@@ -17,6 +17,7 @@ public class RegisterHandler {
 
   public static Response<?> register(User user) {
     Response<?> response = new Response<>();
+    user.setUsername(user.getUsername().toLowerCase()); //setting the user input to lowercase
     String query = prop.getValue("registerUser");
     if(checkUsername(user.getUsername())) {
       response.setStatus(409);

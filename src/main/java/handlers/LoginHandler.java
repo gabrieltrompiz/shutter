@@ -16,6 +16,7 @@ public class LoginHandler {
 
   public static Response<?> login(User user) {
     Response<?> response = new Response<>();
+    user.setUsername(user.getUsername().toLowerCase()); //setting the user input to lowercase
     String query = prop.getValue("login");
     try {
       PreparedStatement pstmt = connection.prepareStatement(query);
