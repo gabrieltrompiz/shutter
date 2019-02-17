@@ -26,7 +26,8 @@ public class LoginServlet extends HttpServlet {
     ObjectMapper mapper = new ObjectMapper();
     String json = req.getReader().lines().collect(Collectors.joining());
     User user = mapper.readValue(json, User.class);
-    user.setPassword(Encryptor.getSHA256(user.getPassword(), user.getUsername()));
+    user.setLowercaseUsername(user.getUsername().toLowerCase());
+    user.setPassword(Encryptor.getSHA256(user.getPassword(), user.getLowercaseUsername()));
     Response<?> response = LoginHandler.login(user);
     if(response.getStatus() == 200) {
       req.getSession();
