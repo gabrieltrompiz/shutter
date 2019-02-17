@@ -1,0 +1,221 @@
+
+CREATE SEQUENCE type_user_type_user_id_seq;
+
+CREATE TABLE type_user (
+                type_user_id INTEGER NOT NULL DEFAULT nextval('type_user_type_user_id_seq'),
+                type_user_description VARCHAR(20) NOT NULL,
+                CONSTRAINT type_user_pk PRIMARY KEY (type_user_id)
+);
+
+
+ALTER SEQUENCE type_user_type_user_id_seq OWNED BY type_user.type_user_id;
+
+CREATE SEQUENCE type_like_type_like_id_seq;
+
+CREATE TABLE type_like (
+                type_like_id INTEGER NOT NULL DEFAULT nextval('type_like_type_like_id_seq'),
+                type_like_description VARCHAR(25) NOT NULL,
+                CONSTRAINT type_like_pk PRIMARY KEY (type_like_id)
+);
+
+
+ALTER SEQUENCE type_like_type_like_id_seq OWNED BY type_like.type_like_id;
+
+CREATE SEQUENCE type_notification_type_notification_id_seq;
+
+CREATE TABLE type_notification (
+                type_notification_id INTEGER NOT NULL DEFAULT nextval('type_notification_type_notification_id_seq'),
+                type_notification_description VARCHAR(25) NOT NULL,
+                CONSTRAINT type_notification_pk PRIMARY KEY (type_notification_id)
+);
+
+
+ALTER SEQUENCE type_notification_type_notification_id_seq OWNED BY type_notification.type_notification_id;
+
+CREATE SEQUENCE type_post_type_post_id_seq;
+
+CREATE TABLE type_post (
+                type_post_id INTEGER NOT NULL DEFAULT nextval('type_post_type_post_id_seq'),
+                type_post_description VARCHAR(25) NOT NULL,
+                CONSTRAINT type_post_pk PRIMARY KEY (type_post_id)
+);
+
+
+ALTER SEQUENCE type_post_type_post_id_seq OWNED BY type_post.type_post_id;
+
+CREATE SEQUENCE users_user_id_seq;
+
+CREATE TABLE users (
+                user_id INTEGER NOT NULL DEFAULT nextval('users_user_id_seq'),
+                user_username VARCHAR(20) NOT NULL,
+                user_password VARCHAR(64) NOT NULL,
+                user_name VARCHAR(40) NOT NULL,
+                user_lastname VARCHAR(50) NOT NULL,
+                user_email VARCHAR(50) NOT NULL,
+                user_birthday DATE NOT NULL,
+                user_creation_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                user_avatar VARCHAR(250) NOT NULL,
+                type_user_id INTEGER NOT NULL,
+                user_sex BOOLEAN NOT NULL,
+                user_enabled BOOLEAN DEFAULT true NOT NULL,
+                CONSTRAINT users_pk PRIMARY KEY (user_id)
+);
+
+
+ALTER SEQUENCE users_user_id_seq OWNED BY users.user_id;
+
+CREATE SEQUENCE notifications_notification_id_seq;
+
+CREATE TABLE notifications (
+                notification_id INTEGER NOT NULL DEFAULT nextval('notifications_notification_id_seq'),
+                notification_sender INTEGER NOT NULL,
+                notification_receiver INTEGER NOT NULL,
+                type_notification_id INTEGER NOT NULL,
+                notification_date TIMESTAMP NOT NULL,
+                CONSTRAINT notifications_pk PRIMARY KEY (notification_id)
+);
+
+
+ALTER SEQUENCE notifications_notification_id_seq OWNED BY notifications.notification_id;
+
+CREATE TABLE friends (
+                friends_id INTEGER NOT NULL,
+                user_id1 INTEGER NOT NULL,
+                user_id2 INTEGER NOT NULL,
+                date TIMESTAMP NOT NULL,
+                CONSTRAINT friends_pk PRIMARY KEY (friends_id)
+);
+
+
+CREATE SEQUENCE post_post_id_seq;
+
+CREATE TABLE post (
+                post_id INTEGER NOT NULL DEFAULT nextval('post_post_id_seq'),
+                user_id INTEGER NOT NULL,
+                type_post_id INTEGER NOT NULL,
+                post_text VARCHAR(500),
+                post_url VARCHAR(256),
+                post_creation_time TIMESTAMP NOT NULL,
+                CONSTRAINT post_pk PRIMARY KEY (post_id)
+);
+
+
+ALTER SEQUENCE post_post_id_seq OWNED BY post.post_id;
+
+CREATE SEQUENCE comments_comment_id_seq;
+
+CREATE TABLE comments (
+                comment_id INTEGER NOT NULL DEFAULT nextval('comments_comment_id_seq'),
+                comment_text VARCHAR(250) NOT NULL,
+                comment_url VARCHAR(256) NOT NULL,
+                user_id INTEGER NOT NULL,
+                post_id INTEGER NOT NULL,
+                CONSTRAINT comments_pk PRIMARY KEY (comment_id)
+);
+
+
+ALTER SEQUENCE comments_comment_id_seq OWNED BY comments.comment_id;
+
+CREATE SEQUENCE likes_like_id_seq;
+
+CREATE TABLE likes (
+                like_id INTEGER NOT NULL DEFAULT nextval('likes_like_id_seq'),
+                user_id INTEGER NOT NULL,
+                post_id INTEGER NOT NULL,
+                type_like_id INTEGER NOT NULL,
+                CONSTRAINT likes_pk PRIMARY KEY (like_id)
+);
+
+
+ALTER SEQUENCE likes_like_id_seq OWNED BY likes.like_id;
+
+ALTER TABLE users ADD CONSTRAINT type_user_users_fk
+FOREIGN KEY (type_user_id)
+REFERENCES type_user (type_user_id)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE likes ADD CONSTRAINT type_like_likes_fk
+FOREIGN KEY (type_like_id)
+REFERENCES type_like (type_like_id)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE notifications ADD CONSTRAINT type_notification_notifications_fk
+FOREIGN KEY (type_notification_id)
+REFERENCES type_notification (type_notification_id)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE post ADD CONSTRAINT type_post_post_fk
+FOREIGN KEY (type_post_id)
+REFERENCES type_post (type_post_id)
+ON DELETE CASCADE
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE post ADD CONSTRAINT users_post_fk
+FOREIGN KEY (user_id)
+REFERENCES users (user_id)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE comments ADD CONSTRAINT users_comments_fk
+FOREIGN KEY (user_id)
+REFERENCES users (user_id)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE likes ADD CONSTRAINT users_likes_fk
+FOREIGN KEY (user_id)
+REFERENCES users (user_id)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE friends ADD CONSTRAINT users_friends_fk1
+FOREIGN KEY (user_id1)
+REFERENCES users (user_id)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE notifications ADD CONSTRAINT users_notifications_fk1
+FOREIGN KEY (notification_sender)
+REFERENCES users (user_id)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE notifications ADD CONSTRAINT users_notifications_fk
+FOREIGN KEY (notification_receiver)
+REFERENCES users (user_id)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE friends ADD CONSTRAINT users_friends_fk
+FOREIGN KEY (user_id2)
+REFERENCES users (user_id)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE likes ADD CONSTRAINT post_likes_fk
+FOREIGN KEY (post_id)
+REFERENCES post (post_id)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE comments ADD CONSTRAINT post_comments_fk
+FOREIGN KEY (post_id)
+REFERENCES post (post_id)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
