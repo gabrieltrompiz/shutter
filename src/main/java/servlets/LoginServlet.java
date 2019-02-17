@@ -10,10 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 
 import handlers.LoginHandler;
 import models.Response;
@@ -31,7 +28,9 @@ public class LoginServlet extends HttpServlet {
     User user = mapper.readValue(json, User.class);
     user.setPassword(Encryptor.getSHA256(user.getPassword(), user.getUserName()));
     Response<?> response = LoginHandler.login(user);
-    req.getSession();
+    if(response.getStatus() == 200) {
+      req.getSession();
+    }
     resp.setStatus(response.getStatus());
     resp.getWriter().print(mapper.writeValueAsString(response));
   }

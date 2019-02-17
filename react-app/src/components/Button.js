@@ -17,7 +17,8 @@ export default class Button extends React.Component {
             height: this.props.height,
             color: this.state.hover ? 'white' : this.props.color,
             cursor: this.state.hover ? 'pointer' : 'auto',
-            transitionDuration: '0.2s'
+            transitionDuration: '0.2s',
+            outline: 0
         }
         const filled = {
             backgroundColor: this.props.color,
@@ -30,14 +31,16 @@ export default class Button extends React.Component {
             color: 'white',
             filter: this.state.hover ? 'brightness(90%)' : '',
             cursor: this.state.hover ? 'pointer' : 'auto',
-            transitionDuration: '0.2s'
+            transitionDuration: '0.2s',
+            outline: 0
         }
         const style = this.props.outlined ? outlined : filled;
         return(
             <button 
             style={style} 
             onMouseOver={() => this.setState({ hover: true })}
-            onMouseOut={() => this.setState({ hover: false })}>
+            onMouseOut={() => this.setState({ hover: false })}
+            onClick={this.props.onClick}>
                 {this.props.children}
             </button>
         );
