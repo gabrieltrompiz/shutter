@@ -16,9 +16,6 @@ public class LoginHandler {
 
   public static Response<?> login(User user) {
     Response<?> response = new Response<>();
-    System.out.println(user.getLowercaseUsername());
-    System.out.println(user.getPassword());
-
     String query = prop.getValue("loginWithUsername");
     try {
       PreparedStatement pstmt = connection.prepareStatement(query);
