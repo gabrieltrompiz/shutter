@@ -16,11 +16,13 @@ public class LoginHandler {
 
   public static Response<?> login(User user) {
     Response<?> response = new Response<>();
-    user.setUsername(user.getUsername().toLowerCase()); //setting the user input to lowercase
-    String query = prop.getValue("login");
+    System.out.println(user.getLowercaseUsername());
+    System.out.println(user.getPassword());
+
+    String query = prop.getValue("loginWithUsername");
     try {
       PreparedStatement pstmt = connection.prepareStatement(query);
-      pstmt.setString(1, user.getUsername());
+      pstmt.setString(1, user.getLowercaseUsername());
       pstmt.setString(2, user.getPassword());
       ResultSet rs = pstmt.executeQuery();
       if(rs.next()) {

@@ -17,7 +17,7 @@
 
         function login() {
             let body = {
-                username: `${$('user')}`,
+                lowercaseUsername: `${$('user').toLowerCase()}`,
                 password: `${$('pw')}`
             };
 
