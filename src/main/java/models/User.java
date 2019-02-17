@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 
 public class User {
   private String username;
+  private String lowercaseUsername;
   private String password;
   private String name;
   private String lastName;
@@ -24,6 +25,8 @@ public class User {
   public String getUsername() {
     return username;
   }
+
+  public String getLowercaseUsername() { return lowercaseUsername; }
 
   public int getTypeId() {
     return typeId;
@@ -68,6 +71,8 @@ public class User {
   public void setUsername(String username) {
     this.username = username;
   }
+
+  public void setLowercaseUsername(String lowercaseUsername) { this.lowercaseUsername = lowercaseUsername; }
 
   public void setAvatar(String avatar) {
     this.avatar = avatar;

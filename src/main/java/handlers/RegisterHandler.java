@@ -17,9 +17,8 @@ public class RegisterHandler {
 
   public static Response<?> register(User user) {
     Response<?> response = new Response<>();
-    user.setUsername(user.getUsername().toLowerCase()); //setting the user input to lowercase
     String query = prop.getValue("registerUser");
-    if(checkUsername(user.getUsername())) {
+    if(checkLowercaseUsername(user.getLowercaseUsername())) {
       response.setStatus(409);
       response.setMessage("Username already registered");
       return response;
@@ -32,16 +31,17 @@ public class RegisterHandler {
     try {
       PreparedStatement pstmt = connection.prepareStatement(query);
       pstmt.setString(1, user.getUsername());
-      pstmt.setString(2, user.getPassword());
-      pstmt.setString(3, user.getName());
-      pstmt.setString(4, user.getLastName());
-      pstmt.setString(5, user.getEmail());
-      pstmt.setDate(6, user.getBirthday());
-      pstmt.setTimestamp(7, user.getCreationTime());
-      pstmt.setString(8, user.getAvatar());
-      pstmt.setInt(9, user.getTypeId());
-      pstmt.setBoolean(10, user.getSex());
-      pstmt.setBoolean(11, user.isEnabled());
+      pstmt.setString(2, user.getLowercaseUsername());
+      pstmt.setString(3, user.getPassword());
+      pstmt.setString(4, user.getName());
+      pstmt.setString(5, user.getLastName());
+      pstmt.setString(6, user.getEmail());
+      pstmt.setDate(7, user.getBirthday());
+      pstmt.setTimestamp(8, user.getCreationTime());
+      pstmt.setString(9, user.getAvatar());
+      pstmt.setInt(10, user.getTypeId());
+      pstmt.setBoolean(11, user.getSex());
+      pstmt.setBoolean(12, user.isEnabled());
       pstmt.execute();
       response.setStatus(200);
       response.setMessage("User registered successfully");
@@ -53,8 +53,8 @@ public class RegisterHandler {
     return response;
   }
 
-  private static boolean checkUsername(String username) {
-    String query = prop.getValue("checkUsername");
+  private static boolean checkLowercaseUsername(String username) {
+    String query = prop.getValue("checkLowercaseUsername");
     try {
       PreparedStatement pstmt = connection.prepareStatement(query);
       pstmt.setString(1, username);

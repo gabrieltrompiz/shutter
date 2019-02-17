@@ -48,6 +48,7 @@ CREATE SEQUENCE users_user_id_seq;
 CREATE TABLE users (
                 user_id INTEGER NOT NULL DEFAULT nextval('users_user_id_seq'),
                 user_username VARCHAR(20) NOT NULL,
+                user_lowercase_username VARCHAR(20) NOT NULL,
                 user_password VARCHAR(64) NOT NULL,
                 user_name VARCHAR(40) NOT NULL,
                 user_lastname VARCHAR(50) NOT NULL,
@@ -132,7 +133,7 @@ ALTER SEQUENCE likes_like_id_seq OWNED BY likes.like_id;
 ALTER TABLE users ADD CONSTRAINT type_user_users_fk
 FOREIGN KEY (type_user_id)
 REFERENCES type_user (type_user_id)
-ON DELETE NO ACTION
+ON DELETE RESTRICT
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
@@ -219,3 +220,7 @@ REFERENCES post (post_id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
+
+INSERT INTO type_user VALUES (1, 'user');
+
+INSERT INTO type_user VALUES (2, 'admin');
