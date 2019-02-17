@@ -23,7 +23,7 @@ public class RegisterServlet extends HttpServlet {
     ObjectMapper mapper = new ObjectMapper();
     String json =  req.getReader().lines().collect(Collectors.joining());
     User user = mapper.readValue(json, User.class);
-    user.setPassword(Encryptor.getSHA256(user.getPassword(), user.getUserName()));
+    user.setPassword(Encryptor.getSHA256(user.getPassword(), user.getUsername()));
     Response<?> response = RegisterHandler.register(user);
     resp.setStatus(response.getStatus());
     resp.getWriter().print(mapper.writeValueAsString(response));

@@ -18,7 +18,7 @@ public class RegisterHandler {
   public static Response<?> register(User user) {
     Response<?> response = new Response<>();
     String query = prop.getValue("registerUser");
-    if(checkUsername(user.getUserName())) {
+    if(checkUsername(user.getUsername())) {
       response.setStatus(409);
       response.setMessage("Username already registered");
       return response;
@@ -30,7 +30,7 @@ public class RegisterHandler {
     }
     try {
       PreparedStatement pstmt = connection.prepareStatement(query);
-      pstmt.setString(1, user.getUserName());
+      pstmt.setString(1, user.getUsername());
       pstmt.setString(2, user.getPassword());
       pstmt.setString(3, user.getName());
       pstmt.setString(4, user.getLastName());

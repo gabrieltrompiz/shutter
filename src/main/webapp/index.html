@@ -10,14 +10,15 @@
     <script>
         function yay() {
             let body = {
-                userName: 'marditasea',
-                password: 'chabes123'
+                username: 'gabtrompiz',
+                password: 'gabrielt0110'
             }
             fetch('./login', { method: 'POST', body: JSON.stringify(body) })
             .then(response => response.json().then(data => console.log(data)))
         }
         function fack() {
-            fetch('./logout')
+          fetch('./logout').then(response => response.json().then(data => console.log(data)))
+        }
     </script>
 </body>
 </html>

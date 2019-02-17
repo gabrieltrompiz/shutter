@@ -12,10 +12,9 @@ export default class LoginView extends React.Component {
     
     login = () => {
         const body = {
-            userName: this.state.username,
+            username: this.state.username,
             password: this.state.password
         }
-        console.log(body.userName)
         fetch('http://localhost:8080/login', { method: 'POST', body: JSON.stringify(body), credentials: 'include'})
         .then(response => response.json().then(data => console.log(data)))
     }

@@ -19,7 +19,7 @@ public class LoginHandler {
     String query = prop.getValue("login");
     try {
       PreparedStatement pstmt = connection.prepareStatement(query);
-      pstmt.setString(1, user.getUserName());
+      pstmt.setString(1, user.getUsername());
       pstmt.setString(2, user.getPassword());
       ResultSet rs = pstmt.executeQuery();
       if(rs.next()) {
