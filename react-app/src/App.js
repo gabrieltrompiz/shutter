@@ -8,11 +8,11 @@ class App extends Component {
     super(props)
     this.state = { loggedIn: false }
   }
+
   render() {
     return (
       <div className="App">
-        <Header />
-        <LoginView />
+        <LoginView loggedIn={this.state.loggedIn}/>
       </div>
     );
   }

@@ -5,10 +5,8 @@ export default class Header extends React.Component {
     render() {
         return(
             
-            <Menu pointing secondary color="red" size="massive" borderless>
-                <Container>
-                
-                </Container>
+            <Menu pointing secondary inverted size="big" widths="3" style={{ backgroundColor: '#FF5252' }}>
+                <Menu.Item name="home" active as="a"/>
             </Menu>
             
         );
