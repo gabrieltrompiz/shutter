@@ -5,6 +5,7 @@ import models.User;
 import utilities.ConnManager;
 import utilities.PropertiesReader;
 
+import javax.xml.transform.Result;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,24 +18,38 @@ public class LoginHandler {
 
   public static Response<?> login(User user) {
     Response<?> response = new Response<>();
-    String query = prop.getValue("login");
+    String query = prop.getValue("checkLowercaseUsername");
     try {
-      PreparedStatement pstmt = connection.prepareStatement(query);
-      pstmt.setString(1, user.getLowercaseUsername());
-      pstmt.setString(2, user.getPassword());
-      ResultSet rs = pstmt.executeQuery();
+      PreparedStatement ps = connection.prepareStatement(query);
+      ps.setString(1, user.getLowercaseUsername());
+      ResultSet rs = ps.executeQuery();
+
+      if(!rs.next()) {
+        response.setStatus(401);
+        response.setMessage("Username or email does not exist");
+        return response;
+      }
+
+      query = prop.getValue("login");
+      ps = connection.prepareStatement(query);
+      ps.setString(1, user.getLowercaseUsername());
+      ps.setString(2, user.getPassword());
+      rs = ps.executeQuery();
+
       if(rs.next()) {
         response.setStatus(200);
         response.setMessage("Access granted");
       }
+
       else {
         response.setStatus(401);
-        response.setMessage("Unauthorized, bad credentials");
+        response.setMessage("Password is incorrect");
       }
-    } catch (SQLException e) {
+
+    } catch(SQLException e) {
+      e.printStackTrace();
       response.setStatus(500);
       response.setMessage("DB connection error");
-      e.printStackTrace();
     }
     return response;
   }
