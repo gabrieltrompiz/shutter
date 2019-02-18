@@ -37,7 +37,6 @@ public class LoginFilter implements Filter {
     else {
       responseObject.setMessage("Already logged in");
       responseObject.setStatus(403);
-      response.setStatus(403);
       response.getWriter().print(mapper.writeValueAsString(responseObject));
     }
   }

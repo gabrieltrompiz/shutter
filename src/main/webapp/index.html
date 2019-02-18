@@ -16,10 +16,18 @@
         }
 
         function login() {
+
             let body = {
-                username: `${$('user')}`,
                 password: `${$('pw')}`
             };
+
+            if(`${$('user').toLowerCase()}`.indexOf('@') > 0)
+                body.email = `${$('user').toLowerCase()}`;
+
+            else
+                body.lowercaseUsername = `${$('user').toLowerCase()}`;
+
+            console.log(body);
 
             fetch('./login', {method: 'POST', body: JSON.stringify(body)})
                     .then(response => response.json()).then(data => console.log(data))
