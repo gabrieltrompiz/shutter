@@ -26,11 +26,17 @@ public class LoginServlet extends HttpServlet {
     ObjectMapper mapper = new ObjectMapper();
     String json = req.getReader().lines().collect(Collectors.joining());
     User user = mapper.readValue(json, User.class);
+
+    if(user.getLowercaseUsername() == null)
+    	user.setLowercaseUsername(LoginHandler.getUsernameByEmail(user.getEmail()));
+
     user.setPassword(Encryptor.getSHA256(user.getPassword(), user.getLowercaseUsername()));
+
     Response<?> response = LoginHandler.login(user);
     if(response.getStatus() == 200) {
       req.getSession();
     }
+
     resp.setStatus(response.getStatus());
     resp.getWriter().print(mapper.writeValueAsString(response));
   }

@@ -10,13 +10,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+@SuppressWarnings("Duplicates")
 public class LoginHandler {
   private static Connection connection = ConnManager.getConnection();
   private static PropertiesReader prop = PropertiesReader.getInstance();
 
   public static Response<?> login(User user) {
     Response<?> response = new Response<>();
-    String query = prop.getValue("loginWithUsername");
+    String query = prop.getValue("login");
     try {
       PreparedStatement pstmt = connection.prepareStatement(query);
       pstmt.setString(1, user.getLowercaseUsername());
@@ -36,6 +37,21 @@ public class LoginHandler {
       e.printStackTrace();
     }
     return response;
+  }
+
+  public static String getUsernameByEmail(String email) {
+    String query = prop.getValue("checkEmail");
+    try {
+      PreparedStatement pstmt = connection.prepareStatement(query);
+      pstmt.setString(1, email);
+      ResultSet rs = pstmt.executeQuery();
+      if(rs.next()) {
+        return rs.getString(3);
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
   }
 
 }
