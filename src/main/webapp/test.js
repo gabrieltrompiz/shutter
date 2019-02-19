@@ -2,7 +2,7 @@ function $(id) {
     return document.getElementById(id).value;
 }
 
-function login() {
+function login() {  //Login
 
     let body = {
         password: `${$('pw')}`
@@ -21,11 +21,11 @@ function login() {
 
 }
 
-function logout() {
+function logout() {  //Logout
     fetch('./session').then(response => response.json().then(data => console.log(data)))
 }
 
-function signUp() {
+function signUp() {  //SignUp
     let body = {
         username: 'CHABESXD',
         password: 'chavezesmarico123',
@@ -45,7 +45,7 @@ function signUp() {
         .then(response => response.json()).then(data => console.log(data))
 }
 
-function forgotPassword() {
+function forgotPassword() {  //Not implemented
     let body = {
         email: 'aax_00ap@hotmail.com'
     };
@@ -56,11 +56,11 @@ function forgotPassword() {
 
 }
 
-function showDashboard() {
-
+function showDashboard() {  //Dashboard
+    fetch("./register").then(response => response.json()).then(data => console.log(data));
 }
 
-function editUser() {
+function editUser() {  //Edit
     let body = {
 
     };

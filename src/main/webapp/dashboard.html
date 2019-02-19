@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Dashboard</title>
+</head>
+<body id="root">
+	<script>
+		let data = {};
+        fetch("./register").then(response => response.json()).then(data => this.data = data);
+        let root = document.getElementById('root');
+        root.textContent = `Name: ${data.name}
+        Lastname: ${data.lastname}
+        Username: ${data.username}
+        Email: ${data.email}`;
+	</script>
+</body>
+</html>

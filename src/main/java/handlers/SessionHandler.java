@@ -5,6 +5,8 @@ import models.User;
 import utilities.ConnManager;
 import utilities.PropertiesReader;
 
+import javax.servlet.http.HttpSession;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -79,6 +81,11 @@ public class SessionHandler {
 			response.setMessage("DB connection error");
 		}
 		return response;
+	}
+
+	public static Response<?> getUserData(HttpSession session) {
+		return null; //XD
+		//Not Implemented
 	}
 
 	public static String getUsernameByEmail(String email) {

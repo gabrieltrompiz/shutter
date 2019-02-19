@@ -9,6 +9,7 @@ import utilities.Encryptor;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -30,6 +31,10 @@ public class RegisterServlet extends HttpServlet {
   }
 
   protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-    doPost(req, res);
+    ObjectMapper mapper = new ObjectMapper();
+    String json = req.getReader().lines().collect(Collectors.joining());
+    HttpSession session = req.getSession();
+    User user = mapper.readValue(json, User.class);
+    Response<?> response = SessionHandler.getUserData(session);
   }
 }
