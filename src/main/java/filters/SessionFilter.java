@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebFilter(urlPatterns = "/logout", filterName = "Session Filter")
+@WebFilter(urlPatterns = "/session", filterName = "Session Filter")
 public class SessionFilter implements Filter {
   @Override
   public void destroy() {}

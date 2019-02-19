@@ -28,4 +28,8 @@ public class RegisterServlet extends HttpServlet {
     resp.setStatus(response.getStatus());
     resp.getWriter().print(mapper.writeValueAsString(response));
   }
+
+  protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+    doPost(req, res);
+  }
 }

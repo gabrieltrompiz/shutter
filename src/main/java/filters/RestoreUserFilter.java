@@ -15,8 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-@WebFilter(urlPatterns = {"/login", "/restoreUser"}, filterName = "No Session Filter")
-public class NoSessionFilter implements Filter {
+@WebFilter(urlPatterns = "/restoreUser", filterName = "Restore User Filter")
+public class RestoreUserFilter implements Filter {
 
   @Override
   public void destroy() {}

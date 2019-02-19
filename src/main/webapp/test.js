@@ -16,7 +16,7 @@ function login() {
 
     console.log(body);
 
-    fetch('./login', {method: 'POST', body: JSON.stringify(body)})
+    fetch('./session', {method: 'POST', body: JSON.stringify(body)})
         .then(response => response.json()).then(data => console.log(data))
 
 }

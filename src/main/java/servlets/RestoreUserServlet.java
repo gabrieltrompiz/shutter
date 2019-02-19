@@ -24,11 +24,11 @@ public class RestoreUserServlet extends HttpServlet {
 		String json = req.getReader().lines().collect(Collectors.joining());
 		User user = mapper.readValue(json, User.class);
 
-
+//Unimplemented, notifications are still not allowed
 	}
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-
+		doPost(req, res);
 	}
 }
