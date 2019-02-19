@@ -22,7 +22,7 @@ function login() {
 }
 
 function logout() {
-    fetch('./logout').then(response => response.json().then(data => console.log(data)))
+    fetch('./session').then(response => response.json().then(data => console.log(data)))
 }
 
 function signUp() {

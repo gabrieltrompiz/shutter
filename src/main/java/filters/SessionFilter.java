@@ -25,14 +25,32 @@ public class SessionFilter implements Filter {
     HttpServletRequest request = (HttpServletRequest) req;
     HttpServletResponse response = (HttpServletResponse) resp;
     HttpSession session = request.getSession(false);
-    if(session != null) {
-      chain.doFilter(req, resp);
+
+    if(request.getMethod().equalsIgnoreCase("POST")) {
+      if(session == null) {
+        chain.doFilter(req, resp);
+      }
+
+      else {
+        responseObject.setMessage("Already Logged In");
+        responseObject.setStatus(403);
+        response.setStatus(403);
+        response.getWriter().print(mapper.writeValueAsString(responseObject));
+      }
     }
+
     else {
-      responseObject.setMessage("Not Logged In");
-      responseObject.setStatus(403);
-      response.setStatus(403);
-      response.getWriter().print(mapper.writeValueAsString(responseObject));
+      if(session != null) {
+        chain.doFilter(req, resp);
+      }
+
+      else {
+        responseObject.setMessage("Not Logged In");
+        responseObject.setStatus(403);
+        response.setStatus(403);
+        response.getWriter().print(mapper.writeValueAsString(responseObject));
+      }
     }
+
   }
 }
