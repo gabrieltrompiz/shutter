@@ -1,7 +1,7 @@
 package servlets;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import handlers.RegisterHandler;
+import handlers.SessionHandler;
 import models.Response;
 import models.User;
 import utilities.Encryptor;
@@ -24,7 +24,7 @@ public class RegisterServlet extends HttpServlet {
     String json =  req.getReader().lines().collect(Collectors.joining());
     User user = mapper.readValue(json, User.class);
     user.setPassword(Encryptor.getSHA256(user.getPassword(), user.getLowercaseUsername()));
-    Response<?> response = RegisterHandler.register(user);
+    Response<?> response = SessionHandler.register(user);
     resp.setStatus(response.getStatus());
     resp.getWriter().print(mapper.writeValueAsString(response));
   }

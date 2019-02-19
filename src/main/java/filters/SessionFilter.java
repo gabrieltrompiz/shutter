@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebFilter(filterName = "Session Filter")
+@WebFilter(urlPatterns = "/logout", filterName = "Session Filter")
 public class SessionFilter implements Filter {
   @Override
   public void destroy() {}
@@ -29,7 +29,7 @@ public class SessionFilter implements Filter {
       chain.doFilter(req, resp);
     }
     else {
-      responseObject.setMessage("Session expired");
+      responseObject.setMessage("Not Logged In");
       responseObject.setStatus(403);
       response.setStatus(403);
       response.getWriter().print(mapper.writeValueAsString(responseObject));

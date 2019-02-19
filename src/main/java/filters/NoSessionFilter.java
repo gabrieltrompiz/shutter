@@ -3,20 +3,26 @@ package filters;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import models.Response;
 
-import javax.servlet.*;
+import java.io.IOException;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 
-@WebFilter(urlPatterns = "/logout", filterName = "Logout Filter")
-public class LogoutFilter implements Filter {
+@WebFilter(urlPatterns = {"/login", "/restoreUser"}, filterName = "No Session Filter")
+public class NoSessionFilter implements Filter {
+
   @Override
   public void destroy() {}
 
   @Override
-  public void init(FilterConfig filterConfig) throws ServletException {}
+  public void init(FilterConfig filterConfig) {}
 
   @Override
   public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
@@ -25,13 +31,12 @@ public class LogoutFilter implements Filter {
     HttpServletRequest request = (HttpServletRequest) req;
     HttpServletResponse response = (HttpServletResponse) resp;
     HttpSession session = request.getSession(false);
-    if(session != null) {
+    if (session == null) {
       chain.doFilter(req, resp);
     }
     else {
-      responseObject.setMessage("Not Logged In");
+      responseObject.setMessage("Already logged in");
       responseObject.setStatus(403);
-      response.setStatus(403);
       response.getWriter().print(mapper.writeValueAsString(responseObject));
     }
   }

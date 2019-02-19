@@ -48,10 +48,12 @@ function signUp() {
 function forgotPassword() {
     let body = {
         email: 'aax_00ap@hotmail.com'
-    }
+    };
 
-    fetch('./forgot', {method: 'POST', body: JSON.stringify(body)})
+    fetch('./restoreUser', {method: 'POST', body: JSON.stringify(body)})
         .then(response => response.json()).then(data => console.log(data))
+
+
 }
 
 function showDashboard() {
