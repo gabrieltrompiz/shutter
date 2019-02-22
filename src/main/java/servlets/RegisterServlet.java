@@ -25,16 +25,16 @@ public class RegisterServlet extends HttpServlet {
     String json =  req.getReader().lines().collect(Collectors.joining());
     User user = mapper.readValue(json, User.class);
     user.setPassword(Encryptor.getSHA256(user.getPassword(), user.getLowercaseUsername()));
-    Response<?> response = SessionHandler.register(user);
+    Response<User> response = SessionHandler.register(user);
+    if(response.getStatus() == 200) {
+    	req.getSession();
+	}
+
     resp.setStatus(response.getStatus());
     resp.getWriter().print(mapper.writeValueAsString(response));
   }
 
   protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-    ObjectMapper mapper = new ObjectMapper();
-    String json = req.getReader().lines().collect(Collectors.joining());
-    HttpSession session = req.getSession();
-    User user = mapper.readValue(json, User.class);
-    Response<?> response = SessionHandler.getUserData(session);
+
   }
 }

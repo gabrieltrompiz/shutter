@@ -27,11 +27,11 @@ function logout() {  //Logout
 
 function signUp() {  //SignUp
     let body = {
-        username: 'CHABESXD',
-        password: 'chavezesmarico123',
-        name: 'Luis',
-        lastName: 'Patrulla',
-        email: 'aax_00ap@hotmail.com',
+        username: 'admin',
+        password: 'admin',
+        name: 'Luiso',
+        lastName: 'Petralleta',
+        email: 'chabesbibe@hotmail.com',
         birthday: new Date(1999, 10, 26),
         creationTime: Date.now(),
         avatar: '/avatar.jpg',

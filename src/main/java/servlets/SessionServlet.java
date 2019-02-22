@@ -29,7 +29,7 @@ public class SessionServlet extends HttpServlet {
 
     user.setPassword(Encryptor.getSHA256(user.getPassword(), user.getLowercaseUsername()));
 
-    Response<?> response = SessionHandler.login(user);
+    Response<User> response = SessionHandler.login(user);
     if(response.getStatus() == 200) {
       req.getSession();
     }

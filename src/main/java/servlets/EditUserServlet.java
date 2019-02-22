@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
  * @author Ptthappy
  */
 
-@WebServlet(urlPatterns = "edit", name = "User Editor Servlet")
+@WebServlet(urlPatterns = "/edit", name = "User Editor Servlet")
 public class EditUserServlet extends HttpServlet {
 
 	public EditUserServlet() {

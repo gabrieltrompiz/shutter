@@ -13,9 +13,9 @@ public class User {
   private Date birthday;
   private Timestamp creationTime;
   private String avatar;
-  private int typeId;
-  private boolean sex;
-  private boolean enabled;
+  private Integer typeId;
+  private Boolean sex;
+  private Boolean enabled;
 
 
   public String getPassword() {
@@ -28,7 +28,7 @@ public class User {
 
   public String getLowercaseUsername() { return lowercaseUsername; }
 
-  public int getTypeId() {
+  public Integer getTypeId() {
     return typeId;
   }
 
@@ -56,11 +56,11 @@ public class User {
     return lastName;
   }
 
-  public boolean getSex() {
+  public Boolean getSex() {
     return sex;
   }
 
-  public boolean isEnabled() {
+  public Boolean isEnabled() {
     return enabled;
   }
 
@@ -90,11 +90,11 @@ public class User {
     this.email = email;
   }
 
-  public void setEnabled(boolean enabled) {
+  public void setEnabled(Boolean enabled) {
     this.enabled = enabled;
   }
 
-  public void setTypeId(int typeId) {
+  public void setTypeId(Integer typeId) {
     this.typeId = typeId;
   }
 
@@ -106,7 +106,7 @@ public class User {
     this.name = name;
   }
 
-  public void setSex(boolean sex) {
+  public void setSex(Boolean sex) {
     this.sex = sex;
   }
 }

@@ -5,12 +5,13 @@ import models.User;
 import utilities.ConnManager;
 import utilities.PropertiesReader;
 
-import javax.servlet.http.HttpSession;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Ptthappy
@@ -21,8 +22,8 @@ public class SessionHandler {
 	private static Connection connection = ConnManager.getConnection();
 	private static PropertiesReader prop = PropertiesReader.getInstance();
 
-	public static Response<?> login(User user) {
-		Response<?> response = new Response<>();
+	public static Response<User> login(User user) {
+		Response<User> response = new Response<>();
 		String query = prop.getValue("login");
 		try {
 			PreparedStatement pstmt = connection.prepareStatement(query);
@@ -30,8 +31,10 @@ public class SessionHandler {
 			pstmt.setString(2, user.getPassword());
 			ResultSet rs = pstmt.executeQuery();
 			if(rs.next()) {
+				getUserData(rs, user);
 				response.setStatus(200);
 				response.setMessage("Access granted");
+				response.setData(user);
 			}
 			else {
 				response.setStatus(401);
@@ -45,8 +48,8 @@ public class SessionHandler {
 		return response;
 	}
 
-	public static Response<?> register(User user) {
-		Response<?> response = new Response<>();
+	public static Response<User> register(User user) throws IOException {
+		Response<User> response = new Response<>();
 		String query = prop.getValue("registerUser");
 		if(checkLowercaseUsername(user.getLowercaseUsername())) {
 			response.setStatus(409);
@@ -75,6 +78,8 @@ public class SessionHandler {
 			pstmt.execute();
 			response.setStatus(200);
 			response.setMessage("User registered successfully");
+			user.setPassword(null);
+			response.setData(user);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			response.setStatus(500);
@@ -83,9 +88,17 @@ public class SessionHandler {
 		return response;
 	}
 
-	public static Response<?> getUserData(HttpSession session) {
-		return null; //XD
-		//Not Implemented
+	public static List getUserData(ResultSet rs, User user) throws SQLException {
+		System.out.println(rs.getString(2));
+		System.out.println(rs.getString(3));
+		System.out.println(rs.getString(5));
+		System.out.println(rs.getString(6));
+		user.setLowercaseUsername(rs.getString(2));
+		user.setUsername(rs.getString(3));
+		user.setName(rs.getString(5));
+		user.setLastName(rs.getString(6));
+		user.setPassword(null);
+		return null;
 	}
 
 	public static String getUsernameByEmail(String email) {
