@@ -19,6 +19,7 @@ import models.User;
 public class RestoreUserServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
+	//Se supone que este servlet se usará para reestablecer la contraseña
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 	}

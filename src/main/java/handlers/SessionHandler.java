@@ -88,7 +88,14 @@ public class SessionHandler {
 		return response;
 	}
 
-	public static List getUserData(ResultSet rs, User user) throws SQLException {
+	//Función para modificar los campos especificados por el usuario.
+	//Debería de ir verificando los getters y los que no sean nulos los cambia
+	//También pueden agregarsele restricciones de vainas que no se pueden cambiar hmmm
+	public static Response<User> modifyUser(User user) {
+		return null;
+	}
+
+	public static void getUserData(ResultSet rs, User user) throws SQLException {
 		System.out.println(rs.getString(2));
 		System.out.println(rs.getString(3));
 		System.out.println(rs.getString(5));
@@ -98,7 +105,6 @@ public class SessionHandler {
 		user.setName(rs.getString(5));
 		user.setLastName(rs.getString(6));
 		user.setPassword(null);
-		return null;
 	}
 
 	public static String getUsernameByEmail(String email) {
