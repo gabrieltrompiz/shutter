@@ -95,20 +95,18 @@ public class SessionHandler {
 		return null;
 	}
 
-	//Función que devuelve todos los datos relevantes al usuario
-	public static Response<User> getAllFields(User user) {
-		return null;
-	}
-
 	public static void getUserData(ResultSet rs, User user) throws SQLException {
-		System.out.println(rs.getString(2));
-		System.out.println(rs.getString(3));
-		System.out.println(rs.getString(5));
-		System.out.println(rs.getString(6));
 		user.setLowercaseUsername(rs.getString(2));
 		user.setUsername(rs.getString(3));
 		user.setName(rs.getString(5));
 		user.setLastName(rs.getString(6));
+		user.setEmail(rs.getString(7));
+    user.setBirthday(rs.getDate(8));
+    user.setCreationTime(rs.getTimestamp(9));
+    user.setAvatar(rs.getString(10));
+    user.setTypeId(rs.getInt(11));
+    user.setSex(rs.getBoolean(12));
+    user.setEnabled(rs.getBoolean(13));
 		user.setPassword(null);
 	}
 

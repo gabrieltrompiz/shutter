@@ -1,5 +1,5 @@
 import React from 'react'
-import { Menu, Container } from 'semantic-ui-react'
+import { Menu } from 'semantic-ui-react'
 
 export default class Header extends React.Component {
     render() {

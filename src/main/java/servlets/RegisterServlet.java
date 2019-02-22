@@ -35,17 +35,9 @@ public class RegisterServlet extends HttpServlet {
     res.getWriter().print(mapper.writeValueAsString(response));
   }
 
-  /*Obtener todos los datos relevantes al cliente*/
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-    ObjectMapper mapper = new ObjectMapper();
-    String json = req.getReader().lines().collect(Collectors.joining());
-    User user = mapper.readValue(json, User.class);
-    user.setPassword(Encryptor.getSHA256(user.getPassword(), user.getLowercaseUsername()));
-    Response<User> response = SessionHandler.getAllFields(user);
 
-    res.setStatus(response.getStatus());
-    res.getWriter().print(mapper.writeValueAsString(response));
   }
 }
 
