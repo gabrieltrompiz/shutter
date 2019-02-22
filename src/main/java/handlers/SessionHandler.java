@@ -95,6 +95,11 @@ public class SessionHandler {
 		return null;
 	}
 
+	//Función que devuelve todos los datos relevantes al usuario
+	public static Response<User> getAllFields(User user) {
+		return null;
+	}
+
 	public static void getUserData(ResultSet rs, User user) throws SQLException {
 		System.out.println(rs.getString(2));
 		System.out.println(rs.getString(3));

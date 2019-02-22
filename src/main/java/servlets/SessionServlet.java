@@ -18,6 +18,7 @@ import utilities.Encryptor;
 public class SessionServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
+  /* Servlet para iniciar sesión */
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     ObjectMapper mapper = new ObjectMapper();
@@ -38,6 +39,7 @@ public class SessionServlet extends HttpServlet {
     resp.getWriter().print(mapper.writeValueAsString(response));
   }
 
+  /* Servlet para cerrar sesión */
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
     req.getSession().invalidate();

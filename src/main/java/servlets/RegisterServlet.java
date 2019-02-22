@@ -19,8 +19,9 @@ import java.util.stream.Collectors;
 public class RegisterServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
+  /*Servlet para registrar usuario*/
   @Override
-  protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+  protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
     ObjectMapper mapper = new ObjectMapper();
     String json =  req.getReader().lines().collect(Collectors.joining());
     User user = mapper.readValue(json, User.class);
@@ -30,11 +31,26 @@ public class RegisterServlet extends HttpServlet {
     	req.getSession();
 	}
 
-    resp.setStatus(response.getStatus());
-    resp.getWriter().print(mapper.writeValueAsString(response));
+    res.setStatus(response.getStatus());
+    res.getWriter().print(mapper.writeValueAsString(response));
   }
 
+  /*Obtener todos los datos relevantes al cliente*/
+  @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+    ObjectMapper mapper = new ObjectMapper();
+    String json = req.getReader().lines().collect(Collectors.joining());
+    User user = mapper.readValue(json, User.class);
+    user.setPassword(Encryptor.getSHA256(user.getPassword(), user.getLowercaseUsername()));
+    Response<User> response = SessionHandler.getAllFields(user);
 
+    res.setStatus(response.getStatus());
+    res.getWriter().print(mapper.writeValueAsString(response));
   }
 }
+
+
+
+
+
+

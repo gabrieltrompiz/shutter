@@ -25,9 +25,9 @@ public class EditUserServlet extends HttpServlet {
 		super();
 	}
 
-	//Servlet para la edición del usuario. Antes de editar los datos del usuario, deberá pedirse contraseña.
-	//Cuando esta se pida, el servidor va a enviar la clave al servlet de SessionServlet. El cliente debe encargarse
-	//de enviar correctamente el username
+	/*Servlet para la edición del usuario. Antes de editar los datos del usuario, deberá pedirse contraseña.
+	Cuando esta se pida, el servidor va a enviar la clave al servlet de SessionServlet. El cliente debe encargarse
+	de enviar correctamente el username	*/
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
@@ -35,8 +35,14 @@ public class EditUserServlet extends HttpServlet {
 		User user = mapper.readValue(json, User.class);
 
 		Response<User> response = SessionHandler.modifyUser(user);
+
+		res.setStatus(response.getStatus());
+		res.getWriter().print(mapper.writeValueAsString(response));
 	}
 
+	/*Servlet para cuando se quiera recuperar usuario por olvido de contraseña
+	Not implemented btw*/
+	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 
 	}
