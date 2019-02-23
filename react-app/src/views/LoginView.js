@@ -7,7 +7,7 @@ const background = require('../assets/WWF_logo1.png')
 export default class LoginView extends React.Component {
     constructor(props) {
         super(props)
-        this.state = { loginVisible: false, registerVisible: true }
+        this.state = { loginVisible: true, registerVisible: false}
     }
 
     handleChangeCard = card => {

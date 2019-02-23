@@ -31,7 +31,7 @@ export default class LoginCard extends React.Component {
             username: this.state.username,
             password: this.state.password
         }
-        fetch('http://localhost:8080/login', { method: 'POST', body: JSON.stringify(body), credentials: 'include'})
+        fetch('http://localhost:8080/session', { method: 'POST', body: JSON.stringify(body), credentials: 'include'})
         .then(response => response.json().then(data => console.log(data)))
     }
 
