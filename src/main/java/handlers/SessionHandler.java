@@ -92,7 +92,26 @@ public class SessionHandler {
 	//Debería de ir verificando los getters y los que no sean nulos los cambia
 	//También pueden agregarsele restricciones de vainas que no se pueden cambiar hmmm
 	public static Response<User> modifyUser(User user) {
-		return null;
+		Response<User> response = new Response<>();
+		String query = prop.getValue("updateUser");
+		try {
+			PreparedStatement ps = connection.prepareStatement(query);
+			ps.setString(1, user.getUsername());
+			ps.setString(2, user.getLowercaseUsername());
+			ps.setString(3, user.getName());
+			ps.setString(4, user.getLastName());
+			ps.setString(5, user.getLowercaseUsername());
+			ps.execute();
+			response.setStatus(200);
+			response.setMessage("User Update Successfully");
+			response.setData(user);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			response.setStatus(500);
+			response.setMessage("DB connection error");
+			response.setData(user);
+		}
+		return response;
 	}
 
 	public static void getUserData(ResultSet rs, User user) throws SQLException {

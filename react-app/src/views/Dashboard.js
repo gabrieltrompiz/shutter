@@ -1,10 +1,10 @@
 import React from 'react'
 import { Menu, Label, Input, Icon, Container, Grid } from 'semantic-ui-react'
-import Home from '../component/Home'
-import Inbox from '../component/Inbox'
-import Profile from '../component/Profile'
-import Search from '../component/Search'
-import Settings from '../component/Settings'
+import Home from '../components/Home'
+import Inbox from '../components/Inbox'
+import Profile from '../components/Profile'
+import Search from '../components/Search'
+import Settings from '../components/Settings'
 
 export default class Dashboard extends React.Component {
 	constructor(props) {
