@@ -3,9 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "email-validator": "^2.0.4",
     "react": "^16.8.1",
     "react-dom": "^16.8.1",
     "react-scripts": "2.1.5",
+    "semantic-ui-calendar-react": "^0.14.1",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^0.85.0"
   },
