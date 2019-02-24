@@ -10,47 +10,29 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebFilter(urlPatterns = {"/session", "/register", "/restoreUser"}, filterName = "Session Filter")
+@WebFilter(urlPatterns = {"/logout", "/edit"}, filterName = "Session Filter")
 public class SessionFilter implements Filter {
-  @Override
-  public void destroy() {}
+    @Override
+    public void destroy() {}
 
-  @Override
-  public void init(FilterConfig filterConfig) throws ServletException {}
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {}
 
-  @Override
-  public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
-    ObjectMapper mapper = new ObjectMapper();
-    Response<?> responseObject = new Response<>();
-    HttpServletRequest request = (HttpServletRequest) req;
-    HttpServletResponse response = (HttpServletResponse) resp;
-    HttpSession session = request.getSession(false);
+    @Override
+    public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
+        ObjectMapper mapper = new ObjectMapper();
+        Response<?> responseObject = new Response<>();
+        HttpServletRequest request = (HttpServletRequest) req;
+        HttpServletResponse response = (HttpServletResponse) resp;
+        HttpSession session = request.getSession(false);
 
-    if(request.getMethod().equalsIgnoreCase("POST")) {
-      if(session == null) {
-        chain.doFilter(req, resp);
-      }
-
-      else {
-        responseObject.setMessage("Already Logged In");
-        responseObject.setStatus(403);
-        response.setStatus(403);
-        response.getWriter().print(mapper.writeValueAsString(responseObject));
-      }
+        if (session != null) {
+            chain.doFilter(req, resp);
+        } else {
+            responseObject.setMessage("Not Logged In");
+            responseObject.setStatus(403);
+            response.setStatus(403);
+            response.getWriter().print(mapper.writeValueAsString(responseObject));
+        }
     }
-
-    else {
-      if(session != null) {
-        chain.doFilter(req, resp);
-      }
-
-      else {
-        responseObject.setMessage("Not Logged In");
-        responseObject.setStatus(403);
-        response.setStatus(403);
-        response.getWriter().print(mapper.writeValueAsString(responseObject));
-      }
-    }
-
-  }
 }

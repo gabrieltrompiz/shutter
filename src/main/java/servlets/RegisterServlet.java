@@ -36,9 +36,7 @@ public class RegisterServlet extends HttpServlet {
   }
 
   @Override
-  protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-
-  }
+  protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {}
 }
 
 

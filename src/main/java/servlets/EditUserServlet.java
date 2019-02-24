@@ -26,7 +26,7 @@ public class EditUserServlet extends HttpServlet {
 	}
 
 	/*Servlet para la edición del usuario. Antes de editar los datos del usuario, deberá pedirse contraseña.
-	Cuando esta se pida, el servidor va a enviar la clave al servlet de SessionServlet. El cliente debe encargarse
+	Cuando esta se pida, el servidor va a enviar la clave al servlet de LoginServlet. El cliente debe encargarse
 	de enviar correctamente el username	*/
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
@@ -43,8 +43,6 @@ public class EditUserServlet extends HttpServlet {
 	/*Servlet para cuando se quiera recuperar usuario por olvido de contraseña
 	Not implemented btw*/
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-
-	}
+	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {}
 
 }

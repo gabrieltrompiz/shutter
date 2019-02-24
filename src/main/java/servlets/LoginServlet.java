@@ -14,11 +14,10 @@ import models.Response;
 import models.User;
 import utilities.Encryptor;
 
-@WebServlet(urlPatterns = "/session", name = "Session Servlet")
-public class SessionServlet extends HttpServlet {
+@WebServlet(urlPatterns = "/login", name = "Login Servlet")
+public class LoginServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
-  /* Servlet para iniciar sesión */
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     ObjectMapper mapper = new ObjectMapper();
@@ -39,14 +38,6 @@ public class SessionServlet extends HttpServlet {
     resp.getWriter().print(mapper.writeValueAsString(response));
   }
 
-  /* Servlet para cerrar sesión */
   @Override
-  protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-    req.getSession().invalidate();
-    Response<?> response = new Response<>();
-    ObjectMapper mapper = new ObjectMapper();
-    response.setStatus(200);
-    response.setMessage("Session ended");
-    res.getWriter().print(mapper.writeValueAsString(response));
-  }
+  protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {}
 }
