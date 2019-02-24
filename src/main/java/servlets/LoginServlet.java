@@ -25,7 +25,7 @@ public class LoginServlet extends HttpServlet {
     User user = mapper.readValue(json, User.class);
 
     if(user.getLowercaseUsername() == null)
-    	user.setLowercaseUsername(SessionHandler.getUsernameByEmail(user.getEmail()));
+    	user.setLowercaseUsername(user.getUsername());
 
     user.setPassword(Encryptor.getSHA256(user.getPassword(), user.getLowercaseUsername()));
 

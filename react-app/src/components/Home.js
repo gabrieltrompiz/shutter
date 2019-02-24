@@ -7,8 +7,6 @@ export default class Home extends React.Component {
 	}
 
 	render() {
-		return(
-			
-			);
+		return(<div></div>);
 	}
 }

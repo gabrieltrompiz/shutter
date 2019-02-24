@@ -1,5 +1,5 @@
 import React from 'react'
-import { Menu, Label, Input, Icon, Container, Grid } from 'semantic-ui-react'
+import { Menu, Label, Input, Icon, Container, Grid, Header, Image } from 'semantic-ui-react'
 import Home from '../components/Home'
 import Inbox from '../components/Inbox'
 import Profile from '../components/Profile'
@@ -9,44 +9,76 @@ import Settings from '../components/Settings'
 export default class Dashboard extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {activeItem : 'Home'}
+		this.state = { activeItem : 'Home' }
 	}
 
 	handleItemClick = (evt, {name}) => {
-		this.setState({activeItem : name});
-		console.log({name});
+		this.setState({ activeItem : name });
+		console.log(name);
 	}
 
 	render() {
-		const activeItem = this.state
 		return (
-			<Grid columns={2}>
-				<Grid.Column>
-					<Menu vertical borderless style={{textAlign : 'center', marginTop : '25vh'}}>
-						<Menu.Item name='Home' active={activeItem === 'Home'} onClick={this.handleItemClick}>
+			<Container fluid style={{ height: 'inherit', backgroundColor: '#FAFAFC' }}>
+				<div style={{ height: '90vh', paddingTop: '5vh', float: 'left' }}>
+					<Menu vertical style={{ height: 'inherit' }} pointing>
+						<Menu.Item header style={{ textAlign: 'center' }}>
+							<Image 
+								as="img" 
+								src={require('../assets/pandagram.png')}
+								style={{ width: 55, height: 55, borderRadius: 12, margin: 'auto', marginTop: 10 }}
+							/>
+							<p style={{ fontFamily: 'Billabong', fontSize: 40, fontWeight: '400' }}>Pandagram</p>
 						</Menu.Item>
-						<Menu.Item name='Profile' active={activeItem === 'Profile'} onClick={this.handleItemClick}>
+						<Menu.Item active={this.state.activeItem === 'Home'} onClick={this.handleItemClick} name='Home'>
+							<Header as='h5' style={{ paddingLeft: 10, marginTop: 0.5 }}>
+								<Icon name='home' style={{ float: 'left', fontSize: 16 }}/>
+								Home
+							</Header>
 						</Menu.Item>
-						<Menu.Item name='Inbox' active={activeItem === 'Inbox'} onClick={this.handleItemClick}>
+						<Menu.Item active={this.state.activeItem === 'Profile'} onClick={this.handleItemClick} name='Profile'>
+							<Header as='h5' style={{ paddingLeft: 10, marginTop: 0.5 }}>
+								<Icon name='user' style={{ float: 'left', fontSize: 16 }}/>
+								Profile
+							</Header>
 						</Menu.Item>
-						<Menu.Item name='Search' active={activeItem === 'Search'} onClick={this.handleItemClick}>
+						<Menu.Item active={this.state.activeItem === 'Inbox'} onClick={this.handleItemClick} name='Inbox'>
+							<Label color='teal'>1</Label>
+							<Header as='h5' style={{ paddingLeft: 10, marginTop: 0.5 }}>
+								<Icon name='inbox' style={{ float: 'left', fontSize: 16 }}/>
+								Inbox
+							</Header>
 						</Menu.Item>
-						<Menu.Item name='Settings' active={activeItem === 'Settings'} onClick={this.handleItemClick}>
+						<Menu.Item active={this.state.activeItem === 'Search'} onClick={this.handleItemClick} name='Search'>
+							<Header as='h5' style={{ paddingLeft: 10, marginTop: 0.5 }}>
+								<Icon name='search' style={{ float: 'left', fontSize: 16 }}/>
+								Search
+							</Header>
 						</Menu.Item>
-						<Menu.Item name='Log out' active={activeItem === 'LogOut'} onClick={this.handleItemClick}>
+						<Menu.Item active={this.state.activeItem === 'Settings'} onClick={this.handleItemClick} name='Settings'>
+							<Header as='h5' style={{ paddingLeft: 10, marginTop: 0.5 }}>
+								<Icon name='cog' style={{ float: 'left', fontSize: 16 }}/>
+								Settings
+							</Header>
+						</Menu.Item>
+						<Menu.Item active={this.state.activeItem === 'LogOut'} onClick={this.handleItemClick} name='LogOut'>
+							<Header as='h5' style={{ paddingLeft: 10, marginTop: 0.5 }}>
+								<Icon name='sign out' style={{ float: 'left', fontSize: 16 }}/>	
+								Log out
+							</Header>
 						</Menu.Item>
 					</Menu>
-				</Grid.Column>
-				<Grid.Column>
-					<Container>
-						<Home/>
-						<Inbox/>
-						<Profile/>
-						<Search/>
-						<Settings/>
-					</Container>
-				</Grid.Column>
-			</Grid>
-			);
+				</div>
+			</Container>
+			
+			// <Container>
+			// 	{/* <Home/>
+			// 	<Inbox/>
+			// 	<Profile/>
+			// 	<Search/>
+			// 	<Settings/> */}
+			// </Container>
+				
+		);
 	}
 }

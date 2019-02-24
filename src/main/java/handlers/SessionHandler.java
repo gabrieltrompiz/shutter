@@ -56,7 +56,7 @@ public class SessionHandler {
 			response.setMessage("Username already registered");
 			return response;
 		}
-		if(checkEmail(user.getEmail())) {
+		if(checkEmail(user.getEmail().toLowerCase())) {
 			response.setStatus(409);
 			response.setMessage("Email already in use");
 			return response;
@@ -68,7 +68,7 @@ public class SessionHandler {
 			pstmt.setString(3, user.getPassword());
 			pstmt.setString(4, user.getName());
 			pstmt.setString(5, user.getLastName());
-			pstmt.setString(6, user.getEmail());
+			pstmt.setString(6, user.getEmail().toLowerCase());
 			pstmt.setDate(7, user.getBirthday());
 			pstmt.setTimestamp(8, user.getCreationTime());
 			pstmt.setString(9, user.getAvatar());
@@ -160,7 +160,7 @@ public class SessionHandler {
 		return false;
 	}
 
-	private static boolean checkLowercaseUsername(String username) {
+	public static boolean checkLowercaseUsername(String username) {
 		String query = prop.getValue("checkLowercaseUsername");
 		try {
 			PreparedStatement pstmt = connection.prepareStatement(query);

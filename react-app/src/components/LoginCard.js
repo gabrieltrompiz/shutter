@@ -14,7 +14,8 @@ export default class LoginCard extends React.Component {
 
     validateUsername = () => {
         const username = this.state.username
-        if(username.length < 6) { return false }
+        const usernameRegex = /^(?=.{6,18}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._@-]+(?<![_.])$/
+        if(!usernameRegex.test(username)) { return false }
         return true
     }
 
@@ -24,20 +25,20 @@ export default class LoginCard extends React.Component {
         return true
     }
     
-    login = async() => {
+    login = async () => {
         await this.setState({ errorUsername: !this.validateUsername(), errorPassword: !this.validatePassword() })
         if(this.state.errorUsername || this.state.errorPassword) { return }
         const body = {
             username: this.state.username,
             password: this.state.password
         }
-        fetch('http://localhost:8080/session', { method: 'POST', body: JSON.stringify(body), credentials: 'include'})
+        fetch('http://localhost:8080/login', { method: 'POST', body: JSON.stringify(body), credentials: 'include'})
         .then(response => response.json().then(data => console.log(data)))
     }
 
     render() {
         const list = []
-        if(this.state.errorUsername) { list.push("Username must be between 6 and 12 characters.") }
+        if(this.state.errorUsername) { list.push("Username must be between 6 and 12 characters and cannot contain special characters.") }
         if(this.state.errorPassword) { list.push("Password must be between 8 and 18 characters.") }
         return(
             <Transition visible={this.props.visible} transitionOnMount unmountOnHide duration={350}>

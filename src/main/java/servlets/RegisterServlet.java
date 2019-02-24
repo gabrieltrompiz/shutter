@@ -30,7 +30,6 @@ public class RegisterServlet extends HttpServlet {
     if(response.getStatus() == 200) {
     	req.getSession();
 	}
-
     res.setStatus(response.getStatus());
     res.getWriter().print(mapper.writeValueAsString(response));
   }

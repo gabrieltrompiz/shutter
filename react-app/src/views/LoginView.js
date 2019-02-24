@@ -23,7 +23,7 @@ export default class LoginView extends React.Component {
 
     render(){
         return(
-            <Grid columns={2} divided style={{ height: 'inherit' }}>
+            <Grid columns={2} divided style={{ height: '101.9vh' }}>
                 <Grid.Column style={{ textAlign: 'center', backgroundImage: `url(${background})`, backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center', }}>
                     <div style={{ marginTop: '35vh' }}>
                         <Icon name="search" style={{ color: 'white', fontSize: 40 }} />
@@ -38,7 +38,7 @@ export default class LoginView extends React.Component {
                         <span style={{ fontFamily: "Roboto", fontSize: 24, paddingLeft: 15, color: 'white', paddingBottom: 10 }}>Join the conversation.</span>       
                     </div>   
                 </Grid.Column>
-                <Grid.Column>
+                <Grid.Column style={{ backgroundColor: '#FAFAFC' }}>
                     <Container fluid>
                         <LoginCard changeCard={this.handleChangeCard} visible={this.state.loginVisible}/>
                         <RegisterCard changeCard={this.handleChangeCard} visible={this.state.registerVisible} />
