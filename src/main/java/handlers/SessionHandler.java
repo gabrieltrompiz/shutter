@@ -101,12 +101,12 @@ public class SessionHandler {
 		user.setName(rs.getString(5));
 		user.setLastName(rs.getString(6));
 		user.setEmail(rs.getString(7));
-    user.setBirthday(rs.getDate(8));
-    user.setCreationTime(rs.getTimestamp(9));
-    user.setAvatar(rs.getString(10));
-    user.setTypeId(rs.getInt(11));
-    user.setSex(rs.getBoolean(12));
-    user.setEnabled(rs.getBoolean(13));
+		user.setBirthday(rs.getDate(8));
+		user.setCreationTime(rs.getTimestamp(9));
+		user.setAvatar(rs.getString(10));
+		user.setTypeId(rs.getInt(11));
+		user.setSex(rs.getBoolean(12));
+		user.setEnabled(rs.getBoolean(13));
 		user.setPassword(null);
 	}
 
