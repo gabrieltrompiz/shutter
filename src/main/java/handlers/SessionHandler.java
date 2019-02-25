@@ -148,7 +148,7 @@ public class SessionHandler {
 		String query = prop.getValue("checkEmail");
 		try {
 			PreparedStatement pstmt = connection.prepareStatement(query);
-			pstmt.setString(1, email);
+			pstmt.setString(1, email.toLowerCase());
 			ResultSet rs = pstmt.executeQuery();
 			if(rs.next()) {
 				return true;

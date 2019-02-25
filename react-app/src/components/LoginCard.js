@@ -1,11 +1,11 @@
 import React from 'react'
-import { Segment, Image, Form, Container, Message, Divider, Transition } from 'semantic-ui-react'
+import { Segment, Image, Form, Container, Message, Divider, Transition, Dimmer, Loader } from 'semantic-ui-react'
 import Button from './Button'
 
 export default class LoginCard extends React.Component {
     constructor(props) {
         super(props)
-         this.state = { username: '', password: '', errorUsername: false, errorPassword: false }
+         this.state = { username: '', password: '', errorUsername: false, errorPassword: false, errorLogin: false, loading: false }
     }
 
     handleChange = (e) => { 
@@ -26,14 +26,23 @@ export default class LoginCard extends React.Component {
     }
     
     login = async () => {
-        await this.setState({ errorUsername: !this.validateUsername(), errorPassword: !this.validatePassword() })
-        if(this.state.errorUsername || this.state.errorPassword) { return }
+        await this.setState({ errorUsername: !this.validateUsername(), errorPassword: !this.validatePassword(), loading: true })
+        if(this.state.errorUsername || this.state.errorPassword) { this.setState({ loading: false }); return; }
         const body = {
             username: this.state.username,
             password: this.state.password
         }
-        fetch('http://localhost:8080/login', { method: 'POST', body: JSON.stringify(body), credentials: 'include'})
-        .then(response => response.json().then(data => console.log(data)))
+        await fetch('http://localhost:8080/login', { method: 'POST', body: JSON.stringify(body), credentials: 'include'})
+        .then(response => {
+            if(response.status === 200) {
+                this.props.handleLoggedIn(true)
+            }
+            else {
+                console.log('Error')
+                this.setState({ errorLogin: true })
+            }
+        })
+        this.setState({ loading: false })
     }
 
     render() {
@@ -44,6 +53,9 @@ export default class LoginCard extends React.Component {
             <Transition visible={this.props.visible} transitionOnMount unmountOnHide duration={350}>
                 <Container>
                     <Segment raised textAlign="center" compact style={{ margin: 'auto', marginTop: '20vh' }}>
+                        <Dimmer active={this.state.loading} inverted>
+                            <Loader />
+                        </Dimmer>
                         <Image 
                             as="img" 
                             src={require('../assets/pandagram.png')}
@@ -64,12 +76,13 @@ export default class LoginCard extends React.Component {
                             <Container fluid style={{ marginBottom: 20 }}>
                                 <Button color="#F16E3F" width='100%' height={34} outlined onClick={() => this.props.changeCard('register')}>Sign up</Button>
                             </Container>
+                            {this.state.errorLogin &&
+                            <Message negative content="There was an error while logging in. Please verify provided credentials." />}
                             {(this.state.errorUsername || this.state.errorPassword) &&
                             <Message
                                 negative size="mini"
                                 list={list}
-                            />
-                            }
+                            />}
                         </Form>
                     </Segment>
                 </Container>

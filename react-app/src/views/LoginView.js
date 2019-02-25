@@ -7,7 +7,7 @@ const background = require('../assets/WWF_logo1.png')
 export default class LoginView extends React.Component {
     constructor(props) {
         super(props)
-        this.state = { loginVisible: true, registerVisible: false}
+        this.state = { loginVisible: true, registerVisible: false }
     }
 
     handleChangeCard = card => {
@@ -40,8 +40,8 @@ export default class LoginView extends React.Component {
                 </Grid.Column>
                 <Grid.Column style={{ backgroundColor: '#FAFAFC' }}>
                     <Container fluid>
-                        <LoginCard changeCard={this.handleChangeCard} visible={this.state.loginVisible}/>
-                        <RegisterCard changeCard={this.handleChangeCard} visible={this.state.registerVisible} />
+                        <LoginCard changeCard={this.handleChangeCard} visible={this.state.loginVisible} handleLoggedIn={this.props.handleLoggedIn}/>
+                        <RegisterCard changeCard={this.handleChangeCard} visible={this.state.registerVisible} handleLoggedIn={this.props.handleLoggedIn}/>
                     </Container>
                 </Grid.Column>
             </Grid>

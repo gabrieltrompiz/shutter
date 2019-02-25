@@ -10,10 +10,28 @@ class App extends Component {
     this.state = { loggedIn: false }
   }
 
+  componentDidMount = () => {
+    this._retrieveState()
+  }
+
+  _retrieveState = async () => {
+    const loggedIn = await localStorage.getItem('loggedIn')
+     if(loggedIn !== null) { this.setState({ loggedIn: JSON.parse(loggedIn) }) }
+  }
+
+  handleLoggedIn = async (loggedIn) => {
+    await localStorage.setItem('loggedIn', JSON.stringify(loggedIn))
+    this.setState({ loggedIn: loggedIn })
+  }
+
   render() {
+    console.log(localStorage.getItem('loggedIn'))
     return (
       <div className="App">
-        <LoginView />
+        {!this.state.loggedIn &&
+        <LoginView handleLoggedIn={this.handleLoggedIn} />}
+        {this.state.loggedIn && 
+        <Dashboard handleLoggedIn={this.handleLoggedIn} />}
       </div>
     );
   }

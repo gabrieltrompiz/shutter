@@ -14,7 +14,11 @@ export default class Dashboard extends React.Component {
 
 	handleItemClick = (evt, {name}) => {
 		this.setState({ activeItem : name });
-		console.log(name);
+	}
+
+	logout = async () => {
+		await fetch('http://localhost:8080/logout', { credentials: 'include' })
+		this.props.handleLoggedIn(false)
 	}
 
 	render() {
@@ -61,7 +65,7 @@ export default class Dashboard extends React.Component {
 								Settings
 							</Header>
 						</Menu.Item>
-						<Menu.Item active={this.state.activeItem === 'LogOut'} onClick={this.handleItemClick} name='LogOut'>
+						<Menu.Item active={this.state.activeItem === 'LogOut'} onClick={this.logout}>
 							<Header as='h5' style={{ paddingLeft: 10, marginTop: 0.5 }}>
 								<Icon name='sign out' style={{ float: 'left', fontSize: 16 }}/>	
 								Log out

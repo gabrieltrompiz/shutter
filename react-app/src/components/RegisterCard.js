@@ -13,9 +13,9 @@ export default class RegisterCard extends React.Component {
 
     get intialState() {
         return {
-            step: 2, pwdVisible: false, confVisible: false, firstname: '', lastname: '', birthday: '',
+            step: 0, pwdVisible: false, confVisible: false, firstname: '', lastname: '', birthday: '',
             gender: '', username: '', email: '', password: '', passwordConf: '', errorFirstname: false, errorLastname: false, errorBirthday: false, errorGender: false,
-            errorUsername: false, errorEmail: false,  errorPwd: false, errorPwdConf: false, usernameAvailable: true, emailAvailable: true, loading: false
+            errorUsername: false, errorEmail: false,  errorPwd: false, errorPwdConf: false, usernameAvailable: true, emailAvailable: true, loading: false, errorRegister: false
         }
     }
 
@@ -83,7 +83,7 @@ export default class RegisterCard extends React.Component {
 
     register = async () => {
         this.setState({ loading: true })
-        let body = {
+        const body = {
             username: this.state.username,
             lowercaseUsername: this.state.username.toLowerCase(),
             password: this.state.password,
@@ -98,9 +98,24 @@ export default class RegisterCard extends React.Component {
             enabled: true
         }
         await fetch('http://localhost:8080/register', { method: 'POST', body: JSON.stringify(body) })
-        .then(response => response.json()
-        .then(data => console.log(data)))
+        .then(response => {
+            if(response.status === 200) {
+                this.login(body);
+            }
+            else {
+                this.setState({ errorRegister: true })
+            }
+        })
         this.setState({ loading: false })
+    }
+
+    login = async (body) => {
+        await fetch('http://localhost:8080/login', { method: 'POST', body: JSON.stringify(body), credentials: 'include' })
+        .then(response => {
+            if(response.status === 200) {
+                this.props.handleLoggedIn(true)
+            }
+        })
     }
 
     render() {
@@ -149,7 +164,7 @@ export default class RegisterCard extends React.Component {
                             <Form.Group widths='equal'>
                                 <Form.Field label="Birthday" control={DateInput} value={this.state.birthday} iconPosition='left' error={this.state.errorBirthday}
                                 onChange={this.handleInput} name='birthday' closable placeholder='Click to select a date' maxDate={maxDate} initialDate='01-01-2000'
-                                onKeyDown={(e) => e.preventDefault()}/>
+                                onKeyDown={(e) => e.preventDefault()} dateFormat="YYYY-MM-DD"/>
                                 <Form.Select label='Gender' options={options} placeholder='Gender' name='gender' onChange={this.handleInput} 
                                 value={this.state.gender} error={this.state.errorGender}/>
                             </Form.Group>
@@ -198,6 +213,8 @@ export default class RegisterCard extends React.Component {
                         {(this.state.errorFirstname || this.state.errorLastname || this.state.errorBirthday || this.state.errorGender || this.state.errorUsername ||
                         this.state.errorEmail || this.state.errorPwd || this.state.errorPwdConf || !this.state.usernameAvailable || !this.state.emailAvailable) && errorList.length !== 0 &&
                         <Message error list={errorList} /> }
+                        {this.state.errorRegister && 
+                        <Message error>There was an error while registering you. Please try again later and if the error persists contact support.</Message>}
                         <Container fluid style={{ marginBottom: 20, marginTop: 20 }}>
                             {this.state.step === 0 && 
                             <span style={{ marginRight: '60%' }}>
