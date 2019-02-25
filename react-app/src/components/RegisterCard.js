@@ -1,16 +1,22 @@
 import React from 'react'
-import { Segment, Form, Container, Transition, Step, Input } from 'semantic-ui-react'
+import { Segment, Form, Container, Transition, Step, Input, Message, Header, Grid, Divider, Dimmer, Loader } from 'semantic-ui-react'
 import { DateInput } from 'semantic-ui-calendar-react'
 import Button from './Button'
 
 export default class RegisterCard extends React.Component {
     constructor(props) {
         super(props)
-        this.state = { step: 0, pwdVisible: false, confVisible: false, firstname: '', lastname: '', birthday: '',
-        gender: '', username: '', email: '', password: '', passwordConf: '', errorFirstname: false, errorLastname: false, errorBirthday: false, errorGender: false,
-        errorUsername: false, errorEmail: false,  errorPwd: false, errorPwdConf: false, usernameAvailable: true, emailAvailable: true }
+        this.state = this.intialState
         this.handleInput = this.handleInput.bind(this)
         this.validator = require('email-validator')
+    }
+
+    get intialState() {
+        return {
+            step: 2, pwdVisible: false, confVisible: false, firstname: '', lastname: '', birthday: '',
+            gender: '', username: '', email: '', password: '', passwordConf: '', errorFirstname: false, errorLastname: false, errorBirthday: false, errorGender: false,
+            errorUsername: false, errorEmail: false,  errorPwd: false, errorPwdConf: false, usernameAvailable: true, emailAvailable: true, loading: false
+        }
     }
 
     handleClickPwd = () => {
@@ -34,7 +40,7 @@ export default class RegisterCard extends React.Component {
                 this.setState({ usernameAvailable: true });   
             }
             else { 
-                this.setState({ errorUsername: true, usernameAvailable: false });
+                this.setState({ usernameAvailable: false });
             }
         })
     }
@@ -48,7 +54,7 @@ export default class RegisterCard extends React.Component {
                 this.setState({ emailAvailable: true }) 
             }
             else {
-                this.setState({ errorEmail: true, emailAvailable: false })
+                this.setState({ emailAvailable: false })
             }
         })
     }
@@ -75,8 +81,26 @@ export default class RegisterCard extends React.Component {
         }
     }
 
-    register = () => {
-
+    register = async () => {
+        this.setState({ loading: true })
+        let body = {
+            username: this.state.username,
+            lowercaseUsername: this.state.username.toLowerCase(),
+            password: this.state.password,
+            name: this.state.firstname,
+            lastName: this.state.lastname,
+            email: this.state.email,
+            birthday: new Date(this.state.birthday),
+            creationTime: Date.now(),
+            avatar: './avatar.png',
+            typeId: 1,
+            sex: this.state.gender === 'Male',
+            enabled: true
+        }
+        await fetch('http://localhost:8080/register', { method: 'POST', body: JSON.stringify(body) })
+        .then(response => response.json()
+        .then(data => console.log(data)))
+        this.setState({ loading: false })
     }
 
     render() {
@@ -86,6 +110,21 @@ export default class RegisterCard extends React.Component {
         const typeConf = this.state.confVisible ? 'text' : 'password'
         const today = new Date()
         const maxDate = today.getDate() + '-' + (parseInt(today.getMonth(), 10) + 1) + '-' + (parseInt(today.getFullYear(), 10) - 12) // Get current date in format dd-mm-yyyy - 12 years
+        const errorList = []
+        if(this.state.step === 0) {
+            if(this.state.errorFirstname) { errorList.push('Enter your first name.') }
+            if(this.state.errorLastname) { errorList.push('Enter your last name.') }
+            if(this.state.errorBirthday) { errorList.push('Enter a valid birthday.') }
+            if(this.state.errorGender) { errorList.push('Specify a gender.') }
+        }
+        if(this.state.step === 1) {
+            if(this.state.errorUsername) { errorList.push('Username must be between 6 and 12 characters and cannot contain special characters.') }
+            if(!this.state.usernameAvailable) { errorList.push('Username already in use.') }
+            if(this.state.errorEmail) { errorList.push('Enter a valid email.') }
+            if(!this.state.emailAvailable) { errorList.push('Email already in use.') }
+            if(this.state.errorPwd) { errorList.push('Password must be between 8 and 18 characters.') }
+            if(this.state.errorPwdConf) { errorList.push('Password confirmation doesn\'t match.') }
+        }
         return(
             <Transition visible={this.props.visible} transitionOnMount unmountOnHide duration={350}>
                 <Container>
@@ -109,7 +148,8 @@ export default class RegisterCard extends React.Component {
                             </Form.Group>
                             <Form.Group widths='equal'>
                                 <Form.Field label="Birthday" control={DateInput} value={this.state.birthday} iconPosition='left' error={this.state.errorBirthday}
-                                onChange={this.handleInput} name='birthday' closable placeholder='Click to select a date' maxDate={maxDate} initialDate='01-01-2000'/>
+                                onChange={this.handleInput} name='birthday' closable placeholder='Click to select a date' maxDate={maxDate} initialDate='01-01-2000'
+                                onKeyDown={(e) => e.preventDefault()}/>
                                 <Form.Select label='Gender' options={options} placeholder='Gender' name='gender' onChange={this.handleInput} 
                                 value={this.state.gender} error={this.state.errorGender}/>
                             </Form.Group>
@@ -119,9 +159,9 @@ export default class RegisterCard extends React.Component {
                         <Form style={{ marginLeft: 10, marginRight: 10, width: '97%' }} size='large'>
                             <Form.Group widths='equal'>
                                 <Form.Field placeholder="Username" onChange={this.handleInput} autoComplete='off' control={Input} label="Username" 
-                                icon='at' iconPosition="left" name='username' maxLength={18} error={this.state.errorUsername}/>
+                                icon='at' iconPosition="left" name='username' maxLength={18} error={this.state.errorUsername || !this.state.usernameAvailable}/>
                                 <Form.Field placeholder="Email" onChange={this.handleInput} autoComplete='off' control={Input} label="Email" 
-                                name='email' error={this.state.errorEmail}/>
+                                name='email' error={this.state.errorEmail || !this.state.emailAvailable}/>
                             </Form.Group>
                             <Form.Group widths='equal'>
                                 <Form.Field placeholder="Password" onChange={this.handleInput} maxLength={30} error={this.state.errorPwd}
@@ -130,10 +170,38 @@ export default class RegisterCard extends React.Component {
                                 control={Input} label="Confirm password" type={typeConf} action={{ icon: iconConf, onClick: this.handleClickConf }} name="passwordConf"/>
                             </Form.Group>
                         </Form>}
+                        {this.state.step === 2 && 
+                        <Grid columns={3} style={{ paddingLeft: 20, paddingRight: 20, marginTop: 2, width: 'inherit' }}>
+                        <Dimmer active={this.state.loading} inverted>
+                            <Loader />
+                        </Dimmer>
+                            <Grid.Column>
+                                <Header as='h3' style={{ marginBottom: 2 }}>First name</Header>
+                                <span style={{ fontSize: 16, paddingLeft: 5 }}>{this.state.firstname}</span>
+                                <Header as='h3' style={{ marginBottom: 2 }}>Gender</Header>
+                                <span style={{ fontSize: 16, paddingLeft: 5 }}>{this.state.gender}</span>
+                            </Grid.Column>
+                            <Grid.Column>
+                                <Header as='h3' style={{ marginBottom: 2 }}>Last name</Header>
+                                <span style={{ fontSize: 16, paddingLeft: 5 }}>{this.state.lastname}</span>
+                                <Header as='h3' style={{ marginBottom: 2 }}>Username</Header>
+                                <span style={{ fontSize: 16, paddingLeft: 5 }}>{this.state.username}</span>
+                            </Grid.Column>
+                            <Grid.Column>
+                                <Header as='h3' style={{ marginBottom: 2 }}>Birthday</Header>
+                                <span style={{ fontSize: 16, paddingLeft: 5 }}>{this.state.birthday}</span>
+                                <Header as='h3' style={{ marginBottom: 2 }}>Email</Header>
+                                <span style={{ fontSize: 16, paddingLeft: 5 }}>{this.state.email}</span>
+                            </Grid.Column>
+                        </Grid>}
+                        {this.state.step === 2 && <Divider />}
+                        {(this.state.errorFirstname || this.state.errorLastname || this.state.errorBirthday || this.state.errorGender || this.state.errorUsername ||
+                        this.state.errorEmail || this.state.errorPwd || this.state.errorPwdConf || !this.state.usernameAvailable || !this.state.emailAvailable) && errorList.length !== 0 &&
+                        <Message error list={errorList} /> }
                         <Container fluid style={{ marginBottom: 20, marginTop: 20 }}>
                             {this.state.step === 0 && 
                             <span style={{ marginRight: '60%' }}>
-                                <Button color="#ff5252" width='20%' height={34} outlined onClick={() => this.props.changeCard('login')}>Back</Button>
+                                <Button color="#ff5252" width='20%' height={34} outlined onClick={() => { this.setState(this.intialState); this.props.changeCard('login') } }>Back</Button>
                             </span>}
                             {this.state.step !== 0 &&
                             <span style={{ marginRight: '60%' }}>
@@ -152,6 +220,6 @@ export default class RegisterCard extends React.Component {
 }
 
 const options = [
-  { key: 'm', text: 'Male', value: 'male' },
-  { key: 'f', text: 'Female', value: 'female' },
+  { key: 'm', text: 'Male', value: 'Male' },
+  { key: 'f', text: 'Female', value: 'Female' },
 ]
