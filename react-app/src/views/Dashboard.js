@@ -1,5 +1,5 @@
 import React from 'react'
-import { Menu, Label, Input, Icon, Container, Grid, Header, Image } from 'semantic-ui-react'
+import { Menu, Label, Input, Icon, Container, Grid, Header, Image, Segment } from 'semantic-ui-react'
 import Home from '../components/Home'
 import Inbox from '../components/Inbox'
 import Profile from '../components/Profile'
@@ -26,8 +26,8 @@ export default class Dashboard extends React.Component {
 		return (
 			<Container fluid style={{ height: 'inherit', backgroundColor: '#FAFAFC' }}>
 				<Grid>
-					<Grid.Column width={4} style={{ height: '90vh', paddingTop: '5vh', float: 'left' }}>
-						<Menu vertical style={{ height: 'inherit' }} pointing>
+					<Grid.Column width={3} style={{ height: '100vh' }}>
+						<Menu vertical style={{ height: 'inherit' }} pointing secondary>
 							<Menu.Item header style={{ textAlign: 'center' }}>
 								<Image
 									as="img"
@@ -67,7 +67,7 @@ export default class Dashboard extends React.Component {
 									Settings
 								</Header>
 							</Menu.Item>
-							<Menu.Item active={this.state.activeItem === 'LogOut'} onClick={this.handleItemClick} name='LogOut'>
+							<Menu.Item active={this.state.activeItem === 'LogOut'} onClick={this.logout}>
 								<Header as='h5' style={{ paddingLeft: 10, marginTop: 0.5 }}>
 									<Icon name='sign out' style={{ float: 'left', fontSize: 16 }}/>
 									Log out
@@ -76,7 +76,10 @@ export default class Dashboard extends React.Component {
 						</Menu>
 					</Grid.Column>
 					<Grid.Column width={12}>
-						<Profile/>
+						<Segment raised style={{ height: '95vh', marginTop: '2.5vh' }}>
+							{this.state.activeItem === 'Profile' && <Profile user={this.props.user}/>}
+						</Segment>
+						
 					</Grid.Column>
 				</Grid>
 			</Container>

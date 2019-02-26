@@ -7,7 +7,7 @@ import Dashboard from './views/Dashboard'
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { loggedIn: false }
+    this.state = { loggedIn: false, user: null }
   }
 
   componentDidMount = () => {
@@ -16,22 +16,33 @@ class App extends Component {
 
   _retrieveState = async () => {
     const loggedIn = await localStorage.getItem('loggedIn')
+    const user = await localStorage.getItem('user')
      if(loggedIn !== null) { this.setState({ loggedIn: JSON.parse(loggedIn) }) }
+     if(user !== null) { this.setState({ user: JSON.parse(user) })}
   }
 
   handleLoggedIn = async (loggedIn) => {
+    if(!loggedIn) {
+      await localStorage.clear('user')
+      this.setState({ user: null })
+    }
     await localStorage.setItem('loggedIn', JSON.stringify(loggedIn))
     this.setState({ loggedIn: loggedIn })
+  }
+
+  handleUser = async (user) => { 
+    await localStorage.setItem('user', JSON.stringify(user))
+    this.setState({ user: user })
   }
 
   render() {
     console.log(localStorage.getItem('loggedIn'))
     return (
-      <div className="App">
+      <div className="App" style={{ height: '101.9vh' }}>
         {!this.state.loggedIn &&
-        <LoginView handleLoggedIn={this.handleLoggedIn} />}
+        <LoginView handleLoggedIn={this.handleLoggedIn} handleUser={this.handleUser}/>}
         {this.state.loggedIn && 
-        <Dashboard handleLoggedIn={this.handleLoggedIn} />}
+        <Dashboard handleLoggedIn={this.handleLoggedIn} user={this.state.user}/>}
       </div>
     );
   }

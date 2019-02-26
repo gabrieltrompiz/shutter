@@ -98,14 +98,16 @@ export default class RegisterCard extends React.Component {
             enabled: true
         }
         await fetch('http://localhost:8080/register', { method: 'POST', body: JSON.stringify(body) })
-        .then(response => {
+        .then(response => response.json()
+        .then(json => {
             if(response.status === 200) {
                 this.login(body);
+                this.props.handleUser(JSON.parse(json.data))
             }
             else {
                 this.setState({ errorRegister: true })
             }
-        })
+        }))
         this.setState({ loading: false })
     }
 
@@ -182,7 +184,7 @@ export default class RegisterCard extends React.Component {
                                 <Form.Field placeholder="Password" onChange={this.handleInput} maxLength={30} error={this.state.errorPwd}
                                 control={Input} label="Password" type={typePwd} action={{ icon: iconPwd, onClick: this.handleClickPwd }} name='password'/>
                                 <Form.Field placeholder="Confirm password" onChange={this.handleInput} name='passwordConf' maxLength={30} error={this.state.errorPwdConf}
-                                control={Input} label="Confirm password" type={typeConf} action={{ icon: iconConf, onClick: this.handleClickConf }} name="passwordConf"/>
+                                control={Input} label="Confirm password" type={typeConf} action={{ icon: iconConf, onClick: this.handleClickConf }}/>
                             </Form.Group>
                         </Form>}
                         {this.state.step === 2 && 

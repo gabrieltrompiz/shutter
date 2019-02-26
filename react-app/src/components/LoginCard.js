@@ -33,16 +33,17 @@ export default class LoginCard extends React.Component {
             password: this.state.password
         }
         await fetch('http://localhost:8080/login', { method: 'POST', body: JSON.stringify(body), credentials: 'include'})
-        .then(response => {
-            if(response.status === 200) {
-                this.props.handleLoggedIn(true)
+        .then(response => response.json()
+        .then(json => {
+            if(json.status === 200) {
+                this.props.handleUser(json.data).then(this.props.handleLoggedIn(true))
+                
             }
             else {
-                console.log('Error')
                 this.setState({ errorLogin: true })
             }
-        })
-        this.setState({ loading: false })
+        }))
+        .then(this.setState({ loading: false }))
     }
 
     render() {

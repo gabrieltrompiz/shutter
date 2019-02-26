@@ -40,8 +40,8 @@ export default class LoginView extends React.Component {
                 </Grid.Column>
                 <Grid.Column style={{ backgroundColor: '#FAFAFC' }}>
                     <Container fluid>
-                        <LoginCard changeCard={this.handleChangeCard} visible={this.state.loginVisible} handleLoggedIn={this.props.handleLoggedIn}/>
-                        <RegisterCard changeCard={this.handleChangeCard} visible={this.state.registerVisible} handleLoggedIn={this.props.handleLoggedIn}/>
+                        <LoginCard changeCard={this.handleChangeCard} visible={this.state.loginVisible} handleLoggedIn={this.props.handleLoggedIn} handleUser={this.props.handleUser}/>
+                        <RegisterCard changeCard={this.handleChangeCard} visible={this.state.registerVisible} handleLoggedIn={this.props.handleLoggedIn} handleUser={this.props.handleUser}/>
                     </Container>
                 </Grid.Column>
             </Grid>
