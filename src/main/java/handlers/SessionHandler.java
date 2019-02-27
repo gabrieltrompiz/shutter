@@ -100,11 +100,22 @@ public class SessionHandler {
 			ps.setString(2, user.getLowercaseUsername());
 			ps.setString(3, user.getName());
 			ps.setString(4, user.getLastName());
-			ps.setString(5, user.getLowercaseUsername());
-			ps.execute();
-			response.setStatus(200);
-			response.setMessage("User Update Successfully");
-			response.setData(user);
+			ps.setString(5, user.getEmail());
+			ps.setDate(6, user.getBirthday());
+			ps.setBoolean(7, user.getSex());
+			ps.setString(8, user.getLowercaseUsername());
+			ps.setString(9, user.getPassword());
+			int affectedRows = ps.executeUpdate();
+			if(affectedRows == 1) {
+        response.setStatus(200);
+        response.setMessage("User Update Successfully");
+        response.setData(user);
+      }
+			else {
+			  response.setStatus(401);
+			  response.setMessage("Bad credentials");
+			  response.setData(null);
+      }
 		} catch (SQLException e) {
 			e.printStackTrace();
 			response.setStatus(500);

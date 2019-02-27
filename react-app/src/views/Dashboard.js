@@ -9,7 +9,7 @@ import Settings from '../components/Settings'
 export default class Dashboard extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { activeItem : 'Home' }
+		this.state = { activeItem : 'Home' } //TODO: revisar xq se expira si pongo otra inicial
 	}
 
 	handleItemClick = (evt, {name}) => {

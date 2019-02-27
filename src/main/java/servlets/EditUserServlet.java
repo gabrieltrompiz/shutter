@@ -1,5 +1,6 @@
 package servlets;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import handlers.SessionHandler;
 import models.Response;
@@ -14,16 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.stream.Collectors;
 
-/**
- * @author Ptthappy
- */
-
 @WebServlet(urlPatterns = "/edit", name = "User Editor Servlet")
 public class EditUserServlet extends HttpServlet {
-
-	public EditUserServlet() {
-		super();
-	}
 
 	/*Servlet para la edición del usuario. Antes de editar los datos del usuario, deberá pedirse contraseña.
 	Cuando esta se pida, el servidor va a enviar la clave al servlet de LoginServlet. El cliente debe encargarse
@@ -31,8 +24,12 @@ public class EditUserServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
+    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false); // Deja que se puedan ignorar fields en el JSON
 		String json = req.getReader().lines().collect(Collectors.joining());
 		User user = mapper.readValue(json, User.class);
+		if(user.getLowercaseUsername() == null)
+		  user.setLowercaseUsername(user.getUsername().toLowerCase());
+		user.setPassword(Encryptor.getSHA256(user.getPassword(), user.getLowercaseUsername()));
 
 		Response<User> response = SessionHandler.modifyUser(user);
 
