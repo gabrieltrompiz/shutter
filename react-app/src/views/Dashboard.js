@@ -15,8 +15,12 @@ export default class Dashboard extends React.Component {
 
 	handleItemClick = (evt, {name}) => {
 		this.setState({ activeItem : name });
-		console.log(name);
 	};
+
+	handleChangeView = view => {
+		this.setState({ activeItem: view })
+	}
+
 
 	logout = async () => {
 		await fetch('http://localhost:8080/logout', { credentials: 'include' })
@@ -78,7 +82,8 @@ export default class Dashboard extends React.Component {
 					</Grid.Column>
 					<Grid.Column width={12}>
 						<Segment raised style={{ height: '95vh', marginTop: '2.5vh' }}>
-							{this.state.activeItem === 'Profile' && <Profile user={this.props.user}/>}
+							{this.state.activeItem === 'Profile' && <Profile user={this.props.user} changeView={this.handleChangeView}/>}
+							{this.state.activeItem === 'Edit' && <EditProfile user={this.props.user} changeView={this.handleChangeView}/>}	
 						</Segment>
 						
 					</Grid.Column>

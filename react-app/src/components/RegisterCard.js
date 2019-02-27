@@ -7,7 +7,6 @@ export default class RegisterCard extends React.Component {
     constructor(props) {
         super(props)
         this.state = this.intialState
-        this.handleInput = this.handleInput.bind(this)
         this.validator = require('email-validator')
     }
 
@@ -98,16 +97,16 @@ export default class RegisterCard extends React.Component {
             enabled: true
         }
         await fetch('http://localhost:8080/register', { method: 'POST', body: JSON.stringify(body) })
-        .then(response => response.json()
+        .then(response => response.json())
         .then(json => {
-            if(response.status === 200) {
+            if(json.status === 200) {
                 this.login(body);
-                this.props.handleUser(JSON.parse(json.data))
+                this.props.handleUser(json.data)
             }
             else {
                 this.setState({ errorRegister: true })
             }
-        }))
+        })
         this.setState({ loading: false })
     }
 

@@ -1,5 +1,6 @@
 import React from 'react';
-import {Segment, Container, Image, Header, Form} from 'semantic-ui-react';
+import {Segment, Container, Image, Header, Form, Input, Divider} from 'semantic-ui-react';
+import { DateInput } from 'semantic-ui-calendar-react'
 import Button from './Button';
 
 export default class EditProfile extends React.Component {
@@ -9,18 +10,31 @@ export default class EditProfile extends React.Component {
 		this.validator = require('email-validator')
 	}
 
-	get intialState() {
+	get initialState() {
         return {
-            pwdVisible: false, confVisible: false, firstname: '', lastname: '', birthday: '',
-            gender: '', username: '', email: '', password: '', passwordConf: '', errorFirstname: false, errorLastname: false, errorBirthday: false, errorGender: false,
+            pwdVisible: false, confVisible: false, firstname: this.props.user.name, lastname: this.props.user.lastName, birthday: new Date(this.props.user.birthday),
+            gender: this.props.user.sex, username: this.props.user.username, email: this.props.user.email, password: '', passwordConf: '', errorFirstname: false, errorLastname: false, errorBirthday: false, errorGender: false,
             errorUsername: false, errorEmail: false,  errorPwd: false, errorPwdConf: false, usernameAvailable: true, emailAvailable: true, loading: false, errorEdit: false
         }
+    }
+
+	handleClickPwd = () => {
+        this.setState({ pwdVisible: !this.state.pwdVisible })
+    }
+
+	handleInput = (event, {name, value}) => {
+		if(name === 'gender') {
+			this.setState({ gender: value === 'Male'})
+		}
+		else {
+			this.setState({ [name]: value })
+		}
     }
 
 	checkUsername = async() => {
 		if (this.state.errorUsername) return;
 		const username = { username: this.state.username };
-		await fetch('http://localhost:8080/checkUsername', { method: 'POST' })
+		await fetch('http://localhost:8080/checkUsername', { method: 'POST', body: JSON.stringify(username) })
 		.then(response => {
             if(response.status === 200) { 
                 this.setState({ usernameAvailable: true });   
@@ -34,7 +48,7 @@ export default class EditProfile extends React.Component {
 	checkEmail = async () => {
 		if (this.state.errorEmail) return;
 		const email = { email: this.state.email };
-		await fetch('http://localhost:8080/checkEmail', { method: 'POST' })
+		await fetch('http://localhost:8080/checkEmail', { method: 'POST', body: JSON.stringify(email) })
 		.then(response => {
             if(response.status === 200) { 
                 this.setState({ emailAvailable: true }) 
@@ -49,12 +63,15 @@ export default class EditProfile extends React.Component {
 		const usernameRegex = /^(?=.{6,18}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/;
 		const { firstname, lastname, birthday, gender, username, email, password, passwordConf } = this.state;
 		await this.setState({errorFirstname: firstname === '', errorLastname: lastname === '', errorBirthday: birthday === '', errorGender: gender === '',
-			errorUsername: !usernameRegex.test(username), errorEmail: !this.validator.validate(email), errorPwd: password.length < 8,
-			errorPwdConf: (password !== passwordConf || passwordConf === '')})
-		await this.checkUsername()
-        await this.checkEmail()
+			errorUsername: !usernameRegex.test(username), errorEmail: !this.validator.validate(email), errorPwd: password.length < 8 })
+		if(this.props.user.username !== this.state.username) {
+			await this.checkUsername()
+		}
+		if(this.props.user.email !== this.state.email) {
+			await this.checkEmail()
+		}
         if(!this.state.errorFirstname && !this.state.errorLastname && !this.state.errorBirthday && !this.state.errorGender
-        	&& !this.state.errorUsername && !this.state.errorEmail && !this.state.errorPwd && !this.state.errorPwdConf && this.state.usernameAvailable && this.state.emailAvailable)
+        	&& !this.state.errorUsername && !this.state.errorEmail && !this.state.errorPwd && this.state.usernameAvailable && this.state.emailAvailable)
         	await this.edit();
 	}
 
@@ -76,15 +93,24 @@ export default class EditProfile extends React.Component {
         }
         await fetch('http://localhost:8080/edit', {method: 'POST', body: JSON.stringify(body), credentials: 'include'})
         .then((res) => res.json().then(
-        	json => {if (json.status === 200) console.log('XD')
-    				else this.setState ({errorEdit: true})}))
+        	json => {
+				if (json.status === 200) 
+					console.log('XD')
+    			else 
+					this.setState ({errorEdit: true})
+			}
+		))
     }
 
 	render() {
+		const iconPwd = this.state.pwdVisible ? 'unhide' : 'hide'
+        const typePwd = this.state.pwdVisible ? 'text' : 'password'
+		const today = new Date()
+		const maxDate = today.getDate() + '-' + (parseInt(today.getMonth(), 10) + 1) + '-' + (parseInt(today.getFullYear(), 10) - 12) // Get current date in format dd-mm-yyyy - 12 years
 		return(
 				<Container fluid style={{display: 'flex', height: '90vh'}}>
 					<div>
-						<Button color='#c00000' width={70} height={35} onClick={this.cancel()}>Cancel</Button>
+						<Button color='#FF5252' width={70} height={35} onClick={() => this.props.changeView('Profile')}>Cancel</Button>
 						<Image
 							src={require('../assets/pandagram2.png')}
 							style={{ width: 160, height: 160, borderRadius: '100%', marginTop: '2vw', marginLeft: '0.8vw' }}
@@ -92,17 +118,34 @@ export default class EditProfile extends React.Component {
 					</div>
 					<div style={{paddingLeft: '10vw', height: 'inherit', width: '30vw'}}>
 						<Header as='h2' style={{paddingLeft: '3.2vw'}}>Edit Profile</Header>
-							<Form>
-								<Form.Input fluid label='Username'/>
-								<Form.Input fluid label='Name'/>
-								<Form.Input fluid label='Last Name'/>
-								<Form.Input fluid label='Email'/>
-							</Form>
-						<div style={{ width: 100, height: 45, marginTop: '25vh', marginLeft: '5.5vw' }}>
-							<Button color='#00b300' width={120} height={42} onclick={this.confirm()}>Confirm</Button>
-						</div>
+						<Form size='large' autoComplete='off'>
+							<Form.Group widths='equal'>
+								<Form.Field placeholder="First name" onChange={this.handleInput} autoComplete='off' error={this.state.errorFirstname}
+								control={Input} label="First name" name='firstname' value={this.state.firstname} maxLength={40}/>
+								<Form.Field placeholder="Last name" onChange={this.handleInput} autoComplete='off' error={this.state.errorLastname}
+								control={Input} label="Last name" name='lastname' value={this.state.lastname} maxLength={40}/>
+							</Form.Group>
+							<Form.Field placeholder="Email" onChange={this.handleInput} autoComplete='off' control={Input} label="Email" 
+							name='email' error={this.state.errorEmail || !this.state.emailAvailable} value={this.state.email}/>
+							<Form.Select label='Gender' options={options} placeholder='Gender' name='gender' onChange={this.handleInput} 
+							value={this.state.gender ? 'Male' : 'Female'} error={this.state.errorGender}/>
+							<Form.Field label="Birthday" control={DateInput} value={this.state.birthday} iconPosition='left' error={this.state.errorBirthday}
+							onChange={this.handleInput} name='birthday' closable placeholder='Click to select a date' maxDate={maxDate} initialDate='2000-01-1'
+							onKeyDown={(e) => e.preventDefault()} dateFormat="YYYY-MM-DD" />
+							<Divider  style={{ marginTop: 28 }}/>
+							<Form.Field placeholder="Password" required onChange={this.handleInput} maxLength={30} error={this.state.errorPwd}
+							control={Input} label="Password" type={typePwd} action={{ icon: iconPwd, onClick: this.handleClickPwd }} name='password'/>
+							<div style={{ textAlign: 'center', width: 'inherit' }}>
+								<Button color='#00b300' width={120} height={42} onClick={() => this.checkInput()}>Confirm</Button>
+							</div>
+						</Form>
 					</div>
 				</Container>
 			);
 	}
 }
+
+const options = [
+  { key: 'm', text: 'Male', value: 'Male' },
+  { key: 'f', text: 'Female', value: 'Female' },
+]

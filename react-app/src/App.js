@@ -42,7 +42,7 @@ class App extends Component {
         {!this.state.loggedIn &&
         <LoginView handleLoggedIn={this.handleLoggedIn} handleUser={this.handleUser}/>}
         {this.state.loggedIn && 
-        <Dashboard handleLoggedIn={this.handleLoggedIn} user={this.state.user}/>}
+        <Dashboard handleLoggedIn={this.handleLoggedIn} user={this.state.user} changeUser={this.handleUser}/>}
       </div>
     );
   }

@@ -17,7 +17,7 @@ export default class Profile extends React.Component {
 			<Container>
 				<div style={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
 					<Header as='h2' textAlign='center' style={{ marginTop: 0, marginBottom: 0, marginLeft: '40%', color: 'black' }}>{this.state.user.username}</Header>
-					<Button outlined color='#FF5252' height={30} width={100}>Edit Profile</Button>
+					<Button outlined color='#FF5252' height={30} width={100} onClick={() => this.props.changeView('Edit')}>Edit Profile</Button>
 				</div>
 				
 				<Divider />

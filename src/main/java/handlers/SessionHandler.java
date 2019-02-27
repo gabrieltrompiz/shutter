@@ -96,15 +96,13 @@ public class SessionHandler {
 		String query = prop.getValue("updateUser");
 		try {
 			PreparedStatement ps = connection.prepareStatement(query);
-			ps.setString(1, user.getUsername());
-			ps.setString(2, user.getLowercaseUsername());
-			ps.setString(3, user.getName());
-			ps.setString(4, user.getLastName());
-			ps.setString(5, user.getEmail());
-			ps.setDate(6, user.getBirthday());
-			ps.setBoolean(7, user.getSex());
-			ps.setString(8, user.getLowercaseUsername());
-			ps.setString(9, user.getPassword());
+			ps.setString(1, user.getName());
+			ps.setString(2, user.getLastName());
+			ps.setString(3, user.getEmail());
+			ps.setDate(4, user.getBirthday());
+			ps.setBoolean(5, user.getSex());
+			ps.setString(6, user.getLowercaseUsername());
+			ps.setString(7, user.getPassword());
 			int affectedRows = ps.executeUpdate();
 			if(affectedRows == 1) {
         response.setStatus(200);

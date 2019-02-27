@@ -24,7 +24,6 @@ public class EditUserServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
-    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false); // Deja que se puedan ignorar fields en el JSON
 		String json = req.getReader().lines().collect(Collectors.joining());
 		User user = mapper.readValue(json, User.class);
 		if(user.getLowercaseUsername() == null)

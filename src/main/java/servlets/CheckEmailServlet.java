@@ -22,7 +22,7 @@ public class CheckEmailServlet extends HttpServlet {
     User user = objectMapper.readValue(json, User.class);
     Response<?> response = new Response<>();
     if(SessionHandler.checkEmail(user.getEmail())) {
-      response.setStatus(401);
+      response.setStatus(409);
       response.setMessage("Username already in use");
     }
     else {

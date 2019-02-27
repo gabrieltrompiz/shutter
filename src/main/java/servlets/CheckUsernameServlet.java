@@ -22,7 +22,7 @@ public class CheckUsernameServlet extends HttpServlet {
     User user = objectMapper.readValue(json, User.class);
     Response<?> response = new Response<>();
     if(SessionHandler.checkLowercaseUsername(user.getUsername().toLowerCase())) {
-      response.setStatus(401);
+      response.setStatus(409);
       response.setMessage("Username already in use");
     }
     else {
