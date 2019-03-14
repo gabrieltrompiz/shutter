@@ -20,8 +20,6 @@ public class NoSessionFilter implements Filter {
 
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
-		ObjectMapper mapper = new ObjectMapper();
-		Response<?> responseObject = new Response<>();
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) resp;
 		HttpSession session = request.getSession(false);
@@ -29,6 +27,8 @@ public class NoSessionFilter implements Filter {
 		if(session == null) {
 			chain.doFilter(req, resp);
 		} else {
+			ObjectMapper mapper = new ObjectMapper();
+			Response<?> responseObject = new Response<>();
 			responseObject.setMessage("Already Logged In");
 			responseObject.setStatus(403);
 			response.setStatus(403);

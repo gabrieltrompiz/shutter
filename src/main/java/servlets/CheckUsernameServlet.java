@@ -15,17 +15,16 @@ import java.util.stream.Collectors;
 
 @WebServlet(urlPatterns = "/checkUsername", name = "Check Username Servlet")
 public class CheckUsernameServlet extends HttpServlet {
+
   @Override
-  protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+  protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     ObjectMapper objectMapper = new ObjectMapper();
-    String json = req.getReader().lines().collect(Collectors.joining());
-    User user = objectMapper.readValue(json, User.class);
+    String user = req.getParameter("user");
     Response<?> response = new Response<>();
-    if(SessionHandler.checkLowercaseUsername(user.getUsername().toLowerCase())) {
+    if(SessionHandler.checkLowercaseUsername(user.toLowerCase())) {
       response.setStatus(409);
       response.setMessage("Username already in use");
-    }
-    else {
+    } else {
       response.setStatus(200);
       response.setMessage("Username available");
     }

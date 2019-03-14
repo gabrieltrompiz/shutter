@@ -15,19 +15,18 @@ import java.util.stream.Collectors;
 
 @WebServlet(urlPatterns = "/checkEmail", name = "Check Email Servlet")
 public class CheckEmailServlet extends HttpServlet {
+
   @Override
-  protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+  protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     ObjectMapper objectMapper = new ObjectMapper();
-    String json = req.getReader().lines().collect(Collectors.joining());
-    User user = objectMapper.readValue(json, User.class);
+    String email = req.getParameter("email");
     Response<?> response = new Response<>();
-    if(SessionHandler.checkEmail(user.getEmail())) {
+    if(SessionHandler.checkEmail(email)) {
       response.setStatus(409);
-      response.setMessage("Username already in use");
-    }
-    else {
+      response.setMessage("Email already in use");
+    } else {
       response.setStatus(200);
-      response.setMessage("Username available");
+      response.setMessage("Email available");
     }
     resp.setStatus(response.getStatus());
     resp.getWriter().print(objectMapper.writeValueAsString(response));

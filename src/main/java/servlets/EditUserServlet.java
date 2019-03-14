@@ -22,7 +22,7 @@ public class EditUserServlet extends HttpServlet {
 	Cuando esta se pida, el servidor va a enviar la clave al servlet de LoginServlet. El cliente debe encargarse
 	de enviar correctamente el username	*/
 	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+	protected void doPut(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
 		String json = req.getReader().lines().collect(Collectors.joining());
 		User user = mapper.readValue(json, User.class);

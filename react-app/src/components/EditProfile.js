@@ -34,7 +34,7 @@ export default class EditProfile extends React.Component {
 	checkUsername = async() => {
 		if (this.state.errorUsername) return;
 		const username = { username: this.state.username };
-		await fetch('http://localhost:8080/checkUsername', { method: 'POST', body: JSON.stringify(username) })
+		await fetch('http://localhost:8080/checkUsername?user=' + username)
 		.then(response => {
             if(response.status === 200) { 
                 this.setState({ usernameAvailable: true });   
@@ -48,7 +48,7 @@ export default class EditProfile extends React.Component {
 	checkEmail = async () => {
 		if (this.state.errorEmail) return;
 		const email = { email: this.state.email };
-		await fetch('http://localhost:8080/checkEmail', { method: 'POST', body: JSON.stringify(email) })
+		await fetch('http://localhost:8080/checkEmail?email=' + email)
 		.then(response => {
             if(response.status === 200) { 
                 this.setState({ emailAvailable: true }) 
@@ -91,7 +91,7 @@ export default class EditProfile extends React.Component {
             sex: this.state.gender === 'Male',
             enabled: true
         }
-        await fetch('http://localhost:8080/edit', {method: 'POST', body: JSON.stringify(body), credentials: 'include'})
+        await fetch('http://localhost:8080/edit', {method: 'PUT', body: JSON.stringify(body), credentials: 'include'})
         .then((res) => res.json().then(
         	json => {
 				if (json.status === 200) 

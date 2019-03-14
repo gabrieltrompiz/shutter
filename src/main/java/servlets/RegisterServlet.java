@@ -26,6 +26,7 @@ public class RegisterServlet extends HttpServlet {
     String json =  req.getReader().lines().collect(Collectors.joining());
     User user = mapper.readValue(json, User.class);
     user.setPassword(Encryptor.getSHA256(user.getPassword(), user.getLowercaseUsername()));
+
     Response<User> response = SessionHandler.register(user);
     if(response.getStatus() == 200) {
     	req.getSession();
