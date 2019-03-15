@@ -37,7 +37,6 @@ export default class LoginCard extends React.Component {
         .then(json => {
             if(json.status === 200) {
                 this.props.handleUser(json.data).then(this.props.handleLoggedIn(true))
-                
             }
             else {
                 this.setState({ errorLogin: true })

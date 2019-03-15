@@ -1,5 +1,5 @@
 import React from 'react';
-import {Segment, Container, Image, Header, Form, Input, Divider} from 'semantic-ui-react';
+import {Segment, Container, Image, Header, Form, Input, Divider, Message} from 'semantic-ui-react';
 import { DateInput } from 'semantic-ui-calendar-react'
 import Button from './Button';
 
@@ -56,14 +56,17 @@ export default class EditProfile extends React.Component {
             else {
                 this.setState({ emailAvailable: false })
             }
-        });
+        })
+		.catch(() => {
+			this.setState({ emailAvailable: false })
+		})
 	}
 
 	checkInput = async(evt) => {
-		const usernameRegex = /^(?=.{6,18}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/;
-		const { firstname, lastname, birthday, gender, username, email, password, passwordConf } = this.state;
+		
+		const { firstname, lastname, birthday, gender, username, email, password } = this.state;
 		await this.setState({errorFirstname: firstname === '', errorLastname: lastname === '', errorBirthday: birthday === '', errorGender: gender === '',
-			errorUsername: !usernameRegex.test(username), errorEmail: !this.validator.validate(email), errorPwd: password.length < 8 })
+		errorEmail: !this.validator.validate(email), errorPwd: password.length < 8 })
 		if(this.props.user.username !== this.state.username) {
 			await this.checkUsername()
 		}
@@ -95,11 +98,14 @@ export default class EditProfile extends React.Component {
         .then((res) => res.json().then(
         	json => {
 				if (json.status === 200) 
-					console.log('XD')
+					this.props.changeUser(json.data)
     			else 
-					this.setState ({errorEdit: true})
+					this.setState ({ errorEdit: true })
 			}
-		)).catch(error => console.log(error));
+		))
+		.catch(() => {
+			this.setState({ errorEdit: true })
+		})
     }
 
 	render() {
@@ -107,6 +113,8 @@ export default class EditProfile extends React.Component {
         const typePwd = this.state.pwdVisible ? 'text' : 'password'
 		const today = new Date()
 		const maxDate = today.getDate() + '-' + (parseInt(today.getMonth(), 10) + 1) + '-' + (parseInt(today.getFullYear(), 10) - 12) // Get current date in format dd-mm-yyyy - 12 years
+		const errorList = []
+
 		return(
 				<Container fluid style={{display: 'flex', height: '90vh'}}>
 					<div>
@@ -140,6 +148,9 @@ export default class EditProfile extends React.Component {
 							</div>
 						</Form>
 					</div>
+					{(this.state.errorFirstname || this.state.errorLastname || this.state.errorBirthday || this.state.errorGender ||
+					this.state.errorEmail || this.state.errorPwd || !this.state.emailAvailable) && errorList.length !== 0 &&
+					<Message error list={errorList} /> }
 				</Container>
 			);
 	}

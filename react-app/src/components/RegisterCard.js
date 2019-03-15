@@ -42,6 +42,9 @@ export default class RegisterCard extends React.Component {
                 this.setState({ usernameAvailable: false });
             }
         })
+        .catch(() => { 
+            this.setState({ usernameAvailable: false })
+        })
     }
 
     checkEmail = async () => {
@@ -55,6 +58,9 @@ export default class RegisterCard extends React.Component {
             else {
                 this.setState({ emailAvailable: false })
             }
+        })
+        .catch(() => {
+            this.setState({ emailAvailable: false })
         })
     }
 
@@ -107,6 +113,9 @@ export default class RegisterCard extends React.Component {
                 this.setState({ errorRegister: true })
             }
         })
+        .catch(() => {
+            this.setState({ errorRegister: true })
+        })
         this.setState({ loading: false })
     }
 
@@ -117,7 +126,10 @@ export default class RegisterCard extends React.Component {
                 
             }
         })
-    }*/
+        .catch(() => {
+            this.setState({ errorRegister: true })
+        })
+    }
 
     render() {
         const iconPwd = this.state.pwdVisible ? 'unhide' : 'hide'
