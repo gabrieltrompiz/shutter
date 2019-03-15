@@ -119,7 +119,7 @@ export default class RegisterCard extends React.Component {
         this.setState({ loading: false })
     }
 
-    /*login = async (body) => {
+    login = async (body) => {
         await fetch('http://localhost:8080/login', { method: 'POST', body: JSON.stringify(body), credentials: 'include' })
         .then(response => {
             if(response.status === 200) {
