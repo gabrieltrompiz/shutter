@@ -2,16 +2,15 @@ package handlers;
 
 import models.Response;
 import models.User;
-import utilities.ConnManager;
 import utilities.PropertiesReader;
+import utilities.PoolManager;
+import utilities.Pool;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Ptthappy
@@ -19,14 +18,16 @@ import java.util.List;
 
 @SuppressWarnings("Duplicates")
 public class SessionHandler {
-	private static Connection connection = ConnManager.getConnection();
+	private static Pool pool = Pool.getPool();
+	private static PoolManager poolManager = PoolManager.getPoolManager();
 	private static PropertiesReader prop = PropertiesReader.getInstance();
 
 	public static Response<User> login(User user) {
+		Connection con = poolManager.getConn();
 		Response<User> response = new Response<>();
 		String query = prop.getValue("login");
 		try {
-			PreparedStatement pstmt = connection.prepareStatement(query);
+			PreparedStatement pstmt = con.prepareStatement(query);
 			pstmt.setString(1, user.getLowercaseUsername());
 			pstmt.setString(2, user.getPassword());
 			ResultSet rs = pstmt.executeQuery();
@@ -45,24 +46,28 @@ public class SessionHandler {
 			response.setMessage("DB connection error");
 			e.printStackTrace();
 		}
+		poolManager.returnConn(con);
 		return response;
 	}
 
 	public static Response<User> register(User user) throws IOException {
+		Connection con = poolManager.getConn();
 		Response<User> response = new Response<>();
 		String query = prop.getValue("registerUser");
 		if(checkLowercaseUsername(user.getLowercaseUsername())) {
 			response.setStatus(409);
 			response.setMessage("Username already registered");
+			poolManager.returnConn(con);
 			return response;
 		}
 		if(checkEmail(user.getEmail().toLowerCase())) {
 			response.setStatus(409);
 			response.setMessage("Email already in use");
+			poolManager.returnConn(con);
 			return response;
 		}
 		try {
-			PreparedStatement pstmt = connection.prepareStatement(query);
+			PreparedStatement pstmt = con.prepareStatement(query);
 			pstmt.setString(1, user.getUsername());
 			pstmt.setString(2, user.getLowercaseUsername());
 			pstmt.setString(3, user.getPassword());
@@ -85,6 +90,7 @@ public class SessionHandler {
 			response.setStatus(500);
 			response.setMessage("DB connection error");
 		}
+		poolManager.returnConn(con);
 		return response;
 	}
 
@@ -92,10 +98,11 @@ public class SessionHandler {
 	//Debería de ir verificando los getters y los que no sean nulos los cambia
 	//También pueden agregarsele restricciones de vainas que no se pueden cambiar hmmm
 	public static Response<User> modifyUser(User user) {
+		Connection con = poolManager.getConn();
 		Response<User> response = new Response<>();
 		String query = prop.getValue("updateUser");
 		try {
-			PreparedStatement ps = connection.prepareStatement(query);
+			PreparedStatement ps = con.prepareStatement(query);
 			ps.setString(1, user.getName());
 			ps.setString(2, user.getLastName());
 			ps.setString(3, user.getEmail());
@@ -105,25 +112,25 @@ public class SessionHandler {
 			ps.setString(7, user.getPassword());
 			int affectedRows = ps.executeUpdate();
 			if(affectedRows == 1) {
-        response.setStatus(200);
-        response.setMessage("User Update Successfully");
-        response.setData(user);
-      }
-			else {
-			  response.setStatus(401);
-			  response.setMessage("Bad credentials");
-			  response.setData(null);
-      }
+				response.setStatus(200);
+				response.setMessage("User Update Successfully");
+				response.setData(user);
+			  } else {
+			    response.setStatus(401);
+			    response.setMessage("Bad credentials");
+			    response.setData(null);
+      		}
 		} catch (SQLException e) {
 			e.printStackTrace();
 			response.setStatus(500);
 			response.setMessage("DB connection error");
 			response.setData(user);
 		}
+		poolManager.returnConn(con);
 		return response;
 	}
 
-	public static void getUserData(ResultSet rs, User user) throws SQLException {
+	private static void getUserData(ResultSet rs, User user) throws SQLException {
 		user.setLowercaseUsername(rs.getString(2));
 		user.setUsername(rs.getString(3));
 		user.setName(rs.getString(5));
@@ -139,52 +146,62 @@ public class SessionHandler {
 	}
 
 	public static String getUsernameByEmail(String email) {
+		Connection con = poolManager.getConn();
 		String query = prop.getValue("checkEmail");
 		try {
-			PreparedStatement pstmt = connection.prepareStatement(query);
+			PreparedStatement pstmt = con.prepareStatement(query);
 			pstmt.setString(1, email);
 			ResultSet rs = pstmt.executeQuery();
 			if(rs.next()) {
+				poolManager.returnConn(con);
 				return rs.getString(3);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		poolManager.returnConn(con);
 		return "";
 	}
 
 	public static boolean checkEmail(String email){
+		Connection con = poolManager.getConn();
 		String query = prop.getValue("checkEmail");
 		try {
-			PreparedStatement pstmt = connection.prepareStatement(query);
+			PreparedStatement pstmt = con.prepareStatement(query);
 			pstmt.setString(1, email.toLowerCase());
 			ResultSet rs = pstmt.executeQuery();
 			if(rs.next()) {
+				poolManager.returnConn(con);
 				return true;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+			poolManager.returnConn(con);
 			return true;
 		}
+		poolManager.returnConn(con);
 		return false;
 	}
 
 	public static boolean checkLowercaseUsername(String username) {
+		Connection con = poolManager.getConn();
 		String query = prop.getValue("checkLowercaseUsername");
 		try {
-			PreparedStatement pstmt = connection.prepareStatement(query);
+			PreparedStatement pstmt = con.prepareStatement(query);
 			pstmt.setString(1, username);
 			ResultSet rs = pstmt.executeQuery();
 			if(rs.next()) {
+				poolManager.returnConn(con);
 				return true;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+			poolManager.returnConn(con);
 			return true;
 		}
+		poolManager.returnConn(con);
 		return false;
 	}
-
 }
 
 

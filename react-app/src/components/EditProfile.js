@@ -99,7 +99,7 @@ export default class EditProfile extends React.Component {
     			else 
 					this.setState ({errorEdit: true})
 			}
-		))
+		)).catch(error => console.log(error));
     }
 
 	render() {
