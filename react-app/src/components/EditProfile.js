@@ -62,7 +62,7 @@ export default class EditProfile extends React.Component {
 		})
 	}
 
-	checkInput = async(evt) => {
+	checkInput = async (evt) => {
 		
 		const { firstname, lastname, birthday, gender, username, email, password } = this.state;
 		await this.setState({errorFirstname: firstname === '', errorLastname: lastname === '', errorBirthday: birthday === '', errorGender: gender === '',
@@ -88,15 +88,15 @@ export default class EditProfile extends React.Component {
             lastName: this.state.lastname,
             email: this.state.email,
             birthday: new Date(this.state.birthday),
-            creationTime: Date.now(),
             avatar: './avatar.png',
             typeId: 1,
             sex: this.state.gender === 'Male',
             enabled: true
         }
-        await fetch('http://localhost:8080/edit', {method: 'PUT', body: JSON.stringify(body), credentials: 'include'})
+        await fetch('http://localhost:8080/edit', { method: 'PUT', body: JSON.stringify(body), credentials: 'include' })
         .then((res) => res.json().then(
         	json => {
+				console.log(json)
 				if (json.status === 200) 
 					this.props.changeUser(json.data)
     			else 

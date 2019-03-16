@@ -14,8 +14,8 @@ public class CORSFilter implements Filter {
   @Override
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
     ((HttpServletResponse) response).addHeader("Access-Control-Allow-Origin", ((HttpServletRequest) request).getHeader("origin"));
-    ((HttpServletResponse) response).addHeader("Access-Control-Allow-Methods", "POST, PUT, GET");
-    ((HttpServletResponse) response).addHeader("Access-Control-Allow-Headers", "Content-Type");
+    ((HttpServletResponse) response).addHeader("Access-Control-Allow-Methods", "POST, PUT, GET, OPTIONS");
+    ((HttpServletResponse) response).addHeader("Access-Control-Allow-Headers",  "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization");
     ((HttpServletResponse) response).addHeader("Access-Control-Allow-Credentials", "true");
     chain.doFilter(request, response);
   }

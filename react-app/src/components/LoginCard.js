@@ -32,7 +32,7 @@ export default class LoginCard extends React.Component {
             username: this.state.username,
             password: this.state.password
         }
-        await fetch('http://localhost:8080/login', { method: 'POST', body: JSON.stringify(body), credentials: 'include'})
+        await fetch('http://localhost:8080/login', { method: 'POST', body: JSON.stringify(body), credentials: 'include' })
         .then(response => response.json()
         .then(json => {
             if(json.status === 200) {

@@ -25,8 +25,8 @@ public class SessionFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) resp;
         HttpSession session = request.getSession(false);
-
-        if (session != null) {
+        System.out.println(request.getMethod());
+        if (session != null || request.getMethod().equals("OPTIONS")) {
             chain.doFilter(req, resp);
         } else {
             responseObject.setMessage("Not Logged In");

@@ -24,7 +24,7 @@ public class NoSessionFilter implements Filter {
 		HttpServletResponse response = (HttpServletResponse) resp;
 		HttpSession session = request.getSession(false);
 
-		if(session == null) {
+		if(session == null || request.getMethod().equals("OPTIONS")) {
 			chain.doFilter(req, resp);
 		} else {
 			ObjectMapper mapper = new ObjectMapper();
