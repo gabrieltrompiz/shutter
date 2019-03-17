@@ -7,6 +7,11 @@ export default class Home extends React.Component {
 	}
 
 	render() {
-		return(<div></div>);
+		return(
+			<Container>
+				<Poster/>
+				{/*Lista de posts*/}
+			</Container>
+		);
 	}
 }

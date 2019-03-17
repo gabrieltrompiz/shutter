@@ -1,5 +1,6 @@
 package handlers;
 
+import models.FriendHelper;
 import models.Response;
 import models.User;
 import utilities.PropertiesReader;
@@ -11,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * @author Ptthappy
@@ -128,6 +130,27 @@ public class SessionHandler {
 		}
 		poolManager.returnConn(con);
 		return response;
+	}
+
+	public static Response<Boolean> addFriend(FriendHelper helper) {
+		Connection con = poolManager.getConn();
+		Response<Boolean> response;
+/*		try {
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}*/
+
+	return null;
+
+	}
+
+	public static Response<Boolean> deleteFriend(FriendHelper helper) {
+		return null;
+	}
+
+	public static Response<ArrayList<User>> getFriendList(User user) {
+		return null;
 	}
 
 	private static void getUserData(ResultSet rs, User user) throws SQLException {
