@@ -5,4 +5,8 @@ export default class Search extends React.Component {
 		super(props)
 		this.state = {}
 	}
+
+	render() {
+		return(<div></div>);
+	}
 }

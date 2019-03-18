@@ -27,6 +27,31 @@ export default class Dashboard extends React.Component {
 		this.props.handleLoggedIn(false)
 	}
 
+	getView = () => {
+		switch(this.state.activeItem) {
+			case 'Home':
+				return <Home user={this.props.user} changeView={this.handleChangeView} changeUser={this.props.changeUser}/>;
+			
+			case 'Profile':
+				return <Profile user={this.props.user} changeView={this.handleChangeView}/>;
+			
+			case 'Inbox':
+				return <Inbox/>;
+			
+			case 'EditProfile':
+				return <EditProfile user={this.props.user} changeView={this.handleChangeView} changeUser={this.props.changeUser}/>;
+			
+			case 'Search':
+				return <Search/>;
+			
+			case 'Settings':
+				return <Settings/>;
+			
+			default:
+				throw new Error();
+		}
+	}
+
 	render() {
 		return (
 			<Container fluid style={{ height: 'inherit', backgroundColor: '#FAFAFC' }}>
@@ -82,8 +107,7 @@ export default class Dashboard extends React.Component {
 					</Grid.Column>
 					<Grid.Column width={12}>
 						<Segment raised style={{ height: '95vh', marginTop: '2.5vh' }}>
-							{this.state.activeItem === 'Profile' && <Profile user={this.props.user} changeView={this.handleChangeView}/>}
-							{this.state.activeItem === 'Edit' && <EditProfile user={this.props.user} changeView={this.handleChangeView} changeUser={this.props.changeUser}/>}	
+							{this.getView()}
 						</Segment>
 						
 					</Grid.Column>

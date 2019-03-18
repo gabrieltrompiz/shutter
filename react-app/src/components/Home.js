@@ -1,4 +1,6 @@
-import React from 'react'
+import React from 'react';
+import { Container } from 'semantic-ui-react';
+import Poster from './Poster.js';
 
 export default class Home extends React.Component {
 	constructor(props) {
@@ -8,10 +10,10 @@ export default class Home extends React.Component {
 
 	render() {
 		return(
-			<Container>
+			<div style={{ backgroundColor: 'red', width: 'inherit', height: 'inherit', overflowY: 'scroll'}}>
 				<Poster/>
 				{/*Lista de posts*/}
-			</Container>
+			</div>
 		);
 	}
 }

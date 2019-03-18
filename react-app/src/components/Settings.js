@@ -5,4 +5,8 @@ export default class Settings extends React.Component {
 		super(props)
 		this.state = {}
 	}
+
+	render() {
+		return(<div></div>);
+	}
 }
