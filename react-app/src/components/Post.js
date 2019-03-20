@@ -32,7 +32,7 @@ export default class Post extends React.Component {
 			<div style={{display: 'flex', marginBottom: '0.6vh'}}>
 				<button style={{ backgroundColor: 'gray', border: 'none', width: '32.7%', marginLeft: '0.3%', marginRight: '0.3%', borderRadius: '5px' }}>Likes</button>
 				<button style={{ backgroundColor: 'gray', border: 'none', width: '32.7%', marginLeft: '0.3%', marginRight: '0.3%', borderRadius: '5px' }}>Comment</button>
-				<button style={{ backgroundColor: 'gray', border: 'none', width: '32.7%', marginLeft: '0.3%', marginRight: '0.3%', borderRadius: '5px' }}>Shares</button>
+				<button style={{ backgroundColor: 'gray', border: 'none', width: '32.7%', marginLeft: '0.3%', marginRight: '0.3%', borderRadius: '5px' }}>Share</button>
 			</div>
 			</Container>
 			);

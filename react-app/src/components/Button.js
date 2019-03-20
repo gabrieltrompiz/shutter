@@ -19,7 +19,10 @@ export default class Button extends React.Component {
             cursor: this.state.hover ? 'pointer' : 'auto',
             transitionDuration: '0.2s',
             outline: 0,
-            marginLeft: this.props.marginLeft
+            marginLeft: this.props.marginLeft,
+            marginRight: this.props.marginRight,
+            marginTop: this.props.marginTop,
+            marginBottom: this.props.marginBottom
         }
         const filled = {
             backgroundColor: this.props.color,
@@ -34,7 +37,10 @@ export default class Button extends React.Component {
             cursor: this.state.hover ? 'pointer' : 'auto',
             transitionDuration: '0.2s',
             outline: 0,
-            marginLeft: this.props.marginLeft
+            marginLeft: this.props.marginLeft,
+            marginRight: this.props.marginRight,
+            marginTop: this.props.marginTop,
+            marginBottom: this.props.marginBottom
         }
         const style = this.props.outlined ? outlined : filled;
         return(

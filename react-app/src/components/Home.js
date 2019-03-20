@@ -11,8 +11,10 @@ export default class Home extends React.Component {
 
 	render() {
 		return(
-			<div style={{ backgroundColor: 'red', width: 'inherit', height: 'inherit', overflowY: 'scroll'}}>
+			<div style={{ backgroundColor: 'purple', width: 'inherit', height: 'inherit', overflowY: 'scroll'}}>
 				<Poster/>
+				<Post/>
+				<Post/>
 				<Post/>
 				{/*Lista de posts*/}
 			</div>

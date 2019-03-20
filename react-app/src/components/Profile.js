@@ -51,7 +51,7 @@ export default class Profile extends React.Component {
 						</Container>
 					</Grid.Column>
 					<Grid.Column width={5} style={{ height: '85vh' }}>
-						<Container style={{ backgroundColor: 'red', width: '100%', height: '100%', borderRadius: 5 }}>
+						<Container style={{ backgroundColor: 'purple', width: '100%', height: '100%', borderRadius: 5 }}>
 							AQUI VAN LOS AMIGOS O OTRA COSA
 						</Container>
 					</Grid.Column>

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Menu, Label, Input, Icon, Container, Grid, Header, Image, Segment } from 'semantic-ui-react'
 import Home from '../components/Home';
-import Inbox from '../components/Inbox';
+import Notifications from '../components/Notifications';
 import Profile from '../components/Profile';
 import Search from '../components/Search';
 import Settings from '../components/Settings';
@@ -10,7 +10,7 @@ import EditProfile from '../components/EditProfile';
 export default class Dashboard extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { activeItem : 'Home' } //TODO: revisar xq se expira si pongo otra inicial
+		this.state = { activeItem : 'Home', notifications: 10 } //TODO: revisar xq se expira si pongo otra inicial
 	}
 
 	handleItemClick = (evt, {name}) => {
@@ -35,8 +35,8 @@ export default class Dashboard extends React.Component {
 			case 'Profile':
 				return <Profile user={this.props.user} changeView={this.handleChangeView}/>;
 			
-			case 'Inbox':
-				return <Inbox/>;
+			case 'Notifications':
+				return <Notifications/>;
 			
 			case 'EditProfile':
 				return <EditProfile user={this.props.user} changeView={this.handleChangeView} changeUser={this.props.changeUser}/>;
@@ -78,11 +78,11 @@ export default class Dashboard extends React.Component {
 									Profile
 								</Header>
 							</Menu.Item>
-							<Menu.Item active={this.state.activeItem === 'Inbox'} onClick={this.handleItemClick} name='Inbox'>
-								<Label color='teal'>1</Label>
+							<Menu.Item active={this.state.activeItem === 'Notifications'} onClick={this.handleItemClick} name='Notifications'>
+								{this.state.notifications > 0 && <Label color='teal'>{this.state.notifications}</Label>}
 								<Header as='h5' style={{ paddingLeft: 10, marginTop: 0.5 }}>
 									<Icon name='inbox' style={{ float: 'left', fontSize: 16 }}/>
-									Inbox
+									Notifications
 								</Header>
 							</Menu.Item>
 							<Menu.Item active={this.state.activeItem === 'Search'} onClick={this.handleItemClick} name='Search'>
@@ -116,7 +116,7 @@ export default class Dashboard extends React.Component {
 			
 			// <Container>
 			// 	{/* <Home/>
-			// 	<Inbox/>
+			// 	<Notifications/>
 			// 	<Profile/>
 			// 	<Search/>
 			// 	<Settings/> */}

@@ -16,8 +16,9 @@ export default class Poster extends React.Component {
 						src={require('../assets/pandagram2.png')}
 						style={{ width: 80, height: 80, borderRadius: '100%', marginTop: '2vh', marginLeft: '1vw' }}
 					/>
-					<Button marginLeft='0.8vw' marginTop='1.2vh' border='none'>Lorem Ipsum</Button>
-					<Button marginLeft='0.8vw' marginTop='1.2vh' border='none'>Lorem Ipsum</Button>
+					<Button marginLeft='0.8vw' marginTop='1vh'>Lorem Ipsum</Button>
+					<Button marginLeft='0.8vw' marginTop='1vh'>Lorem Ipsum</Button>
+					<Button marginLeft='0.8vw' marginTop='1vh'>Lorem Ipsum</Button>
 				</div>
 				<TextArea placeholder='Whats on your mind' style={{ resize: 'none', width: 'inherit', 
 				borderRadius: '20px', marginTop: '2vh', marginBottom: '2vh', marginRight: '1vw', paddingLeft: '1vw',
