@@ -21,7 +21,7 @@ export default class Not extends React.Component {
 					</div>
 					
 					<div style={{ width: 'inherit', fontFamily: 'Arial', fontSize: '18px', paddingTop: '2vh', 
-					paddingLeft: '2vw', paddingRight: '1vw', paddingTop: '4vh' }}>
+					paddingLeft: '2vw', paddingRight: '1vw', paddingTop: '4vh '}}>
 						{this.state.msg}
 					</div>
 				</div>

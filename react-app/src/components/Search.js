@@ -7,7 +7,7 @@ export default class Search extends React.Component {
 	}
 
 	search = (name) => {
-
+		
 	}
 
 	render() {
