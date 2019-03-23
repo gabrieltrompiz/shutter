@@ -9,7 +9,7 @@ export default class Poster extends React.Component {
 
 	render() {
 		return(
-			<Container style={{ width: '60vw', height: '30vh', backgroundColor: 'blue', display: 'flex'}}>
+			<Container style={{ width: '65vw', height: '30vh', backgroundColor: 'blue', display: 'flex'}}>
 				{/*TextArea, MiniProfile pic, opciones adicionales(subir foto, video), boton de salir, boton de post*/ /*leftPadding*/}
 				<div style={{width: '11vw'}}>
 					<Image

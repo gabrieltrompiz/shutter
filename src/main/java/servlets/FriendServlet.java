@@ -42,9 +42,10 @@ public class FriendServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
-		String json =  req.getReader().lines().collect(Collectors.joining());
-		User user = mapper.readValue(json, User.class);
-		Response<ArrayList<User>> response = SessionHandler.getFriendList(user);
-		resp.getWriter().print(mapper.writeValueAsString(response));
+		HttpSession session = req.getSession();
+		//String json =  req.getReader().lines().collect(Collectors.joining());
+		//User user = mapper.readValue(json, User.class);
+		//Response<ArrayList<User>> response = SessionHandler.getFriendList(user);
+		//resp.getWriter().print(mapper.writeValueAsString(response));
 	}
 }

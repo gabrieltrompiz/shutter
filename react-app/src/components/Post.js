@@ -10,7 +10,7 @@ export default class Post extends React.Component {
 
 	render() {
 		return(
-			<Container style={{width: '60vw', height: 'auto', backgroundColor: 'white', marginTop: 0, display: 'flow-root', fontSize: '20px'}}>
+			<Container style={{width: '65vw', height: 'auto', backgroundColor: 'white', marginTop: 0, display: 'flow-root', fontSize: '20px'}}>
 				<div style={{display: 'flex'}}>
 					<Image
 						src={require('../assets/pandagram2.png')}

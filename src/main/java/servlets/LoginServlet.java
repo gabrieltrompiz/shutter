@@ -37,7 +37,4 @@ public class LoginServlet extends HttpServlet {
     resp.setStatus(response.getStatus());
     resp.getWriter().print(mapper.writeValueAsString(response));
   }
-
-  @Override
-  protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {}
 }

@@ -142,7 +142,6 @@ public class SessionHandler {
 		}*/
 
 	return null;
-
 	}
 
 	public static Response<Boolean> deleteFriend(FriendHelper helper) {
@@ -152,6 +151,10 @@ public class SessionHandler {
 	public static Response<ArrayList<User>> getFriendList(User user) {
 		return null;
 	}
+
+	public static Response<ArrayList<User>> searchUsers(String name) { return null; }
+
+
 
 	private static void getUserData(ResultSet rs, User user) throws SQLException {
 		user.setLowercaseUsername(rs.getString(2));
