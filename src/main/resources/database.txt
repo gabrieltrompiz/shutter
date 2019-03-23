@@ -222,5 +222,24 @@ ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
 INSERT INTO type_user VALUES (1, 'user');
-
 INSERT INTO type_user VALUES (2, 'admin');
+
+INSERT INTO type_notification VALUES(1, 'friend_request');
+INSERT INTO type_notification VALUES(2, 'tag');
+INSERT INTO type_notification VALUES(3, 'comment');
+INSERT INTO type_notification VALUES(4, 'like');
+
+INSERT INTO type_like VALUES(1, 'like');
+INSERT INTO type_like VALUES(2, 'love');
+INSERT INTO type_like VALUES(3, 'haha');
+INSERT INTO type_like VALUES(4, 'wow');
+INSERT INTO type_like VALUES(5, 'sad');
+INSERT INTO type_like VALUES(6, 'angry');
+INSERT INTO type_like VALUES(7, 'pepe');
+INSERT INTO type_like VALUES(8, 'bagre');
+INSERT INTO type_like VALUES(9, 'nerio_aproves');
+INSERT INTO type_like VALUES(10, 'nuke_israel');
+
+INSERT INTO type_post VALUES(1, 'plain_text');
+INSERT INTO type_post VALUES(2, 'picture');
+INSERT INTO type_post VALUES(3, 'video');
