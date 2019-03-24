@@ -22,7 +22,9 @@ export default class Button extends React.Component {
             marginLeft: this.props.marginLeft,
             marginRight: this.props.marginRight,
             marginTop: this.props.marginTop,
-            marginBottom: this.props.marginBottom
+            marginBottom: this.props.marginBottom,
+            fontFamily: this.props.fontFamily,
+            fontSize: this.props.fontSize
         }
         const filled = {
             backgroundColor: this.props.color,
@@ -40,8 +42,11 @@ export default class Button extends React.Component {
             marginLeft: this.props.marginLeft,
             marginRight: this.props.marginRight,
             marginTop: this.props.marginTop,
-            marginBottom: this.props.marginBottom
+            marginBottom: this.props.marginBottom,
+            fontFamily: this.props.fontFamily,
+            fontSize: this.props.fontSize
         }
+
         const style = this.props.outlined ? outlined : filled;
         return(
             <button 
