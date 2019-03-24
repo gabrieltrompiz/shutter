@@ -21,11 +21,12 @@ public class SearchServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
 		String name = req.getParameter("name");
+		String search = req.getParameter("search");
 		String list = req.getParameter("list");
 		Response<ArrayList<User>> response = null;
 
 		if (list.equalsIgnoreCase("friends"))
-			response = SessionHandler.searchFriends(name);
+			response = SessionHandler.searchFriends(name, search);
 		else
 			response = SessionHandler.searchUsers(name);
 

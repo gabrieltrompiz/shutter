@@ -157,8 +157,9 @@ public class SessionHandler {
 			response.setStatus(500);
 			response.setMessage("DB Connection Error");
 			response.setData(false);
+		} finally {
+			poolManager.returnConn(con);
 		}
-		poolManager.returnConn(con);
 		return response;
 	}
 
@@ -187,29 +188,187 @@ public class SessionHandler {
 			response.setStatus(500);
 			response.setMessage("DB Connection Error");
 			response.setData(false);
+		} finally {
+			poolManager.returnConn(con);
 		}
-		poolManager.returnConn(con);
 		return response;
 	}
 
 	public static Response<ArrayList<User>> getFriendList(String username) {
-		return null;
+		Response<ArrayList<User>> response = new Response<>();
+		ArrayList<User> friends = new ArrayList<>();
+		Connection con = poolManager.getConn();
+		String query = prop.getValue("friendList");
+		try {
+			PreparedStatement ps = con.prepareStatement(query);
+			ps.setString(1, username);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				User u = new User();
+				u.setUsername(rs.getString(1));
+				u.setName(rs.getString(2));
+				u.setLastName(rs.getString(3));
+				u.setAvatar(rs.getString(4));
+				friends.add(u);
+			}
+			response.setData(friends);
+			response.setMessage("List Returned");
+			response.setStatus(200);
+		} catch (Exception e) {
+			e.printStackTrace();
+			response.setMessage("DB Connection Error");
+			response.setStatus(500);
+		} finally {
+			poolManager.returnConn(con);
+		}
+		return response;
 	}
 
 	public static Response<ArrayList<User>> searchUsers(String name) {
-		return null;
+		Response<ArrayList<User>> response = new Response<>();
+		ArrayList<User> users = new ArrayList<>();
+		Connection con = poolManager.getConn();
+		String query = prop.getValue("searchUsers");
+		try {
+			PreparedStatement ps = con.prepareStatement(query);
+			ps.setString(1, name);
+			ps.setString(2, name);
+			ps.setString(3, name);
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				User user = new User();
+				user.setUsername(rs.getString(1));
+				user.setName(rs.getString(2));
+				user.setLastName(rs.getString(3));
+				user.setAvatar(rs.getString(4));
+				users.add(user);
+			}
+
+			response.setData(users);
+			response.setMessage("List Returned");
+			response.setStatus(200);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			response.setMessage("DB Connection Error");
+			response.setStatus(500);
+		} finally {
+			poolManager.returnConn(con);
+		}
+
+		return response;
 	}
 
-	public static Response<ArrayList<User>> searchFriends(String name) {
-		return null;
+	public static Response<ArrayList<User>> searchFriends(String name, String search) {
+		Response<ArrayList<User>> response = new Response<>();
+		ArrayList<User> friends = new ArrayList<>();
+		Connection con = poolManager.getConn();
+		String query = prop.getValue("searchFriends");
+		try {
+			PreparedStatement ps = con.prepareStatement(query);
+			ps.setString(1, name);
+			ps.setString(2, search);
+			ps.setString(3, search);
+			ps.setString(4, search);
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				User user = new User();
+				user.setUsername(rs.getString(1));
+				user.setName(rs.getString(2));
+				user.setLastName(rs.getString(3));
+				user.setAvatar(rs.getString(4));
+				friends.add(user);
+			}
+
+			response.setData(friends);
+			response.setMessage("List Returned");
+			response.setStatus(200);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			response.setMessage("DB Connection Error");
+			response.setStatus(500);
+		} finally {
+			poolManager.returnConn(con);
+		}
+
+		return response;
 	}
 
 	public static Response<ArrayList<Post>> getPosts(String username) {
-		return null;
+		Response<ArrayList<Post>> response = new Response<>();
+		ArrayList<Post> posts = new ArrayList<>();
+		Connection con = poolManager.getConn();
+		String query = prop.getValue("getPosts");
+		try {
+			PreparedStatement ps = con.prepareStatement(query);
+			ps.setString(1, username);
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				Post post = new Post();
+				User user = new User();
+
+				post.setIdPost(rs.getInt(1));
+				post.setTypePost(rs.getInt(2));
+				post.setPostText(rs.getString(3));
+				post.setUrl(rs.getString(4));
+				post.setCreationTime(rs.getTimestamp(5));
+				user.setUsername(rs.getString(6));
+				user.setName(rs.getString(7));
+				user.setLastName(rs.getString(8));
+				user.setAvatar(rs.getString(9));
+
+				post.setUser(user);
+				posts.add(post);
+			}
+			response.setData(posts);
+			response.setMessage("Posts Returned");
+			response.setStatus(200);
+		} catch(SQLException e) {
+			e.printStackTrace();
+			response.setMessage("DB Connection Error");
+			response.setStatus(500);
+		} finally {
+			poolManager.returnConn(con);
+		}
+
+		return response;
 	}
 
 	public static Response<ArrayList<Post>> getUserPosts(String username) {
-		return null;
+		Response<ArrayList<Post>> response = new Response<>();
+		ArrayList<Post> posts = new ArrayList<>();
+		Connection con = poolManager.getConn();
+		String query = prop.getValue("getUserPosts");
+		try {
+			PreparedStatement ps = con.prepareStatement(query);
+			ps.setString(1, username);
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				Post post = new Post();
+				post.setIdPost(rs.getInt(1));
+				post.setTypePost(rs.getInt(2));
+				post.setPostText(rs.getString(3));
+				post.setUrl(rs.getString(4));
+				post.setCreationTime(rs.getTimestamp(5));
+
+				posts.add(post);
+			}
+			response.setData(posts);
+			response.setMessage("User Posts Returned");
+			response.setStatus(200);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			response.setMessage("DB Connection Error");
+			response.setStatus(500);
+		} finally {
+			poolManager.returnConn(con);
+		}
+
+		return response;
 	}
 
 	private static void getUserData(ResultSet rs, User user) throws SQLException {
@@ -285,10 +444,3 @@ public class SessionHandler {
 		return false;
 	}
 }
-
-
-
-
-
-
-

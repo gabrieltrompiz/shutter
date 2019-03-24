@@ -31,8 +31,9 @@ public class FriendServlet extends HttpServlet {
 	@Override
 	protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
-		String username = req.getParameter("username").toLowerCase();
-		Response<Boolean> response = SessionHandler.deleteFriend(username);
+		String user1 = req.getParameter("user1").toLowerCase();
+		String user2 = req.getParameter("user2").toLowerCase();
+		Response<Boolean> response = SessionHandler.deleteFriend(user1, user2);
 		resp.getWriter().print(mapper.writeValueAsString(response));
 	}
 
