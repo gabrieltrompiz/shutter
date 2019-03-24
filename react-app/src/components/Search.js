@@ -7,6 +7,11 @@ export default class Search extends React.Component {
 		this.state = { recent: null}
 	}
 
+	//El problemita con este callback es que pa buscar busquedas recientes se necesita modificar la db creo
+	componentDidMount = async () => {
+		fetch(/*getRecentSearch*/)
+	}
+
 	search = async (name) => {
 		//se settea el loading
 		//await fetch(/*el nombre del endpoint*/'')

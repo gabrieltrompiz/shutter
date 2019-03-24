@@ -2,6 +2,7 @@ package servlets;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -10,25 +11,20 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 
 import handlers.SessionHandler;
+import models.Post;
 import models.Response;
 import models.User;
+import utilities.Encryptor;
 
-@WebServlet(urlPatterns = "/search", name = "User Searcher")
-public class SearchServlet extends HttpServlet {
+@WebServlet(urlPatterns = "feed", name = "Feed Servlet")
+public class FeedServlet extends HttpServlet {
 
-	//Esta vaina puede buscar tanto a users en la lista de amigos como users de todos lados dependiendo del param
+	//Gettea los posts del feed
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
-		String name = req.getParameter("name");
-		String list = req.getParameter("list");
-		Response<ArrayList<User>> response = null;
-
-		if (list.equalsIgnoreCase("friends"))
-			response = SessionHandler.searchFriends(name);
-		else
-			response = SessionHandler.searchUsers(name);
-
+		String username = req.getParameter("user").toLowerCase();
+		Response<ArrayList<Post>> response = SessionHandler.getPosts(username);
 		resp.getWriter().print(mapper.writeValueAsString(response));
 	}
 }

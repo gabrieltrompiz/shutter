@@ -1,8 +1,8 @@
 package servlets;
 
 import java.io.IOException;
-import java.util.stream.Collectors;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -11,30 +11,28 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 
 import handlers.SessionHandler;
-import models.FriendHelper;
 import models.Response;
 import models.User;
 
 @WebServlet(urlPatterns = "/friends", name = "Friend Management Servlet")
 public class FriendServlet extends HttpServlet {
 
-	//Aja convive pa agregar amiwo
+	//Aja convive pa agregar amiwo. TODO Corregir
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
 		String json =  req.getReader().lines().collect(Collectors.joining());
-		FriendHelper helper = mapper.readValue(json, FriendHelper.class);
-		Response<Boolean> response = SessionHandler.addFriend(helper);
+		User user = mapper.readValue(json, User.class);
+		Response<Boolean> response = SessionHandler.addFriend(user);
 		resp.getWriter().print(mapper.writeValueAsString(response));
 	}
 
-	//Pa eliminar amiwo
+	//Pa eliminar amiwo. TODO Corregir
 	@Override
 	protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
-		String json =  req.getReader().lines().collect(Collectors.joining());
-		FriendHelper helper = mapper.readValue(json, FriendHelper.class);
-		Response<Boolean> response = SessionHandler.deleteFriend(helper);
+		String username = req.getParameter("username").toLowerCase();
+		Response<Boolean> response = SessionHandler.deleteFriend(username);
 		resp.getWriter().print(mapper.writeValueAsString(response));
 	}
 
@@ -42,10 +40,8 @@ public class FriendServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
-		HttpSession session = req.getSession();
-		//String json =  req.getReader().lines().collect(Collectors.joining());
-		//User user = mapper.readValue(json, User.class);
-		//Response<ArrayList<User>> response = SessionHandler.getFriendList(user);
-		//resp.getWriter().print(mapper.writeValueAsString(response));
+		String username = req.getParameter("username").toLowerCase();
+		Response<ArrayList<User>> response = SessionHandler.getFriendList(username);
+		resp.getWriter().print(mapper.writeValueAsString(response));
 	}
 }

@@ -6,7 +6,27 @@ import Button from './Button';
 export default class Profile extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { user: this.props.user, posts: 0, friends: 0 }
+		this.state = { user: this.props.user, friendList: {}, posts: {}, posts: 0, friends: 0 }
+	}
+
+	componentDidMount = async () => {
+		await fetch('http://localhost:8080/userPosts?user=' + this.props.user.username)
+			.then(response => {
+				if (response.status === 200) {
+					this.setState({ posts = response.data });
+				} else {
+					console.log('cry');
+				}
+			});
+
+		await fetch('http://localhost:8080/friends?user=' + this.props.user.username)
+			.then(response => {
+				if (response.status === 200) {
+					this.setState({ friendList = response.data });
+				} else {
+					console.log('cry');
+				}
+			});
 	}
 	
 	render() {

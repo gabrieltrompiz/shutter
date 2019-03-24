@@ -1,6 +1,6 @@
 package handlers;
 
-import models.FriendHelper;
+import models.Post;
 import models.Response;
 import models.User;
 import utilities.PropertiesReader;
@@ -132,7 +132,7 @@ public class SessionHandler {
 		return response;
 	}
 
-	public static Response<Boolean> addFriend(FriendHelper helper) {
+	public static Response<Boolean> addFriend(User user) {
 		Connection con = poolManager.getConn();
 		Response<Boolean> response;
 /*		try {
@@ -144,17 +144,29 @@ public class SessionHandler {
 	return null;
 	}
 
-	public static Response<Boolean> deleteFriend(FriendHelper helper) {
+	public static Response<Boolean> deleteFriend(String username) {
 		return null;
 	}
 
-	public static Response<ArrayList<User>> getFriendList(User user) {
+	public static Response<ArrayList<User>> getFriendList(String username) {
 		return null;
 	}
 
-	public static Response<ArrayList<User>> searchUsers(String name) { return null; }
+	public static Response<ArrayList<User>> searchUsers(String name) {
+		return null;
+	}
 
+	public static Response<ArrayList<User>> searchFriends(String name) {
+		return null;
+	}
 
+	public static Response<ArrayList<Post>> getPosts(String username) {
+		return null;
+	}
+
+	public static Response<ArrayList<Post>> getUserPosts(String username) {
+		return null;
+	}
 
 	private static void getUserData(ResultSet rs, User user) throws SQLException {
 		user.setLowercaseUsername(rs.getString(2));
