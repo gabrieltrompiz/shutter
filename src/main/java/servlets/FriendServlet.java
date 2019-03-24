@@ -21,9 +21,9 @@ public class FriendServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
-		String json =  req.getReader().lines().collect(Collectors.joining());
-		User user = mapper.readValue(json, User.class);
-		Response<Boolean> response = SessionHandler.addFriend(user);
+		String user1 = req.getParameter("user1");
+		String user2 = req.getParameter("user2");
+		Response<Boolean> response = SessionHandler.addFriend(user1, user2);
 		resp.getWriter().print(mapper.writeValueAsString(response));
 	}
 

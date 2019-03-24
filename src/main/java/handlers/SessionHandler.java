@@ -132,20 +132,64 @@ public class SessionHandler {
 		return response;
 	}
 
-	public static Response<Boolean> addFriend(User user) {
+	public static Response<Boolean> addFriend(String user1, String user2) {
 		Connection con = poolManager.getConn();
-		Response<Boolean> response;
-/*		try {
+		Response<Boolean> response = new Response<>();
+		String query = prop.getValue("addFriend");
+		try {
+			PreparedStatement ps = con.prepareStatement(query);
+			ps.setString(1, user1);
+			ps.setString(2, user2);
+			ps.setString(3, user1);
+			ps.setString(4, user2);
+			if (ps.execute()) {
+				response.setData(true);
+				response.setStatus(200);
+				response.setMessage("Friend Request Sent");
+			} else {
+				response.setData(false);
+				response.setStatus(200);
+				response.setMessage("Couldn't Send Request");
+			}
 
-		} catch (Exception e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
-		}*/
-
-	return null;
+			response.setStatus(500);
+			response.setMessage("DB Connection Error");
+			response.setData(false);
+		}
+		poolManager.returnConn(con);
+		return response;
 	}
 
-	public static Response<Boolean> deleteFriend(String username) {
-		return null;
+	public static Response<Boolean> deleteFriend(String user1, String user2) {
+		Connection con = poolManager.getConn();
+		Response<Boolean> response = new Response<>();
+		String query = prop.getValue("deleteFriend");
+		try {
+			PreparedStatement ps = con.prepareStatement(query);
+			ps.setString(1, user1);
+			ps.setString(2, user2);
+			ps.setString(3, user1);
+			ps.setString(4, user2);
+			if (ps.execute()) {
+				response.setData(true);
+				response.setStatus(200);
+				response.setMessage("User Deleted");
+			} else {
+				response.setData(false);
+				response.setStatus(200);
+				response.setMessage("Couldn't Delete Friend");
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			response.setStatus(500);
+			response.setMessage("DB Connection Error");
+			response.setData(false);
+		}
+		poolManager.returnConn(con);
+		return response;
 	}
 
 	public static Response<ArrayList<User>> getFriendList(String username) {
