@@ -3,6 +3,7 @@ package servlets;
 import java.io.IOException;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.servlet.ServletException;
@@ -14,6 +15,7 @@ import models.Response;
 import models.User;
 import utilities.Encryptor;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @WebServlet(urlPatterns = "/login", name = "Login Servlet")
 public class LoginServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
@@ -33,7 +35,7 @@ public class LoginServlet extends HttpServlet {
     if(response.getStatus() == 200) {
       req.getSession();
     }
-
+    mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
     resp.setStatus(response.getStatus());
     resp.getWriter().print(mapper.writeValueAsString(response));
   }

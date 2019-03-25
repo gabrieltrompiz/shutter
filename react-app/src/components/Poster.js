@@ -10,7 +10,7 @@ export default class Poster extends React.Component {
 
 	render() {
 		return(
-			<Container style={{ width: '100%', height: '30%', backgroundColor: 'rgb(240, 240, 240)', display: 'flex'}}>
+			<Container style={{ width: '100%', height: '34%', backgroundColor: 'rgb(240, 240, 240)', display: 'flex'}}>
 				{/*TextArea, MiniProfile pic, opciones adicionales(subir foto, video), boton de salir, boton de post*/ /*leftPadding*/}
 				<div style={{width: '14vw'}}>
 					<Image
@@ -18,15 +18,15 @@ export default class Poster extends React.Component {
 						style={{ width: 80, height: 80, borderRadius: '100%', marginTop: '2vh', marginLeft: '2.5vw' }}
 					/>
 					<Button outlined marginLeft='1.8vw' marginRight='1vw' marginTop='1vh' fontFamily='Arial' 
-					fontSize='12px' width='10vw'>Pictures</Button>
+					fontSize='12px' width='10vw' border= 'none'>Pictures</Button>
 					<Button outlined marginLeft='1.8vw' marginTop='1vh' fontFamily='Arial' 
-					fontSize='12px' width='10vw'>Video</Button>
+					fontSize='12px' width='10vw' border= 'none'>Video</Button>
 				</div>
 				<div style={{ width: '55vw', height: 'inherit' }}>
 					<TextArea placeholder='Whats on your mind...' style={{ resize: 'none', width: 'inherit', height: '23vh',
 					borderRadius: '20px', marginTop: '2vh', /*marginBottom: '2vh',*/ marginRight: '1vw', paddingLeft: '1vw',
 					paddingTop: '1vh', fontFamily: 'Arial', fontSize: '22px',  }}/>
-					<Button outlined fontFamily='Arial' fontSize='12px' width='10vw'
+					<Button outlined fontFamily='Arial' fontSize='12px' width='10vw' height= '4vh' border= 'none'
 					>Post</Button>
 				</div>
 				<div>

@@ -1,5 +1,6 @@
 package servlets;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import models.Response;
 
@@ -16,6 +17,7 @@ import java.util.Collection;
 
 @MultipartConfig
 @WebServlet(urlPatterns = "/files", name = "File Upload Servlet")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class FilesServlet extends HttpServlet {
 
     @Override

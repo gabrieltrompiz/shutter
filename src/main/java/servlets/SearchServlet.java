@@ -3,6 +3,7 @@ package servlets;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.servlet.ServletException;
@@ -13,6 +14,7 @@ import handlers.SessionHandler;
 import models.Response;
 import models.User;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @WebServlet(urlPatterns = "/search", name = "User Searcher")
 public class SearchServlet extends HttpServlet {
 
@@ -30,6 +32,7 @@ public class SearchServlet extends HttpServlet {
 		else
 			response = SessionHandler.searchUsers(name);
 
+		mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 		resp.getWriter().print(mapper.writeValueAsString(response));
 	}
 }

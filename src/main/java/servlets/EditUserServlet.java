@@ -1,5 +1,6 @@
 package servlets;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import handlers.SessionHandler;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.stream.Collectors;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @WebServlet(urlPatterns = "/edit", name = "User Editor Servlet")
 public class EditUserServlet extends HttpServlet {
 
@@ -32,6 +34,7 @@ public class EditUserServlet extends HttpServlet {
 
 		Response<User> response = SessionHandler.modifyUser(user);
 
+		mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 		res.setStatus(response.getStatus());
 		res.getWriter().print(mapper.writeValueAsString(response));
 	}

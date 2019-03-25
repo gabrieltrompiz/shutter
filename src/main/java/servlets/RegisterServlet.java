@@ -1,5 +1,6 @@
 package servlets;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import handlers.SessionHandler;
 import models.Response;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.stream.Collectors;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @WebServlet(urlPatterns = "/register", name = "Register Servlet")
 public class RegisterServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
@@ -40,6 +42,7 @@ public class RegisterServlet extends HttpServlet {
     	req.getSession();
 	}
     res.setStatus(response.getStatus());
+    mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
     res.getWriter().print(mapper.writeValueAsString(response));
   }
 

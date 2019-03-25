@@ -1,5 +1,6 @@
 import React from 'react';
 import { Container, Image } from 'semantic-ui-react';
+import Button from './Button.js';
 
 export default class Post extends React.Component {
 	constructor(props) {
@@ -30,11 +31,16 @@ export default class Post extends React.Component {
 				</div>
 			<p style={{ paddingLeft: '1vw', margin: 0}}>{'Gabriel Trompussy and 31 others' /* Obviamente aquí va un switchito */}</p>
 			<div style={{display: 'flex', marginBottom: '0.6vh'}}>
-				<button style={{ backgroundColor: 'rgb(230, 230, 230)', border: 'none', width: '32.7%', marginLeft: '0.3%', marginRight: '0.3%', borderRadius: '15px' }}>Likes</button>
-				<button style={{ backgroundColor: 'rgb(230, 230, 230)', border: 'none', width: '32.7%', marginLeft: '0.3%', marginRight: '0.3%', borderRadius: '15px' }}>Comment</button>
-				<button style={{ backgroundColor: 'rgb(230, 230, 230)', border: 'none', width: '32.7%', marginLeft: '0.3%', marginRight: '0.3%', borderRadius: '15px' }}>Share</button>
+				<Button changeRadius border= 'none' width= '32.7%' marginLeft= '0.3%' marginRight= '0.3%' borderRadius= '50px'>Likes</Button>
+				<Button changeRadius border= 'none' width= '32.7%' marginLeft= '0.3%' marginRight= '0.3%' borderRadius= '50px'>Comments</Button>
+				<Button changeRadius border= 'none' width= '32.7%' marginLeft= '0.3%' marginRight= '0.3%' borderRadius= '50px'>Share</Button>
 			</div>
 			</Container>
 			);
 	}
 }
+/*
+<button style={{ backgroundColor: 'rgb(230, 230, 230)', border: 'none', width: '32.7%', marginLeft: '0.3%', marginRight: '0.3%', borderRadius: '15px' }}>Likes</button>
+<button style={{ backgroundColor: 'rgb(230, 230, 230)', border: 'none', width: '32.7%', marginLeft: '0.3%', marginRight: '0.3%', borderRadius: '15px' }}>Comment</button>
+<button style={{ backgroundColor: 'rgb(230, 230, 230)', border: 'none', width: '32.7%', marginLeft: '0.3%', marginRight: '0.3%', borderRadius: '15px' }}>Share</button>
+*/

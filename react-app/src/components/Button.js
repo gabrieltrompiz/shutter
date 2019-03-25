@@ -9,7 +9,7 @@ export default class Button extends React.Component {
     render(){
         const outlined = {
             backgroundColor: this.state.hover ? this.props.color : 'white',
-            borderRadius: 5,
+            borderRadius: this.props.changeRadius ? this.props.borderRadius : 5,
             borderWidth: 1.5,
             borderColor: this.props.color,
             borderStyle: 'solid',
@@ -28,7 +28,7 @@ export default class Button extends React.Component {
         }
         const filled = {
             backgroundColor: this.props.color,
-            borderRadius: 5,
+            borderRadius: this.props.changeRadius ? this.props.borderRadius : 5,
             borderWidth: 1.5,
             borderColor: this.props.color,
             borderStyle: 'solid',
@@ -50,7 +50,7 @@ export default class Button extends React.Component {
         const style = this.props.outlined ? outlined : filled;
         return(
             <button 
-            style={style} 
+            style={style}
             onMouseOver={() => this.setState({ hover: true })}
             onMouseOut={() => this.setState({ hover: false })}
             onClick={this.props.onClick}>

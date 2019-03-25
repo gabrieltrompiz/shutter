@@ -5,7 +5,7 @@ import Button from '../components/Button';
 export default class Profile extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { user: this.props.user, friendList: {}, posts: {}, posts: 0, friends: 0 }
+		this.state = { user: this.props.user, friendList: {}, posts: {}, postsMade: 0, friends: 0 }
 	}
 
 	componentDidMount = async () => {
@@ -57,7 +57,7 @@ export default class Profile extends React.Component {
 								</Header>
 							</div>
 							<Header as='h1' textAlign='center' style={{ marginLeft: 120, paddingTop: 20, fontSize: 35 }}>
-								<Header.Content>{this.state.posts}</Header.Content>
+								<Header.Content>{this.state.postsMade}</Header.Content>
 								<Header.Subheader>Posts</Header.Subheader>
 							</Header>
 							<Header as='h1' textAlign='center' style={{ marginLeft: 60, paddingTop: 20, fontSize: 35 }}>
