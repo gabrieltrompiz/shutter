@@ -1,6 +1,6 @@
 import React from 'react'
 import { Image, Container, Divider, Grid, Header, Icon } from 'semantic-ui-react'
-import Button from './Button';
+import Button from '../components/Button';
 
 export default class Profile extends React.Component {
 	constructor(props) {
@@ -30,7 +30,6 @@ export default class Profile extends React.Component {
 	
 	render() {
 		const source = "http://localhost:8080/files?type=avatar&file=" + this.state.user.username + ".png"
-		console.log(source)
 		const date = new Date(this.state.user.birthday)
 		const birthday = date.getDate() + "/" + (parseInt(date.getMonth(), 10) + 1) + "/" + date.getFullYear()
 		return(			
@@ -45,9 +44,10 @@ export default class Profile extends React.Component {
 					<Grid.Column width={11} style={{ height: '100%' }}>
 						<div style={{ display: 'flex', width: '100%', height: 'fit-content', paddingLeft: 20 }} id="mardicion">
 							<Image
-							src={source}
-							style={{ width: 100, height: 100, borderRadius: 50, marginTop: 12 }}
-							verticalAlign='middle'
+								src={source}
+								style={{ width: 100, height: 100, marginTop: 12 }}
+								circular
+								verticalAlign='middle'
 							/>
 							<div style={{ marginTop: 25, paddingLeft: 10 }}>
 								<Header as='h2' style={{ marginTop: 0, marginBottom: 0, display: 'inline-block', color: 'black' }}>{this.state.user.name + " " + this.state.user.lastName}</Header><br />

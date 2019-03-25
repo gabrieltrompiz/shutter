@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Image, Header, Form, Input, Divider, Message } from 'semantic-ui-react';
 import { DateInput } from 'semantic-ui-calendar-react'
-import Button from './Button';
+import Button from '../components/Button';
 
 export default class EditProfile extends React.Component {
 	constructor(props) {

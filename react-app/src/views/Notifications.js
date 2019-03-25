@@ -1,5 +1,5 @@
 import React from 'react'
-import Not from './Not.js'
+import Not from '../components/Not.js'
 
 export default class Inbox extends React.Component {
 	constructor(props) {
@@ -9,7 +9,7 @@ export default class Inbox extends React.Component {
 
 	render() {
 		return(
-			<div style={{ backgroundColor: 'purple', width: 'inherit', height: 'inherit', overflowY: 'scroll'}}>
+			<div style={{ backgroundColor: 'purple', width: 'inherit', height: '100%', overflowY: 'scroll'}}>
 				<Not/>
 				<Not/>
 				<Not/>

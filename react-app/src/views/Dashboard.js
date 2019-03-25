@@ -1,14 +1,11 @@
 import React from 'react'
 import { Menu, Label, Icon, Container, Grid, Header, Image, Segment } from 'semantic-ui-react'
-// eslint-disable-next-line
-import Home from '../components/Home';
-import Notifications from '../components/Notifications';
-import Profile from '../components/Profile';
-// eslint-disable-next-line
-import Search from '../components/Search';
-// eslint-disable-next-line
-import Settings from '../components/Settings';
-import EditProfile from '../components/EditProfile';
+import Home from './Home';
+import Notifications from './Notifications';
+import Profile from './Profile';
+import Search from './Search';
+import Settings from './Settings';
+import EditProfile from './EditProfile';
 
 export default class Dashboard extends React.Component {
 	constructor(props) {

@@ -9,8 +9,8 @@ export default class UsersContainer extends React.Component {
 
 	render() {
 		return(
-			<div style ={{ width: 'inherit', height: 'inherit', marginLeft: '1.5vw', marginRight: '1.5vw', marginTop: '4vh', border: '2px solid black', borderRadius: '1vh' }}>
-				
+			<div style ={{ width: 'inherit', height: '85%', marginLeft: '1.5vw', marginRight: '1.5vw', marginTop: '4vh', border: '2px solid black', borderRadius: '1vh' }}>
+				{this.props.children}			
 			</div>
 		);
 	}

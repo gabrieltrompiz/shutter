@@ -23,7 +23,7 @@ public class FilesServlet extends HttpServlet {
         ObjectMapper mapper = new ObjectMapper();
         Response<?> response = new Response<>();
         resp.setContentType("image/png");
-        resp.addHeader("accept-ranges", "bytes");
+        resp.addHeader("Accept-Ranges", "bytes");
         String target = System.getenv("SystemDrive");
         if(req.getParameter("type").equalsIgnoreCase("avatar"))
             target += "/web2p1/assets/avatars/";
