@@ -9,13 +9,13 @@ export default class Not extends React.Component {
 
 	render() {
 		return(
-				<div style={{ backgroundColor: 'gray', height: '135px', width: '100%', display: 'flex', border: '1px solid blue' }}>
+				<div style={{ backgroundColor: 'white', height: '135px', width: '100%', display: 'flex', border: '1px solid rgb(220, 220, 220)' }}>
 					<div style={{width: '15%'}}>
 						<Image
 							src={require('../assets/pandagram2.png')}
-							style={{ width: 60, height: 60, borderRadius: '100%', marginTop: '2vh', marginLeft: '2.5vw' }}
+							style={{ width: 60, height: 60, borderRadius: '100%', marginTop: '3vh', marginLeft: '2.5vw' }}
 						/>
-						<p style={{ marginLeft: '1.5vw', marginTop: '1.2vh', fontFamily: 'Arial', fontSize: '12px', width: 'fill', margin: 'none' }}>
+						<p style={{ marginLeft: '2.1vw', marginTop: '1.4vh', fontFamily: 'Arial', fontSize: '12px', width: 'fill', margin: 'none' }}>
 							{this.state.date}
 						</p>
 					</div>
