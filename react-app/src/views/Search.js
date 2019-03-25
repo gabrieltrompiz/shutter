@@ -27,22 +27,32 @@ export default class Search extends React.Component {
 	*/
 
 	render() {
-		const user = { username: 'default', name: "Luis Patrulla" }
+		const user = { username: 'gabtrompzi', name: "Gabriel Trompiz" }
 		return(
-			<div style={{ width: 'inherit', height: '100%', backgroundColor: 'pink'}}>
+			<div style={{ width: 'inherit', height: '100%' }}>
 				<Input placeholder='Search' style={{ width: '50vw', marginLeft: '10vw', marginTop: '2.5vh' }} 
 				focus icon={{ name: 'search', circular: 'true'}} onClick={() => this.search('a')}
 				onChange={this.handleInput} autoComplete='off' maxLength={50}/>
-				<UsersContainer>
-					<Grid columns={4} style={{ width: '100%', height: '30%', margin: 0, marginLeft: '0.75vw' }}>
-						<Grid.Row>
-							<UserCard user={user}/> {/* Este user va a estar en el state, posiblemente se guarde en localStorage no c */}
-							<UserCard />
-							<UserCard />
-							<UserCard />
-						</Grid.Row>
-					</Grid>
-				</UsersContainer>
+				<Grid columns={4} style={{ width: '100%', height: '30%', margin: 0, marginLeft: '0.75vw' }}>
+					<Grid.Row>
+						<UserCard user={user}/> {/* Este user va a estar en el state, posiblemente se guarde en localStorage no c */}
+						<UserCard user={user}/>
+						<UserCard user={user}/>
+						<UserCard user={user}/>
+					</Grid.Row>
+					<Grid.Row>
+						<UserCard user={user}/> {/* Este user va a estar en el state, posiblemente se guarde en localStorage no c */}
+						<UserCard user={user}/>
+						<UserCard user={user}/>
+						<UserCard user={user}/>
+					</Grid.Row>
+					<Grid.Row>
+						<UserCard user={user}/> {/* Este user va a estar en el state, posiblemente se guarde en localStorage no c */}
+						<UserCard user={user}/>
+						<UserCard user={user}/>
+						<UserCard user={user}/>
+					</Grid.Row>
+				</Grid>
 			</div>
 		);
 	}

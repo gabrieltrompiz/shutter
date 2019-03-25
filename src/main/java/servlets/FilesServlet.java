@@ -20,15 +20,13 @@ public class FilesServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        Response<?> response = new Response<>();
         resp.setContentType("image/png");
         resp.addHeader("Accept-Ranges", "bytes");
         String target = System.getenv("SystemDrive");
         if(req.getParameter("type").equalsIgnoreCase("avatar"))
             target += "/web2p1/assets/avatars/";
         else if(req.getParameter("type").equalsIgnoreCase("post"))
-            target += "/web2p1/assets/posts/";
+            target += "/web2p1/assets/users/";
         FileInputStream fileObj = null;
         OutputStream out = resp.getOutputStream();
         try {
@@ -44,14 +42,7 @@ public class FilesServlet extends HttpServlet {
         }
         catch (Exception e) {
             e.printStackTrace();
-            response.setStatus(500);
-            response.setMessage("Error getting photo.");
         }
-        finally {
-            response.setStatus(200);
-            response.setMessage("Photo sent successfully.");
-        }
-        resp.getWriter().print(mapper.writeValueAsString(response));
     }
 
     @Override
