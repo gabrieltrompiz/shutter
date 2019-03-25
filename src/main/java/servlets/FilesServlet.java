@@ -67,16 +67,14 @@ public class FilesServlet extends HttpServlet {
                 }
                 fileContent.close();
                 out.close();
+                response.setStatus(200);
+                response.setMessage("File(s) uploaded successfully.");
             }
         }
         catch(Exception e) {
             e.printStackTrace();
             response.setStatus(500);
             response.setMessage("Error uploading files.");
-        }
-        finally {
-            response.setStatus(200);
-            response.setMessage("File(s) uploaded successfully.");
         }
         resp.getWriter().print(mapper.writeValueAsString(response));
     }
@@ -102,15 +100,13 @@ public class FilesServlet extends HttpServlet {
             }
             fileContent.close();
             out.close();
+            response.setStatus(200);
+            response.setMessage("Uploaded file successfully.");
         }
         catch (Exception e) {
             e.printStackTrace();
             response.setStatus(500);
             response.setMessage("Error uploading file.");
-        }
-        finally {
-            response.setStatus(200);
-            response.setMessage("Uploaded file successfully.");
         }
         resp.getWriter().print(mapper.writeValueAsString(response));
     }
