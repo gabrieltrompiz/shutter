@@ -1,5 +1,5 @@
 import React from 'react';
-import {Segment, Container, Image, Header, Form, Input, Divider, Message} from 'semantic-ui-react';
+import { Container, Image, Header, Form, Input, Divider, Message } from 'semantic-ui-react';
 import { DateInput } from 'semantic-ui-calendar-react'
 import Button from './Button';
 
@@ -62,12 +62,11 @@ export default class EditProfile extends React.Component {
 		})
 	}
 
-	checkInput = async (evt) => {
-		
+	checkInput = async (evt) => {		
 		const { firstname, lastname, birthday, gender, username, email, password } = this.state;
 		await this.setState({errorFirstname: firstname === '', errorLastname: lastname === '', errorBirthday: birthday === '', errorGender: gender === '',
 		errorEmail: !this.validator.validate(email), errorPwd: password.length < 8 })
-		if(this.props.user.username !== this.state.username) {
+		if(this.props.user.username !== username) {
 			await this.checkUsername()
 		}
 		if(this.props.user.email !== this.state.email) {
@@ -96,7 +95,6 @@ export default class EditProfile extends React.Component {
         await fetch('http://localhost:8080/edit', { method: 'PUT', body: JSON.stringify(body), credentials: 'include' })
         .then((res) => res.json().then(
         	json => {
-				console.log(json)
 				if (json.status === 200) 
 					this.props.changeUser(json.data)
     			else 

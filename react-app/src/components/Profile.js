@@ -1,6 +1,5 @@
 import React from 'react'
-import { Segment, Image, Form, Container, Message, Divider, Transition, Grid, Header, Icon } from 'semantic-ui-react'
-import button from './Button'
+import { Image, Container, Divider, Grid, Header, Icon } from 'semantic-ui-react'
 import Button from './Button';
 
 export default class Profile extends React.Component {
@@ -13,7 +12,7 @@ export default class Profile extends React.Component {
 		await fetch('http://localhost:8080/userPosts?user=' + this.props.user.username)
 			.then(response => {
 				if (response.status === 200) {
-					this.setState({ posts = response.data });
+					this.setState({ posts: response.data });
 				} else {
 					console.log('cry');
 				}
@@ -22,7 +21,7 @@ export default class Profile extends React.Component {
 		await fetch('http://localhost:8080/friends?user=' + this.props.user.username)
 			.then(response => {
 				if (response.status === 200) {
-					this.setState({ friendList = response.data });
+					this.setState({ friendList: response.data });
 				} else {
 					console.log('cry');
 				}

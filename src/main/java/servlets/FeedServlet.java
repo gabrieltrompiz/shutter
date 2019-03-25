@@ -16,7 +16,7 @@ import models.Response;
 import models.User;
 import utilities.Encryptor;
 
-@WebServlet(urlPatterns = "feed", name = "Feed Servlet")
+@WebServlet(urlPatterns = "/feed", name = "Feed Servlet")
 public class FeedServlet extends HttpServlet {
 
 	//Gettea los posts del feed

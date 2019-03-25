@@ -9,7 +9,7 @@ export default class Home extends React.Component {
 		this.state = { user: this.props.user, posts: {} }
 	}
 
-	componentDidMount = async () {
+	componentDidMount = async () => {
 		await fetch('http://localhost:8080/feed?user=' + this.props.user.username)
 			.then(response => {
 				if (response.status === 200) {

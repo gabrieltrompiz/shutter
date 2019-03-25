@@ -1,9 +1,12 @@
 import React from 'react'
-import { Menu, Label, Input, Icon, Container, Grid, Header, Image, Segment } from 'semantic-ui-react'
+import { Menu, Label, Icon, Container, Grid, Header, Image, Segment } from 'semantic-ui-react'
+// eslint-disable-next-line
 import Home from '../components/Home';
 import Notifications from '../components/Notifications';
 import Profile from '../components/Profile';
+// eslint-disable-next-line
 import Search from '../components/Search';
+// eslint-disable-next-line
 import Settings from '../components/Settings';
 import EditProfile from '../components/EditProfile';
 
