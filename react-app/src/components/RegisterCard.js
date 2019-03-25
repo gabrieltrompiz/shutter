@@ -32,7 +32,7 @@ export default class RegisterCard extends React.Component {
 
     checkUsername = async () => {
         if(this.state.errorUsername) { return; }
-        const username = { username: this.state.username }
+        const username = this.state.username
         await fetch('http://localhost:8080/checkUsername?user=' + username)
         .then(response => {
             if(response.status === 200) { 
@@ -49,7 +49,7 @@ export default class RegisterCard extends React.Component {
 
     checkEmail = async () => {
         if(this.state.errorEmail) { return false; }
-        const email = { email: this.state.email }
+        const email = this.state.email
         await fetch('http://localhost:8080/checkEmail?email=' + email)
         .then(response => {
             if(response.status === 200) { 
@@ -106,8 +106,7 @@ export default class RegisterCard extends React.Component {
         .then(response => response.json())
         .then(json => {
             if(json.status === 200) {
-                this.props.handleLoggedIn(true)
-                this.props.handleUser(json.data)
+                this.props.handleUser(json.data).then(() => this.props.handleLoggedIn(true))
             }
             else {
                 this.setState({ errorRegister: true })

@@ -22,7 +22,8 @@ public class FilesServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ObjectMapper mapper = new ObjectMapper();
         Response<?> response = new Response<>();
-        resp.setContentType("file");
+        resp.setContentType("image/png");
+        resp.addHeader("accept-ranges", "bytes");
         String target = System.getenv("SystemDrive");
         if(req.getParameter("type").equalsIgnoreCase("avatar"))
             target += "/web2p1/assets/avatars/";
@@ -32,6 +33,7 @@ public class FilesServlet extends HttpServlet {
         OutputStream out = resp.getOutputStream();
         try {
             fileObj = new FileInputStream(target + req.getParameter("file"));
+            resp.setHeader("Content-Length", Long.toString(fileObj.getChannel().size()));
             int read = 0;
             byte[] bytes = new byte[1024];
             while ((read = fileObj.read(bytes)) != -1) {
@@ -61,7 +63,7 @@ public class FilesServlet extends HttpServlet {
         OutputStream out = null;
         File fileObj = null;
         try {
-            String baseDir = System.getenv("SystemDrive") + "web2p1/assets/posts/";
+            String baseDir = System.getenv("SystemDrive") + "web2p1/assets/users/" + req.getParameter("user") + "/"; // TODO: Agreagar filtro
             for (Part file : files) {
                 fileContent = file.getInputStream();
                 fileObj = new File(baseDir + this.getFileName(file));

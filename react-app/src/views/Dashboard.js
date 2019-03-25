@@ -33,7 +33,7 @@ export default class Dashboard extends React.Component {
 	getView = () => {
 		switch(this.state.activeItem) {
 			case 'Home':
-				return <Home user={this.props.user} changeView={this.handleChangeView} changeUser={this.props.changeUser}/>;
+				return <Home user={this.props.user} changeView={this.handleChangeView} changeUser={this.props.changeUser} handleLoggedIn={this.props.handleLoggedIn}/>;
 			
 			case 'Profile':
 				return <Profile user={this.props.user} changeView={this.handleChangeView}/>;

@@ -18,7 +18,7 @@ export default class Profile extends React.Component {
 				}
 			});
 
-		await fetch('http://localhost:8080/friends?user=' + this.props.user.username)
+		await fetch('http://localhost:8080/friends?user=' + this.props.user.username, { credentials: 'include' })
 			.then(response => {
 				if (response.status === 200) {
 					this.setState({ friendList: response.data });
@@ -29,7 +29,8 @@ export default class Profile extends React.Component {
 	}
 	
 	render() {
-		console.log(this.state)
+		const source = "http://localhost:8080/files?type=avatar&file=" + this.state.user.username + ".png"
+		console.log(source)
 		const date = new Date(this.state.user.birthday)
 		const birthday = date.getDate() + "/" + (parseInt(date.getMonth(), 10) + 1) + "/" + date.getFullYear()
 		return(			
@@ -44,7 +45,7 @@ export default class Profile extends React.Component {
 					<Grid.Column width={11} style={{ height: '100%' }}>
 						<div style={{ display: 'flex', width: '100%', height: 'fit-content', paddingLeft: 20 }} id="mardicion">
 							<Image
-							src={require('../assets/pandagram2.png')}
+							src={source}
 							style={{ width: 100, height: 100, borderRadius: 50, marginTop: 12 }}
 							verticalAlign='middle'
 							/>

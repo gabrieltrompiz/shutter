@@ -15,8 +15,6 @@ public class PoolManager {
 
 	public synchronized Connection getConn() {
 		m++;
-		System.out.println("Solicitando conexión " + m);
-		//System.out.println("Solicitud " + m);
 		if (!(pool.getAvailConn() > 0)) {
 			if (!addConn()) {
 				try {
@@ -38,7 +36,6 @@ public class PoolManager {
 
 	public synchronized void returnConn(Connection con) {
 		n++;
-		System.out.println("Conexión " + n + " devuelta");
 		pool.returnConn(con);
 		notify();
 	}

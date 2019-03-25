@@ -22,10 +22,11 @@ class App extends Component {
   }
 
   handleLoggedIn = async (loggedIn) => {
-    if(!loggedIn) {
-      await localStorage.clear('user')
-      this.setState({ user: null })
-    }
+    console.log("modyfing loggeed")
+    // if(!loggedIn) {
+    //   await localStorage.clear('user')
+    //   this.setState({ user: null })
+    // }
     await localStorage.setItem('loggedIn', JSON.stringify(loggedIn))
     this.setState({ loggedIn: loggedIn })
   }
@@ -36,7 +37,6 @@ class App extends Component {
   }
 
   render() {
-    console.log(localStorage.getItem('loggedIn'))
     return (
       <div className="App" style={{ height: '101.9vh' }}>
         {!this.state.loggedIn &&
