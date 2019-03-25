@@ -23,7 +23,7 @@ export default class Home extends React.Component {
 
 	render() {
 		return(
-			<div style={{ backgroundColor: 'purple', width: 'inherit', height: '100%', overflowY: 'scroll'}}>
+			<div style={{ backgroundColor: 'white', width: 'inherit', height: '100%', overflowY: 'scroll'}}>
 				<Poster/>
 				<Post/>
 				<Post/>
