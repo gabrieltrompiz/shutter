@@ -9,9 +9,10 @@ export default class Post extends React.Component {
 	}
 
 	render() {
-		const source = 'http://localhost:8080/files?type=avatar&file=' + this.state.username + '.png'
+		const source = 'http://localhost:8080/files?type=avatar&file=' + this.state.user + '.png'
 		return(
-			<Container style={{width: '70vw', height: 'auto', backgroundColor: 'white', marginTop: 0, display: 'flow-root', fontSize: '20px'}}>
+			<Container style={{ width: 'auto', height: 'auto', marginTop: '2.5vh', display: 'flow-root', backgroundColor: 'white', borderColor: '#DDDFE2', 
+			borderRadius: 5, borderWidth: 1.5, borderStyle: 'solid' }}>
 				<div style={{display: 'flex'}}>
 					<Image
 						src={source}

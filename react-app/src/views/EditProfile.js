@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Image, Header, Form, Input, Divider, Message } from 'semantic-ui-react';
+import { Container, Image, Header, Form, Input, Divider, Message, Segment } from 'semantic-ui-react';
 import { DateInput } from 'semantic-ui-calendar-react'
 import Button from '../components/Button';
 
@@ -114,6 +114,7 @@ export default class EditProfile extends React.Component {
 		const errorList = []
 
 		return(
+			<Segment raised style={{ marginTop: '2.5vh' }}>
 				<Container fluid style={{display: 'flex', height: '90vh'}}>
 					<div>
 						<Button color='#FF5252' width={70} height={35} onClick={() => this.props.changeView('Profile')}>Cancel</Button>
@@ -150,6 +151,7 @@ export default class EditProfile extends React.Component {
 					this.state.errorEmail || this.state.errorPwd || !this.state.emailAvailable) && errorList.length !== 0 &&
 					<Message error list={errorList} /> }
 				</Container>
+			</Segment>
 			);
 	}
 }

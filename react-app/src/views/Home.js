@@ -20,19 +20,28 @@ export default class Home extends React.Component {
 	}
 
 	render() {
+		const test = { user: 'gabtrompiz', text: 'hee hee', name: 'Gabriel Trompiz' }
 		return(
-			<div style={{ backgroundColor: 'white', width: 'inherit', height: '100%', overflowY: 'scroll'}}>
-				<Poster name={this.state.user}/>
+			<div style={{ backgroundColor: 'transparent', width: '100%', height: '100vh' }}>
+				<Poster user={this.state.user}/>
 				{this.state.posts.map(post => {
 					return(
 						<Post post={post}/>
 					)
 				})}
+				<Post post={test}/>
 				{this.state.posts.length === 0 && 
-					<div>HEEHEE</div>
+					<div style={styles.empty}></div>
 				}
-				{/*Lista de posts*/}
 			</div>
 		);
+	}
+}
+
+const styles = {
+	empty: {
+		height: 'auto',
+		backgroundColor: 'black',
+		width: '100%'
 	}
 }

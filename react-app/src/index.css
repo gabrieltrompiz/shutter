@@ -23,3 +23,43 @@ code {
   font-weight: normal;
   src: local('Billabong'), url('./assets/Billabong.woff') format('woff');
 }
+
+.posterButtons {
+  outline: 0;
+  border: none;
+  background-color: #ff5252;
+  width: 15%;
+  height: 32px;
+  margin-bottom: 1.5%;
+  font-family: 'Roboto';
+  font-size: 16px; 
+  color: white; 
+  border-radius: 12px;
+  margin-left: 10px;
+}
+
+.posterButtons:hover {
+  cursor: pointer;
+  filter: brightness(0.8);
+  transition-duration: 0.4s;
+}
+
+#postBtn {
+  outline: 0;
+  border: none;
+  background-color: #00b5ad;
+  width: 15%;
+  height: 32px;
+  margin-bottom: 1.5%;
+  font-family: 'Roboto';
+  font-size: 16px; 
+  color: white; 
+  border-radius: 12px;
+  margin-left: 10px;
+}
+
+#postBtn:hover {
+  cursor: pointer;
+  filter: brightness(0.8);
+  transition-duration: 0.4s;
+}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextArea, Container, Image } from 'semantic-ui-react';
+import { TextArea, Container, Image, Divider, Icon } from 'semantic-ui-react';
 import Button from './Button.js';
 
 export default class Poster extends React.Component {
@@ -9,25 +9,34 @@ export default class Poster extends React.Component {
 	}
 
 	render() {
+		const source = 'http://localhost:8080/files?type=avatar&file=' + this.props.user.username + '.png'
 		return(
-			<Container style={{ width: '100%', height: '34%', backgroundColor: 'rgb(240, 240, 240)', display: 'flex'}}>
-				{/*TextArea, MiniProfile pic, opciones adicionales(subir foto, video), boton de salir, boton de post*/ /*leftPadding*/}
-				<div style={{width: '14vw'}}>
+			<Container style={{ width: 'auto', height: 'auto', marginTop: '2.5vh', backgroundColor: 'white', borderColor: '#DDDFE2', 
+			borderRadius: 5, borderWidth: 1.5, borderStyle: 'solid' }}>
+				<div style={{ display: 'flex' }}>
 					<Image
-						src={require('../assets/pandagram2.png')}
-						style={{ width: 80, height: 80, borderRadius: '100%', marginTop: '2vh', marginLeft: '2.5vw' }}
+						src={source}
+						style={{ width: 80, height: 80, borderRadius: '100%', marginTop: '1.5vw', marginLeft: '1.5vw' }}
 					/>
-					<Button outlined marginLeft='1.8vw' marginRight='1vw' marginTop='1vh' fontFamily='Arial' 
-					fontSize='12px' width='10vw' border= 'none'>Pictures</Button>
-					<Button outlined marginLeft='1.8vw' marginTop='1vh' fontFamily='Arial' 
-					fontSize='12px' width='10vw' border= 'none'>Video</Button>
-				</div>
-				<div style={{ width: '55vw', height: 'inherit' }}>
-					<TextArea placeholder='Whats on your mind...' style={{ resize: 'none', width: 'inherit', height: '23vh',
-					borderRadius: '20px', marginTop: '2vh', /*marginBottom: '2vh',*/ marginRight: '1vw', paddingLeft: '1vw',
-					paddingTop: '1vh', fontFamily: 'Arial', fontSize: '22px',  }}/>
-					<Button outlined fontFamily='Arial' fontSize='12px' width='10vw' height= '4vh' border= 'none'
-					>Post</Button>
+					<TextArea placeholder={'What\'s on your mind, ' + this.props.user.name + '?'} style={{ resize: 'none', width: '100%', height: 100, paddingTop: 80,
+			        marginTop: '1.5vh', marginRight: '1vw', paddingLeft: '1vw', paddingTop: '1vh', fontFamily: 'Arial', fontSize: '22px', border: 'none', outline: 0,
+					lineHeight: 3 }}/>
+				</div>			
+				<Divider style={{ marginLeft: 12, marginRight: 12 }}/>
+				<div style={{ display: 'flex', width: '100%', paddingLeft: 15 }}>
+					<button className='posterButtons'>
+						<Icon name='photo' style={{ color: 'white' }}/>Photo
+					</button>
+					<button className='posterButtons'>
+						<Icon name='photo' style={{ color: 'white' }}/>Video
+					</button>
+					<button className='posterButtons'>
+						<Icon name='file audio' style={{ color: 'white' }}/>Audio
+					</button>
+					<div style={{ width: '35%' }}></div>
+					<button id='postBtn'>
+						Post <Icon name='send' style={{ color: 'white' }}/>
+					</button>
 				</div>
 				<div>
 					{/*Este div va a ser pa cuando el coño suba una foto/video, aquí se muestran
