@@ -45,9 +45,6 @@ public class RegisterServlet extends HttpServlet {
     mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
     res.getWriter().print(mapper.writeValueAsString(response));
   }
-
-  @Override
-  protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {}
 }
 
 

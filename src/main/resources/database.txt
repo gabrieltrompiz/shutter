@@ -79,14 +79,17 @@ CREATE TABLE notifications (
 
 ALTER SEQUENCE notifications_notification_id_seq OWNED BY notifications.notification_id;
 
+CREATE SEQUENCE friends_friend_id_seq;
+
 CREATE TABLE friends (
-                friends_id INTEGER NOT NULL,
+                friends_id INTEGER NOT NULL DEFAULT nextval('friends_friend_id_seq'),
                 user_id1 INTEGER NOT NULL,
                 user_id2 INTEGER NOT NULL,
                 date TIMESTAMP NOT NULL,
                 CONSTRAINT friends_pk PRIMARY KEY (friends_id)
 );
 
+ALTER SEQUENCE friends_friend_id_seq OWNED BY friends.friend_id;
 
 CREATE SEQUENCE post_post_id_seq;
 
@@ -230,11 +233,11 @@ INSERT INTO type_notification VALUES(3, 'comment');
 INSERT INTO type_notification VALUES(4, 'like');
 
 INSERT INTO type_like VALUES(1, 'like');
-INSERT INTO type_like VALUES(2, 'love');
-INSERT INTO type_like VALUES(3, 'haha');
-INSERT INTO type_like VALUES(4, 'wow');
-INSERT INTO type_like VALUES(5, 'sad');
-INSERT INTO type_like VALUES(6, 'angry');
+INSERT INTO type_like VALUES(2, 'not_like');
+INSERT INTO type_like VALUES(3, 'revert_commit_birth');
+INSERT INTO type_like VALUES(4, 'kill_oropeza');
+INSERT INTO type_like VALUES(5, 'E');
+INSERT INTO type_like VALUES(6, 'you_are_have_stupid');
 INSERT INTO type_like VALUES(7, 'pepe');
 INSERT INTO type_like VALUES(8, 'bagre');
 INSERT INTO type_like VALUES(9, 'nerio_aproves');
