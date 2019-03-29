@@ -72,24 +72,24 @@ CREATE TABLE notifications (
                 notification_sender INTEGER NOT NULL,
                 notification_receiver INTEGER NOT NULL,
                 type_notification_id INTEGER NOT NULL,
-                notification_date TIMESTAMP NOT NULL,
+                notification_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                 CONSTRAINT notifications_pk PRIMARY KEY (notification_id)
 );
 
 
 ALTER SEQUENCE notifications_notification_id_seq OWNED BY notifications.notification_id;
 
-CREATE SEQUENCE friends_friend_id_seq;
+CREATE SEQUENCE friends_friends_id_seq;
 
 CREATE TABLE friends (
-                friends_id INTEGER NOT NULL DEFAULT nextval('friends_friend_id_seq'),
+                friends_id INTEGER NOT NULL DEFAULT nextval('friends_friends_id_seq'),
                 user_id1 INTEGER NOT NULL,
                 user_id2 INTEGER NOT NULL,
-                date TIMESTAMP NOT NULL,
+                date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
                 CONSTRAINT friends_pk PRIMARY KEY (friends_id)
 );
 
-ALTER SEQUENCE friends_friend_id_seq OWNED BY friends.friend_id;
+ALTER SEQUENCE friends_friends_id_seq OWNED BY friends.friends_id;
 
 CREATE SEQUENCE post_post_id_seq;
 
@@ -99,7 +99,7 @@ CREATE TABLE post (
                 type_post_id INTEGER NOT NULL,
                 post_text VARCHAR(500),
                 post_url VARCHAR(256),
-                post_creation_time TIMESTAMP NOT NULL,
+                post_creation_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
                 CONSTRAINT post_pk PRIMARY KEY (post_id)
 );
 
@@ -233,17 +233,32 @@ INSERT INTO type_notification VALUES(3, 'comment');
 INSERT INTO type_notification VALUES(4, 'like');
 
 INSERT INTO type_like VALUES(1, 'like');
-INSERT INTO type_like VALUES(2, 'not_like');
-INSERT INTO type_like VALUES(3, 'revert_commit_birth');
-INSERT INTO type_like VALUES(4, 'kill_oropeza');
-INSERT INTO type_like VALUES(5, 'E');
-INSERT INTO type_like VALUES(6, 'you_are_have_stupid');
-INSERT INTO type_like VALUES(7, 'pepe');
-INSERT INTO type_like VALUES(8, 'bagre');
-INSERT INTO type_like VALUES(9, 'nerio_aproves');
-INSERT INTO type_like VALUES(10, 'nuke_israel');
+INSERT INTO type_like VALUES(2, 'love');
+INSERT INTO type_like VALUES(3, 'haha');
+INSERT INTO type_like VALUES(4, 'wow');
+INSERT INTO type_like VALUES(5, 'sad');
+INSERT INTO type_like VALUES(6, 'angry');
 
 INSERT INTO type_post VALUES(1, 'plain_text');
 INSERT INTO type_post VALUES(2, 'picture');
 INSERT INTO type_post VALUES(3, 'video');
 INSERT INTO type_post VALUES(4, 'audio');
+
+-- Datos pa no tener que llenar esa mierda a pie
+-- INSERT INTO friends (user_id1, user_id2) VALUES (1, 2);
+-- INSERT INTO friends (user_id1, user_id2) VALUES (2, 1);
+-- INSERT INTO friends (user_id1, user_id2) VALUES (1, 3);
+-- INSERT INTO friends (user_id1, user_id2) VALUES (3, 1);
+
+-- INSERT INTO post (user_id, type_post_id, post_text, post_url) VALUES (1, 1, 'Felisidades eres bagre', '');
+-- INSERT INTO post (user_id, type_post_id, post_text, post_url) VALUES (1, 1, 'Felisidades eres bagre', '');
+-- INSERT INTO post (user_id, type_post_id, post_text, post_url) VALUES (1, 1, 'Felisidades eres bagre', '');
+
+-- INSERT INTO post (user_id, type_post_id, post_text, post_url) VALUES (2, 1, 'Felisidades eres bagre XD', '');
+-- INSERT INTO post (user_id, type_post_id, post_text, post_url) VALUES (2, 1, 'Felisidades eres bagre', '');
+-- INSERT INTO post (user_id, type_post_id, post_text, post_url) VALUES (2, 1, 'Felisidades eres bagre', '');
+-- INSERT INTO post (user_id, type_post_id, post_text, post_url) VALUES (2, 1, 'Felisidades eres bagre', '');
+
+-- INSERT INTO post (user_id, type_post_id, post_text, post_url) VALUES (3, 1, 'Felisidades eres bagre', '');
+-- INSERT INTO post (user_id, type_post_id, post_text, post_url) VALUES (3, 1, 'Felisidades eres bagre', '');
+

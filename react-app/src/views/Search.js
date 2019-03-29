@@ -13,7 +13,7 @@ export default class Search extends React.Component {
 		// fetch(/*getRecentSearch*/)
 	}
 
-	/*
+	
 	search = async (name) => {
 		//se settea el loading
 		await fetch('http://localhost:8080/search?name=' + name + '&&list=general')
@@ -24,7 +24,7 @@ export default class Search extends React.Component {
 				console.log('cry');
 			});
 	}
-	*/
+	
 
 	render() {
 		const user = { username: 'gabtrompzi', name: "Gabriel Trompiz" }

@@ -14,8 +14,9 @@ export default class Home extends React.Component {
 			.then(response => response.json())
 			.then(response => {
 				if(response.status === 200) {
+					console.log(response.data);
 					this.setState({ posts: response.data})
-				}
+				} else console.log('cry');
 			});
 	}
 
@@ -24,6 +25,7 @@ export default class Home extends React.Component {
 			<div style={{ backgroundColor: 'white', width: 'inherit', height: '100%', overflowY: 'scroll'}}>
 				<Poster name={this.state.user}/>
 				{this.state.posts.map(post => {
+					console.log(post);
 					return(
 						<Post post={post}/>
 					)

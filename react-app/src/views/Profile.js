@@ -5,26 +5,26 @@ import Button from '../components/Button';
 export default class Profile extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { user: this.props.user, friendList: {}, posts: {}, postsMade: 0, friends: 0 }
+		this.state = { user: this.props.user, friendList: {}, posts: {}, postsMade: 0, friends: 0, lastFetch: '' }
 	}
 
 	componentDidMount = async () => {
 		await fetch('http://localhost:8080/userPosts?user=' + this.props.user.username)
+			.then(response => response.json())
 			.then(response => {
 				if (response.status === 200) {
+					console.log(response.data);
 					this.setState({ posts: response.data });
-				} else {
-					console.log('cry');
-				}
+				} else console.log('cry');
 			});
 
-		await fetch('http://localhost:8080/friends?user=' + this.props.user.username, { credentials: 'include' })
+		await fetch('http://localhost:8080/friends?username=' + this.props.user.username, { credentials: 'include' })
+			.then(response => response.json())
 			.then(response => {
 				if (response.status === 200) {
-					this.setState({ friendList: response.data });
-				} else {
-					console.log('cry');
-				}
+					console.log(response.data);
+					this.setState({ posts: response.data });
+				} else console.log('cry');
 			});
 	}
 	
