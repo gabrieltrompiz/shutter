@@ -42,7 +42,7 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App" style={{ height: '101.9vh' }}>
+      <div className="App" style={{ height: '100vh', overflow: 'hidden' }}>
         {!this.state.loggedIn && this.state.user === null &&
         <LoginView handleLoggedIn={this.handleLoggedIn} handleUser={this.handleUser}/>}
         {this.state.loggedIn && this.state.user !== null &&
