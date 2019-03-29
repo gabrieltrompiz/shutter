@@ -246,3 +246,4 @@ INSERT INTO type_like VALUES(10, 'nuke_israel');
 INSERT INTO type_post VALUES(1, 'plain_text');
 INSERT INTO type_post VALUES(2, 'picture');
 INSERT INTO type_post VALUES(3, 'video');
+INSERT INTO type_post VALUES(4, 'audio');

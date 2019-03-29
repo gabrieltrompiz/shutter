@@ -5,16 +5,16 @@ import Button from './Button.js';
 export default class Post extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { profilePic: null, msg: 'Entré al baño y habían dos moscas cogiendo. Las maté pal sebillo porque si yo no cojo ellas tampoco',
-		 content: null, name: 'Luis Petrella', date: '22 hrs', height: '30vh', likes: 0 };
+		this.state = this.props.post;
 	}
 
 	render() {
+		const source = 'http://localhost:8080/files?type=avatar&file=' + this.state.username + '.png'
 		return(
 			<Container style={{width: '70vw', height: 'auto', backgroundColor: 'white', marginTop: 0, display: 'flow-root', fontSize: '20px'}}>
 				<div style={{display: 'flex'}}>
 					<Image
-						src={require('../assets/pandagram2.png')}
+						src={source}
 						style={{borderRadius: '100%', width: 65, height: 65, marginTop: '2vh', marginLeft: '1vw'}}
 					/>
 					<div style={{marginLeft: '1vw'}}>

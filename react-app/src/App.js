@@ -23,15 +23,19 @@ class App extends Component {
 
   handleLoggedIn = async (loggedIn) => {
     console.log("modyfing loggeed")
-    // if(!loggedIn) {
-    //   await localStorage.clear('user')
-    //   this.setState({ user: null })
-    // }
+    if(!loggedIn) {
+      await localStorage.clear('user')
+      this.setState({ user: null })
+    }
     await localStorage.setItem('loggedIn', JSON.stringify(loggedIn))
     this.setState({ loggedIn: loggedIn })
   }
 
   handleUser = async (user) => { 
+    if(user === null) {
+      await localStorage.setItem("loggedIn", JSON.stringify(false));
+      this.setState({ loggedIn: false })
+    }
     await localStorage.setItem('user', JSON.stringify(user))
     this.setState({ user: user })
   }
@@ -39,9 +43,9 @@ class App extends Component {
   render() {
     return (
       <div className="App" style={{ height: '101.9vh' }}>
-        {!this.state.loggedIn &&
+        {!this.state.loggedIn && this.state.user === null &&
         <LoginView handleLoggedIn={this.handleLoggedIn} handleUser={this.handleUser}/>}
-        {this.state.loggedIn && 
+        {this.state.loggedIn && this.state.user !== null &&
         <Dashboard handleLoggedIn={this.handleLoggedIn} user={this.state.user} changeUser={this.handleUser}/>}
       </div>
     );

@@ -86,6 +86,7 @@ public class FilesServlet extends HttpServlet {
         ObjectMapper mapper = new ObjectMapper();
         Response<?> response = new Response<>();
         Part file = req.getPart("file");
+        System.out.println(file);
         InputStream fileContent = null;
         OutputStream out = null;
         File fileObj = null;
