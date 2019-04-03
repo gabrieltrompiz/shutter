@@ -12,7 +12,7 @@ export default class Poster extends React.Component {
 		const source = 'http://localhost:8080/files?type=avatar&file=' + this.props.user.username + '.png'
 		return(
 			<Container style={{ width: 'auto', height: 'auto', marginTop: '2.5vh', backgroundColor: 'white', borderColor: '#DDDFE2', 
-			borderRadius: 5, borderWidth: 1.5, borderStyle: 'solid' }}>
+			borderRadius: 5, borderWidth: 1.5, borderStyle: 'solid', marginBottom: '1.5vh' }}>
 				<div style={{ display: 'flex' }}>
 					<Image
 						src={source}

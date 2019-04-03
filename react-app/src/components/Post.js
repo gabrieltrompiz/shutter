@@ -8,28 +8,8 @@ export default class Post extends React.Component {
 		this.state = this.props.post;
 	}
 
-	getTime = (date) => {
-		let now = new Date();
-		let postDate = new Date(date)
-		console.log(now);
-		console.log(postDate);
-
-		if(now.getDate() === postDate.getDate()) {
-			if(now.getHours() === postDate.getHours()) {
-				if (now.getMinutes() === postDate.getMinutes())
-					return (now.getSeconds() - postDate.getSeconds()) + 'seconds ago';
-				return (now.getMinutes() - postDate.getMinutes()) + 'minutes ago';
-			}
-			else
-				return (now.getHours() - postDate.getHours()) + ' hours ago';
-		}
-
-		else
-			return postDate.getDate() +  '/' + (postDate.getMonth() + 1) + '/' + postDate.getFullYear();
-	}
-
 	render() {
-		const source = 'http://localhost:8080/files?type=avatar&file=' + this.state.user.username + '.png'
+		const source = 'http://localhost:8080/files?type=avatar&file=' + this.state.user + '.png'
 		return(
 			<Container style={{ width: 'auto', height: 'auto', marginTop: '2.5vh', display: 'flow-root', backgroundColor: 'white', borderColor: '#DDDFE2', 
 			borderRadius: 5, borderWidth: 1.5, borderStyle: 'solid' }}>
@@ -39,13 +19,13 @@ export default class Post extends React.Component {
 						style={{borderRadius: '100%', width: 65, height: 65, marginTop: '2vh', marginLeft: '1vw'}}
 					/>
 					<div style={{marginLeft: '1vw'}}>
-						<p style={{margin: 0, paddingTop: '2.5vh'}}>{'@' + this.state.user.username}</p>
-						<p style={{fontSize: '13px'}}>{this.getTime(this.state.creationTime)}</p>
+						<p style={{margin: 0, paddingTop: '2.5vh'}}>{this.state.name}</p>
+						<p style={{fontSize: '13px'}}>{this.state.date}</p>
 					</div>
 				{<button style={{backgroundColor: 'transparent', cursor: 'pointer', border: 'none', height: '5vh', marginLeft: 'auto'}}>...</button> /* Que ladilla */}
 				</div>
 				<div style={{marginLeft: '5vw', marginRight: '2vw', marginTop: '2vh', marginBottom: '2vh'}}>
-					<p>{this.state.postText}</p>
+					<p>{this.state.msg}</p>
 				</div>
 				<div>
 					{/* -Para cada archivo que contenga content- */}

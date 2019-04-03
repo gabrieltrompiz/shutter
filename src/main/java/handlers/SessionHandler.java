@@ -142,15 +142,10 @@ public class SessionHandler {
 			ps.setString(2, user2);
 			ps.setString(3, user1);
 			ps.setString(4, user2);
-			if (ps.execute()) {
-				response.setData(true);
-				response.setStatus(200);
-				response.setMessage("Friend Request Sent");
-			} else {
-				response.setData(false);
-				response.setStatus(200);
-				response.setMessage("Couldn't Send Request");
-			}
+		    ps.execute();
+            response.setData(true);
+            response.setStatus(200);
+            response.setMessage("Friend Request Sent");
 
 		} catch (SQLException e) {
 			e.printStackTrace();

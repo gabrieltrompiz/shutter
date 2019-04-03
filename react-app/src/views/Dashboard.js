@@ -56,7 +56,7 @@ export default class Dashboard extends React.Component {
 		return (
 			<Container fluid style={{ height: '100vh', backgroundColor: '#FAFAFC' }}>
 				<div style={{ backgroundColor: '#f1f2f4', display: 'flex' }}>
-					<Menu vertical style={{ height: '100vh', position: 'sticky', backgroundColor: 'white', width: '15%' }} pointing secondary>
+					<Menu vertical style={{ height: '100vh', position: 'sticky', backgroundColor: 'white', width: '17.5%' }} pointing secondary>
 						<Menu.Item header style={{ textAlign: 'center' }}>
 							<Image
 								as="img"
