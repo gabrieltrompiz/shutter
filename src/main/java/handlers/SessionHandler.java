@@ -7,10 +7,7 @@ import utilities.PropertiesReader;
 import utilities.PoolManager;
 import utilities.Pool;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -365,6 +362,32 @@ public class SessionHandler {
 
 		return response;
 	}
+
+	public static Response<Boolean> addPost(Post post) {
+	    Response<Boolean> response = new Response<>();
+	    Connection con = poolManager.getConn();
+	    String query = prop.getValue("addPost");
+	    try {
+	        PreparedStatement ps = con.prepareStatement(query);
+	        ps.setInt(1, post.getTypePost());
+	        ps.setString(2, post.getPostText());
+	        ps.setString(3, post.getUser().getLowercaseUsername());
+	        ps.execute();
+	        response.setMessage("Added post successfully.");
+	        response.setStatus(200);
+	        response.setData(true);
+        }
+        catch (SQLException e) {
+	        e.printStackTrace();
+	        response.setMessage("Error while posting.");
+	        response.setStatus(500);
+	        response.setData(false);
+        }
+        finally {
+	        poolManager.returnConn(con);
+        }
+        return response;
+    }
 
 	private static void getUserData(ResultSet rs, User user) throws SQLException {
 		user.setLowercaseUsername(rs.getString(2));

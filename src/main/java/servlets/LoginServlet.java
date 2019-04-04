@@ -33,7 +33,8 @@ public class LoginServlet extends HttpServlet {
 
     Response<User> response = SessionHandler.login(user);
     if(response.getStatus() == 200) {
-      req.getSession();
+      HttpSession session = req.getSession();
+      session.setAttribute("username", user.getLowercaseUsername());
     }
     mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
     resp.setStatus(response.getStatus());

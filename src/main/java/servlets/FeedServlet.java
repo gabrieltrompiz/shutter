@@ -26,7 +26,7 @@ public class FeedServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
-		String username = req.getParameter("user").toLowerCase();
+		String username = req.getSession(false).getAttribute("username").toString();
 		Response<ArrayList<Post>> response = SessionHandler.getPosts(username);
 		mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 		resp.getWriter().print(mapper.writeValueAsString(response));

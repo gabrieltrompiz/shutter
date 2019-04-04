@@ -28,7 +28,7 @@ export default class Poster extends React.Component {
 						<Icon name='photo' style={{ color: 'white' }}/>Photo
 					</button>
 					<button className='posterButtons'>
-						<Icon name='photo' style={{ color: 'white' }}/>Video
+						<Icon name='video' style={{ color: 'white' }}/>Video
 					</button>
 					<button className='posterButtons'>
 						<Icon name='file audio' style={{ color: 'white' }}/>Audio

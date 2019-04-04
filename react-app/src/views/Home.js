@@ -10,7 +10,7 @@ export default class Home extends React.Component {
 	}
 
 	componentDidMount = async () => {
-		await fetch('http://localhost:8080/feed?user=' + this.state.user.username)
+		await fetch('http://localhost:8080/feed', { credentials: 'include' })
 			.then(response => response.json())
 			.then(response => {
 				if(response.status === 200) {

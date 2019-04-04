@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebFilter(urlPatterns = {/*"/login", "/register"*/}, filterName = "No Session Filter")
+@WebFilter(urlPatterns = {"/login", "/register"}, filterName = "No Session Filter")
 public class NoSessionFilter implements Filter {
 	@Override
 	public void destroy() {}
