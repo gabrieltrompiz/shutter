@@ -5,13 +5,24 @@ import Button from './Button.js';
 export default class Poster extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {media: false}
+		this.state = { typePost: 1, postText: '' }
+	}
+
+	handleInput = (event, {name, value}) => {
+		this.setState({ postText: value })
+	}
+
+	post = () => {
+		const body = {
+			typePost: this.state.typePost,
+			postText: this.state.postText
+		}
 	}
 
 	render() {
 		const source = 'http://localhost:8080/files?type=avatar&file=' + this.props.user.username + '.png'
 		return(
-			<Container style={{ width: 'auto', height: 'auto', marginTop: '2.5vh', backgroundColor: 'white', borderColor: '#DDDFE2', 
+			<Container style={{ width: 'auto', maxHeight: 'auto', marginTop: '2.5vh', backgroundColor: 'white', borderColor: '#DDDFE2', 
 			borderRadius: 5, borderWidth: 1.5, borderStyle: 'solid', marginBottom: '1.5vh' }}>
 				<div style={{ display: 'flex' }}>
 					<Image
@@ -20,7 +31,7 @@ export default class Poster extends React.Component {
 					/>
 					<TextArea placeholder={'What\'s on your mind, ' + this.props.user.name + '?'} style={{ resize: 'none', width: '100%', height: 100, paddingTop: 80,
 			        marginTop: '1.5vh', marginRight: '1vw', paddingLeft: '1vw', paddingTop: '1vh', fontFamily: 'Arial', fontSize: '22px', border: 'none', outline: 0,
-					lineHeight: 3 }}/>
+					lineHeight: 3 }} onChange={this.handleInput} value={this.state.postText}/>
 				</div>			
 				<Divider style={{ marginLeft: 12, marginRight: 12 }}/>
 				<div style={{ display: 'flex', width: '100%', paddingLeft: 15 }}>

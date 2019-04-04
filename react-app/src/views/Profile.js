@@ -5,11 +5,11 @@ import Button from '../components/Button';
 export default class Profile extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { user: this.props.user, friendList: {}, posts: {}, postsMade: 0, friends: 0, lastFetch: '' }
+		this.state = { user: this.props.user, friendList: [], posts: [], lastFetch: '' }
 	}
 
 	componentDidMount = async () => {
-		await fetch('http://localhost:8080/userPosts?user=' + this.props.user.username)
+		await fetch('http://localhost:8080/posts?user=' + this.props.user.username)
 			.then(response => response.json())
 			.then(response => {
 				if (response.status === 200) {
@@ -23,7 +23,7 @@ export default class Profile extends React.Component {
 			.then(response => {
 				if (response.status === 200) {
 					console.log(response.data);
-					this.setState({ posts: response.data });
+					this.setState({ friendList: response.data });
 				} else console.log('cry');
 			});
 	}
@@ -58,11 +58,11 @@ export default class Profile extends React.Component {
 									</Header>
 								</div>
 								<Header as='h1' textAlign='center' style={{ marginLeft: 120, paddingTop: 20, fontSize: 35 }}>
-									<Header.Content>{this.state.postsMade}</Header.Content>
+									<Header.Content>{this.state.posts.length}</Header.Content>
 									<Header.Subheader>Posts</Header.Subheader>
 								</Header>
 								<Header as='h1' textAlign='center' style={{ marginLeft: 60, paddingTop: 20, fontSize: 35 }}>
-									<Header.Content>{this.state.friends}</Header.Content>
+									<Header.Content>{this.state.friendList.length}</Header.Content>
 									<Header.Subheader>Friends</Header.Subheader>
 								</Header>	
 							</div>

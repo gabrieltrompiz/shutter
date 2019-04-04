@@ -20,20 +20,17 @@ export default class Home extends React.Component {
 	}
 
 	render() {
-		const test = { user: 'gabtrompiz', text: 'hee hee', name: 'Gabriel Trompiz' }
-		console.log(this.state.posts.length)
 		return(
-			<div style={{ backgroundColor: 'transparent', width: '100%', height: '97vh' }}>
+			<div style={{ backgroundColor: 'transparent', width: '60%', height: '97vh' }}>
 				<Poster user={this.state.user}/>
 				{this.state.posts.map(post => {
 					return(
-						<Post post={post}/>
+						<Post post={post} key={post.idPost}/>
 					)
 				})}
-				{/* <Post post={test}/> */}
 				{this.state.posts.length === 0 && 
 					<div style={styles.empty}>
-						<span style={styles.icon}><i class="far fa-frown"></i></span>
+						<span style={styles.icon}><i className="far fa-frown"></i></span>
 						<span style={styles.text}>It seems like you don't have friends <br /> or they haven't posted yet.</span>
 					</div>
 				}

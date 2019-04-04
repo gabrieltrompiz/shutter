@@ -30,13 +30,14 @@ export default class Dashboard extends React.Component {
 	getView = () => {
 		switch(this.state.activeItem) {
 			case 'Home':
-				return <Home user={this.props.user} changeView={this.handleChangeView} changeUser={this.props.changeUser} handleLoggedIn={this.props.handleLoggedIn}/>;
+				return (
+					<div style={{ display: 'flex' }}>
+						<Home user={this.props.user} changeView={this.handleChangeView} changeUser={this.props.changeUser} handleLoggedIn={this.props.handleLoggedIn}/>
+						<Notifications />
+					</div>);
 			
 			case 'Profile':
 				return <Profile user={this.props.user} changeView={this.handleChangeView}/>;
-			
-			case 'Notifications':
-				return <Notifications/>;
 			
 			case 'EditProfile':
 				return <EditProfile user={this.props.user} changeView={this.handleChangeView} changeUser={this.props.changeUser}/>;
@@ -61,7 +62,7 @@ export default class Dashboard extends React.Component {
 							<Image
 								as="img"
 								src={require('../assets/pandagram.png')}
-								style={{ width: 55, height: 55, borderRadius: 12, margin: 'auto', marginTop: 10 }}
+								style={{ width: 70, height: 70, borderRadius: 12, margin: 'auto', marginTop: 10 }}
 							/>
 							<p style={{ fontFamily: 'Billabong', fontSize: 40, fontWeight: '400' }}>Pandagram</p>
 						</Menu.Item>
@@ -75,13 +76,6 @@ export default class Dashboard extends React.Component {
 							<Header as='h5' style={{ paddingLeft: 10, marginTop: 0.5 }}>
 								<Icon name='user' style={{ float: 'left', fontSize: 16 }}/>
 								Profile
-							</Header>
-						</Menu.Item>
-						<Menu.Item active={this.state.activeItem === 'Notifications'} onClick={this.handleItemClick} name='Notifications'>
-							{this.state.notifications > 0 && <Label color='teal'>{this.state.notifications}</Label>}
-							<Header as='h5' style={{ paddingLeft: 10, marginTop: 0.5 }}>
-								<Icon name='inbox' style={{ float: 'left', fontSize: 16 }}/>
-								Notifications
 							</Header>
 						</Menu.Item>
 						<Menu.Item active={this.state.activeItem === 'Search'} onClick={this.handleItemClick} name='Search'>
