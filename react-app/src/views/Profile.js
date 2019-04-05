@@ -1,6 +1,7 @@
 import React from 'react'
 import { Image, Container, Divider, Grid, Header, Icon, Segment } from 'semantic-ui-react'
 import Button from '../components/Button';
+import FriendContainer from '../components/FriendContainer';
 
 export default class Profile extends React.Component {
 	constructor(props) {
@@ -9,7 +10,7 @@ export default class Profile extends React.Component {
 	}
 
 	componentDidMount = async () => {
-		await fetch('http://localhost:8080/posts?user=' + this.props.user.username)
+		await fetch('http://localhost:8080/posts?user=' + this.props.user.username, { credentials: 'include' })
 			.then(response => response.json())
 			.then(response => {
 				if (response.status === 200) {
@@ -33,16 +34,16 @@ export default class Profile extends React.Component {
 		const date = new Date(this.state.user.birthday)
 		const birthday = date.getDate() + "/" + (parseInt(date.getMonth(), 10) + 1) + "/" + date.getFullYear()
 		return(	
-			<Segment raised style={{ marginTop: '2.5vh' }}>		
-				<Container>
+			<Segment raised style={{ marginTop: '2.5vh', height: '95vh' }}>		
+				<Container fluid style={{ height: '100%' }}>
 					<div style={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
 						<Header as='h2' textAlign='center' style={{ marginTop: 0, marginBottom: 0, marginLeft: '40%', color: 'black' }}>{this.state.user.username}</Header>
 						<Button outlined color='#FF5252' height={30} width={100} onClick={() => this.props.changeView('EditProfile')}>Edit Profile</Button>
 					</div>
 					
 					<Divider />
-					<Grid>
-						<Grid.Column width={11} style={{ height: '100%' }}>
+					<Grid style={{ height: '96%' }}>
+						<Grid.Column width={11}>
 							<div style={{ display: 'flex', width: '100%', height: 'fit-content', paddingLeft: 20 }} id="mardicion">
 								<Image
 									src={source}
@@ -67,13 +68,17 @@ export default class Profile extends React.Component {
 								</Header>	
 							</div>
 							<Divider/>
-							<Container style={{ backgroundColor: 'grey', width: '100%', height: '60vh', borderRadius: 5 }}>
+							<Container style={{ backgroundColor: 'grey', width: '100%', height: '77%', borderRadius: 5 }}>
 								AQUI VAN LOS POSTS
 							</Container>
 						</Grid.Column>
-						<Grid.Column width={5} style={{ height: '85vh' }}>
-							<Container style={{ backgroundColor: 'purple', width: '100%', height: '100%', borderRadius: 5 }}>
-								AQUI VAN LOS AMIGOS O OTRA COSA
+						<Grid.Column width={5}>
+							<Container style={styles.friendList}>
+							<p style={styles.title}>Friends</p>
+							<Divider fitted style={{ width: '100%', marginBottom: 10 }}/>
+								{this.state.friendList.map(friend => {
+									return <FriendContainer friend={friend} key={friend.username} />
+								})}
 							</Container>
 						</Grid.Column>
 					</Grid>					
@@ -82,4 +87,21 @@ export default class Profile extends React.Component {
 			);
 	}
 
+}
+
+const styles = {
+    title: {
+		fontFamily: 'Heebo',
+		fontSize: 25,
+		fontWeight: 'bolder',
+		margin: 0,
+		paddingBottom: 5
+	},
+	friendList: {
+	    width: '100%', 
+		height: '99%', 
+		borderRadius: 5, 
+		padding: 14,
+		border: '1px solid rgba(34,36,38,.15)'
+	}
 }

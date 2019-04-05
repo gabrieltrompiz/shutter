@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Image } from 'semantic-ui-react';
+import { Container, Image, Divider } from 'semantic-ui-react';
 import Button from './Button.js';
 
 export default class Post extends React.Component {
@@ -10,7 +10,6 @@ export default class Post extends React.Component {
 
 	getBeautifiedDate = () => {
 		const seconds = Math.floor((Date.now() - this.state.creationTime) / 1000)
-		console.log('hehehe')
 		const date = new Date(this.state.creationTime)
 		if(seconds <= 0) { return '' }
         if(seconds <= 10) { return 'a few seconds ago' }
@@ -29,6 +28,7 @@ export default class Post extends React.Component {
 			else { hours = date.getHours(); suffix = " AM" }
 			if(date.getMinutes() < 10) { minutes = "0" + date.getMinutes() }
 			else { minutes = date.getMinutes() }
+			if(hours === 0) { hours = 12 }
 			return "Yesterday at " + parseInt(hours, 10) + ":" + minutes + suffix
 		}
         else { 
@@ -37,6 +37,7 @@ export default class Post extends React.Component {
 			else { hours = date.getHours(); suffix = " AM" }
 			if(date.getMinutes() < 10) { minutes = "0" + date.getMinutes() }
 			else { minutes = date.getMinutes() }
+			if(hours === 0) { hours = 12 }
 			const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 			return months[date.getMonth()] + " " + date.getDate() + " at " + parseInt(hours, 10) + ":" + minutes + suffix;
 		}
@@ -59,7 +60,15 @@ export default class Post extends React.Component {
 					</div>
 				</div>
 				<p style={styles.text}>{this.state.postText}</p>
-				
+				<div style={{ width: '96%', height: 'auto', display: 'flex', alignItems: 'center', marginLeft: '2%', marginBottom: 10 }}>
+					<span style={{ paddingRight: 20 }}><span style={styles.stats}>200</span><span style={styles.statsText}>Likes</span></span>
+					<span><span style={styles.stats}>5</span><span style={styles.statsText}>Comments</span></span>
+				</div>
+				<Divider fitted />
+				<div style={{ width: '100%', height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+					<button className="reactionsBtns"><i className="far fa-heart"></i>  Like</button>
+					<button className="reactionsBtns"><i className="far fa-comment"></i>  Comment</button>
+				</div>
 			</Container>
 			);
 	}
@@ -97,5 +106,18 @@ const styles = {
 		fontWeight: 'light',
 		paddingLeft: 15,
 		paddingRight: 15
+	},
+	stats: {
+		fontFamily: 'Heebo',
+		fontWeight: 'bolder',
+		color: 'black',
+		fontSize: 16,
+		paddingRight: 5
+	},
+	statsText: {
+		fontFamily: 'Heebo',
+		fontWeight: 'light',
+		color: '#606770',
+		fontSize: 16
 	}
 }

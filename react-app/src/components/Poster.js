@@ -12,11 +12,20 @@ export default class Poster extends React.Component {
 		this.setState({ postText: value })
 	}
 
-	post = () => {
+	post = async () => {
 		const body = {
 			typePost: this.state.typePost,
 			postText: this.state.postText
 		}
+		await fetch('http://localhost:8080/posts', { method: 'POST', credentials: 'include' })
+		.then(response => {
+			if(response.status === 200) {
+				console.log("se postio mi rei")
+			}
+			else {
+				console.log("no se postio bro")
+			}
+		})
 	}
 
 	render() {
@@ -35,13 +44,13 @@ export default class Poster extends React.Component {
 				</div>			
 				<Divider style={{ marginLeft: 12, marginRight: 12 }}/>
 				<div style={{ display: 'flex', width: '100%', paddingLeft: 15 }}>
-					<button className='posterButtons'>
+					<button className='posterButtons' onClick={() => this.setState({ typePost: 2 })}>
 						<Icon name='photo' style={{ color: 'white' }}/>Photo
 					</button>
-					<button className='posterButtons'>
+					<button className='posterButtons' onClick={() => this.setState({ typePost: 3 })}>
 						<Icon name='video' style={{ color: 'white' }}/>Video
 					</button>
-					<button className='posterButtons'>
+					<button className='posterButtons' onClick={() => this.setState({ typePost: 4 })}>
 						<Icon name='file audio' style={{ color: 'white' }}/>Audio
 					</button>
 					<div style={{ width: '35%' }}></div>
