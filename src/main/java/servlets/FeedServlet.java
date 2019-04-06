@@ -29,6 +29,7 @@ public class FeedServlet extends HttpServlet {
 		ObjectMapper mapper = new ObjectMapper();
 		Response<ArrayList<Post>> response = null;
 		String username = req.getSession(false).getAttribute("username").toString();
+		System.out.println(username);
 		String timePost = req.getParameter("time");
 
 		if(timePost == null) {

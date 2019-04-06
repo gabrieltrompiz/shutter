@@ -468,8 +468,8 @@ public class SessionHandler {
     }
 
 	private static void getUserData(ResultSet rs, User user) throws SQLException {
-		user.setLowercaseUsername(rs.getString(2));
-		user.setUsername(rs.getString(3));
+		user.setUsername(rs.getString(2));
+		user.setLowercaseUsername(rs.getString(3));
 		user.setName(rs.getString(5));
 		user.setLastName(rs.getString(6));
 		user.setEmail(rs.getString(7));

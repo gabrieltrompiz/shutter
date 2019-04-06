@@ -32,7 +32,7 @@ public class PostsServlet extends HttpServlet {
 			response = SessionHandler.getUserPosts(username);
 		} else {
 			Timestamp time = Timestamp.valueOf(timePost);
-			response = SessionHandler.getPosts(username, time);
+			response = SessionHandler.getUserPosts(username, time);
 		}
 		mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 		resp.getWriter().print(mapper.writeValueAsString(response));

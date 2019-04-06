@@ -1,21 +1,28 @@
-import React from 'react'
-import { Image, Container, Divider, Grid, Header, Icon, Segment } from 'semantic-ui-react'
+import React from 'react';
+import { Image, Container, Divider, Grid, Header, Icon, Segment } from 'semantic-ui-react';
 import Button from '../components/Button';
 import FriendContainer from '../components/FriendContainer';
-
+import Post from '../components/Post.js';
 export default class Profile extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { user: this.props.user, friendList: [], posts: [], lastFetch: '' }
+		this.state = { user: this.props.user, friendList: [], posts: [], lastPost: null }
 	}
 
 	componentDidMount = async () => {
+		let user = {username: this.state.user.username, name: this.state.user.name, 
+			lastName: this.state.user.lastName};
 		await fetch('http://localhost:8080/posts?user=' + this.props.user.username, { credentials: 'include' })
 			.then(response => response.json())
 			.then(response => {
 				if (response.status === 200) {
-					console.log(response.data);
-					this.setState({ posts: response.data });
+					let res = response.data;
+					res.map(post => {
+						post.user = user;
+					})
+
+					this.setState({ posts: res });
+					console.log(res);
 				} else console.log('cry');
 			});
 
@@ -29,7 +36,7 @@ export default class Profile extends React.Component {
 			});
 	}
 
-	chargeMorePosts = () => {
+	chargeMorePosts = async () => {
 		let date = new Date(this.state.lastPost);
 		date.setMilliseconds(date.getMilliseconds() + 1);
 		await fetch('http://localhost:8080/posts?time=' + date, { credentials: 'include' })
@@ -46,7 +53,7 @@ export default class Profile extends React.Component {
 		const date = new Date(this.state.user.birthday)
 		const birthday = date.getDate() + "/" + (parseInt(date.getMonth(), 10) + 1) + "/" + date.getFullYear()
 		return(	
-			<Segment raised style={{ marginTop: '2.5vh', height: '95vh' }}>		
+			<Segment raised style={{ marginTop: '2.5vh', height: '95vh' }}>
 				<Container fluid style={{ height: '100%' }}>
 					<div style={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
 						<Header as='h2' textAlign='center' style={{ marginTop: 0, marginBottom: 0, marginLeft: '40%', color: 'black' }}>{this.state.user.username}</Header>
@@ -80,9 +87,14 @@ export default class Profile extends React.Component {
 								</Header>	
 							</div>
 							<Divider/>
-							<Container style={{ backgroundColor: 'grey', width: '100%', height: '72.5%', borderRadius: 5 }}>
-								AQUI VAN LOS POSTS
-							</Container>
+							<div style={{ backgroundColor: 'transparent', width: '100%', height: '72.5%' }}>
+								{this.state.posts.map(post => {
+									return(
+										<Post post={post} key={post.idPost}/>
+										)
+									this.setState({ lastPost: post.postCreationTime })
+								})}
+							</div>
 						</Grid.Column>
 						<Grid.Column width={5}>
 							<Container style={styles.friendList}>
