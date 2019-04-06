@@ -328,6 +328,48 @@ public class SessionHandler {
 		return response;
 	}
 
+	public static Response<ArrayList<Post>> getPosts(String username, Timestamp time) {
+		Response<ArrayList<Post>> response = new Response<>();
+		ArrayList<Post> posts = new ArrayList<>();
+		Connection con = poolManager.getConn();
+		String query = prop.getValue("getMorePosts");
+		try {
+			PreparedStatement ps = con.prepareStatement(query);
+			ps.setString(1, username);
+			ps.setTimestamp(2, time);
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				Post post = new Post();
+				User user = new User();
+
+				post.setIdPost(rs.getInt(1));
+				post.setTypePost(rs.getInt(2));
+				post.setPostText(rs.getString(3));
+				post.setUrl(rs.getString(4));
+				post.setCreationTime(rs.getTimestamp(5));
+				user.setUsername(rs.getString(6));
+				user.setName(rs.getString(7));
+				user.setLastName(rs.getString(8));
+				user.setAvatar(rs.getString(9));
+
+				post.setUser(user);
+				posts.add(post);
+			}
+			response.setData(posts);
+			response.setMessage("Posts Returned");
+			response.setStatus(200);
+		} catch(SQLException e) {
+			e.printStackTrace();
+			response.setMessage("DB Connection Error");
+			response.setStatus(500);
+		} finally {
+			poolManager.returnConn(con);
+		}
+
+		return response;
+	}
+
 	public static Response<ArrayList<Post>> getUserPosts(String username) {
 		Response<ArrayList<Post>> response = new Response<>();
 		ArrayList<Post> posts = new ArrayList<>();
@@ -336,6 +378,42 @@ public class SessionHandler {
 		try {
 			PreparedStatement ps = con.prepareStatement(query);
 			ps.setString(1, username);
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				Post post = new Post();
+				post.setIdPost(rs.getInt(1));
+				post.setTypePost(rs.getInt(2));
+				post.setPostText(rs.getString(3));
+				post.setUrl(rs.getString(4));
+				post.setCreationTime(rs.getTimestamp(5));
+
+				posts.add(post);
+			}
+			response.setData(posts);
+			response.setMessage("User Posts Returned");
+			response.setStatus(200);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			response.setMessage("DB Connection Error");
+			response.setStatus(500);
+		} finally {
+			poolManager.returnConn(con);
+		}
+
+		return response;
+	}
+
+	public static Response<ArrayList<Post>> getUserPosts(String username, Timestamp time) {
+		Response<ArrayList<Post>> response = new Response<>();
+		ArrayList<Post> posts = new ArrayList<>();
+		Connection con = poolManager.getConn();
+		String query = prop.getValue("getMoreUserPosts");
+		try {
+			PreparedStatement ps = con.prepareStatement(query);
+			ps.setString(1, username);
+			ps.setTimestamp(2, time);
 			ResultSet rs = ps.executeQuery();
 
 			while (rs.next()) {

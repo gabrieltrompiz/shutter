@@ -6,11 +6,24 @@ import Post from '../components/Post.js';
 export default class Home extends React.Component {
 	constructor(props) {
 		super(props)
-		this.state = { user: this.props.user, posts: [] }
+		this.state = { user: this.props.user, posts: [], lastPost: null }
 	}
 
 	componentDidMount = async () => {
 		await fetch('http://localhost:8080/feed', { credentials: 'include' })
+			.then(response => response.json())
+			.then(response => {
+				if(response.status === 200) {
+					this.setState({ posts: response.data})
+				}
+			});
+		console.log(this.state.posts);
+	}
+
+	chargeMorePosts = async () => {
+		let date = new Date(this.state.lastPost);
+		date.setMilliseconds(date.getMilliseconds() + 1);
+		await fetch('http://localhost:8080/feed?time=' + date, { credentials: 'include' })
 			.then(response => response.json())
 			.then(response => {
 				if(response.status === 200) {
@@ -27,6 +40,7 @@ export default class Home extends React.Component {
 					return(
 						<Post post={post} key={post.idPost}/>
 					)
+					this.setState({ lastPost: post.postCreationTime })
 				})}
 				{this.state.posts.length === 0 && 
 					<div style={styles.empty}>

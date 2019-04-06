@@ -1,6 +1,7 @@
 package servlets;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -26,8 +27,17 @@ public class FeedServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
+		Response<ArrayList<Post>> response = null;
 		String username = req.getSession(false).getAttribute("username").toString();
-		Response<ArrayList<Post>> response = SessionHandler.getPosts(username);
+		String timePost = req.getParameter("time");
+
+		if(timePost == null) {
+			response = SessionHandler.getPosts(username);
+		} else {
+			Timestamp time = Timestamp.valueOf(timePost);
+			response = SessionHandler.getPosts(username, time);
+		}
+
 		mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 		resp.getWriter().print(mapper.writeValueAsString(response));
 	}

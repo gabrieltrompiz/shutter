@@ -28,6 +28,18 @@ export default class Profile extends React.Component {
 				} else console.log('cry');
 			});
 	}
+
+	chargeMorePosts = () => {
+		let date = new Date(this.state.lastPost);
+		date.setMilliseconds(date.getMilliseconds() + 1);
+		await fetch('http://localhost:8080/posts?time=' + date, { credentials: 'include' })
+			.then(response => response.json())
+			.then(response => {
+				if(response.status === 200) {
+					this.setState({ posts: response.data})
+				}
+			});
+	}
 	
 	render() {
 		const source = "http://localhost:8080/files?type=avatar&file=" + this.state.user.username + ".png"

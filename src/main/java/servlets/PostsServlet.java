@@ -1,6 +1,7 @@
 package servlets;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -23,8 +24,16 @@ public class PostsServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
-		String username = req.getParameter("user").toLowerCase();
-		Response<ArrayList<Post>> response = SessionHandler.getUserPosts(username);
+		Response<ArrayList<Post>> response = null;
+		String username = req.getSession(false).getAttribute("username").toString();
+		String timePost = req.getParameter("time");
+
+		if(timePost == null) {
+			response = SessionHandler.getUserPosts(username);
+		} else {
+			Timestamp time = Timestamp.valueOf(timePost);
+			response = SessionHandler.getPosts(username, time);
+		}
 		mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 		resp.getWriter().print(mapper.writeValueAsString(response));
 	}
