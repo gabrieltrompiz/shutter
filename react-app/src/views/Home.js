@@ -53,7 +53,7 @@ const styles = {
 		borderRadius: 20,
 		fontFamily: 'Heebo',
 		color: 'grey',
-		opacity: 0.8
+		opacity: 0.8,
 	},
 	icon: {
 		fontSize: 50,

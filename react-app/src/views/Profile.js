@@ -68,7 +68,7 @@ export default class Profile extends React.Component {
 								</Header>	
 							</div>
 							<Divider/>
-							<Container style={{ backgroundColor: 'grey', width: '100%', height: '77%', borderRadius: 5 }}>
+							<Container style={{ backgroundColor: 'grey', width: '100%', height: '72.5%', borderRadius: 5 }}>
 								AQUI VAN LOS POSTS
 							</Container>
 						</Grid.Column>
@@ -76,6 +76,11 @@ export default class Profile extends React.Component {
 							<Container style={styles.friendList}>
 							<p style={styles.title}>Friends</p>
 							<Divider fitted style={{ width: '100%', marginBottom: 10 }}/>
+								{this.state.friendList.length === 0 &&
+								<div style={styles.empty}>
+									<span><i className="far fa-frown" style={{ fontSize: 50, marginBottom: 10 }}></i></span>
+									<span style={{ fontSize: 20, textAlign: 'center' }}>You don't have any friends.</span>
+								</div>}
 								{this.state.friendList.map(friend => {
 									return <FriendContainer friend={friend} key={friend.username} />
 								})}
@@ -102,6 +107,18 @@ const styles = {
 		height: '99%', 
 		borderRadius: 5, 
 		padding: 14,
-		border: '1px solid rgba(34,36,38,.15)'
+		border: '1px solid rgba(34,36,38,.15)',
+		overflowY: 'scroll'
+	},
+	empty: {
+		display: 'flex',
+		height: '85%',
+		flexDirection: 'column',
+		color: 'grey',
+		opacity: 0.8,
+		alignItems: 'center',
+		justifyContent: 'center',
+		fontFamily: 'Heebo',
+		fontWeight: 'bolder'
 	}
 }

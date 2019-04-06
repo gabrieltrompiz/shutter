@@ -38,7 +38,7 @@ export default class Poster extends React.Component {
 						src={source}
 						style={{ width: 80, height: 80, borderRadius: '100%', marginTop: '1.5vw', marginLeft: '1.5vw' }}
 					/>
-					<TextArea placeholder={'What\'s on your mind, ' + this.props.user.name + '?'} style={{ resize: 'none', width: '100%', height: 100, paddingTop: 80,
+					<TextArea placeholder={'What\'s on your mind, ' + this.props.user.name + '?'} style={{ resize: 'none', width: '100%', height: 100,
 			        marginTop: '1.5vh', marginRight: '1vw', paddingLeft: '1vw', paddingTop: '1vh', fontFamily: 'Arial', fontSize: '22px', border: 'none', outline: 0,
 					lineHeight: 3 }} onChange={this.handleInput} value={this.state.postText}/>
 				</div>			

@@ -216,16 +216,16 @@ public class SessionHandler {
 		return response;
 	}
 
-	public static Response<ArrayList<User>> searchUsers(String name) {
+	public static Response<ArrayList<User>> searchUsers(String search) {
 		Response<ArrayList<User>> response = new Response<>();
 		ArrayList<User> users = new ArrayList<>();
 		Connection con = poolManager.getConn();
 		String query = prop.getValue("searchUsers");
 		try {
 			PreparedStatement ps = con.prepareStatement(query);
-			ps.setString(1, name);
-			ps.setString(2, name);
-			ps.setString(3, name);
+			ps.setString(1, search);
+			ps.setString(2, search);
+			ps.setString(3, search);
 			ResultSet rs = ps.executeQuery();
 
 			while (rs.next()) {

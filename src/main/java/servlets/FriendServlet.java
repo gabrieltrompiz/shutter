@@ -23,8 +23,8 @@ public class FriendServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
-		String user1 = req.getParameter("user1");
-		String user2 = req.getParameter("user2");
+		String user1 = req.getParameter("user");
+		String user2 = req.getSession(false).getAttribute("username").toString();
 		Response<Boolean> response = SessionHandler.addFriend(user1, user2);
 		mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 		resp.getWriter().print(mapper.writeValueAsString(response));
@@ -34,8 +34,8 @@ public class FriendServlet extends HttpServlet {
 	@Override
 	protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
-		String user1 = req.getParameter("user1").toLowerCase();
-		String user2 = req.getParameter("user2").toLowerCase();
+		String user1 = req.getSession(false).getAttribute("username").toString();
+		String user2 = req.getParameter("user").toLowerCase();
 		Response<Boolean> response = SessionHandler.deleteFriend(user1, user2);
 		mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 		resp.getWriter().print(mapper.writeValueAsString(response));

@@ -30,7 +30,7 @@ public class RegisterServlet extends HttpServlet {
     user.setPassword(Encryptor.getSHA256(user.getPassword(), user.getLowercaseUsername()));
     Response<User> response = SessionHandler.register(user);
     if(response.getStatus() == 200) {
-        InputStream is = new FileInputStream(System.getenv("SystemDrive") + "/web2p1/assets/avatars/default.png");;
+        InputStream is = new FileInputStream(System.getenv("SystemDrive") + "/web2p1/assets/avatars/def.png");;
         OutputStream out = new FileOutputStream(System.getenv("SystemDrive") + "/web2p1/assets/avatars/" + user.getLowercaseUsername() + ".png");;
         int read = 0;
         byte[] bytes = new byte[1024];
@@ -39,7 +39,8 @@ public class RegisterServlet extends HttpServlet {
         }
         is.close();
         out.close();
-    	req.getSession();
+    	HttpSession session = req.getSession();
+    	session.setAttribute("username", user.getLowercaseUsername());
 	}
     res.setStatus(response.getStatus());
     mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);

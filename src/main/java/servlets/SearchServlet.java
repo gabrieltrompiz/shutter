@@ -30,7 +30,7 @@ public class SearchServlet extends HttpServlet {
 		if (list.equalsIgnoreCase("friends"))
 			response = SessionHandler.searchFriends(name, search);
 		else
-			response = SessionHandler.searchUsers(name);
+			response = SessionHandler.searchUsers(search);
 
 		mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 		resp.getWriter().print(mapper.writeValueAsString(response));

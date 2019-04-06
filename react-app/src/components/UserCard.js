@@ -2,11 +2,6 @@ import React from 'react';
 import { Image } from 'semantic-ui-react';
 
 export default class UserCard extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {};
-	}
-
 	render() {
 		const source = "http://localhost:8080/files?type=avatar&file=" + this.props.user.username + ".png"
 		return(
@@ -17,7 +12,7 @@ export default class UserCard extends React.Component {
 					style={{ width: 70, height: 70, margin: 'auto', marginTop: 16 }}
 				/>}
 				<p style={styles.username}>{this.props.user.username}</p>
-				<p style={styles.name}>{this.props.user.name}</p>
+				<p style={styles.name}>{this.props.user.name + " " + this.props.user.lastName}</p>
 			</div>
 		);
 	}
@@ -25,12 +20,12 @@ export default class UserCard extends React.Component {
 
 const styles = {
 	container: {
-		width: '22.5%',
-		height: '100%',
+		width: '32%',
+		height: '25%',
 		marginTop: 5,
 		marginBottom: 5,
-		marginRight: 10,
-		marginLeft: 10,
+		marginRight: '0.5%',
+		marginLeft: '0.5%',
 		borderColor: '#F0F0F2',
         borderWidth: 1,
 		borderStyle: 'solid',
