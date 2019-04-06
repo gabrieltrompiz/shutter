@@ -49,18 +49,18 @@ export default class Search extends React.Component {
 	}
 	
 	search = async (name) => {
-		await fetch('http://localhost:8080/search?search=' + name + '&&list=general')
-			.then(response => response.json())
-			.then(response => {
-				if(response.status === 200) {
-					this.setState({ results: response.data })
-				}
+		if (name !== '' && name.length > 2)
+			await fetch('http://localhost:8080/search?search=' + name + '&&list=general')
+				.then(response => response.json())
+				.then(response => {
+					if(response.status === 200) {
+						this.setState({ results: response.data })
+					}
 			});
 	}
 	
 
 	render() {
-		const user = { username: 'gabtrompzi', name: "Gabriel Trompiz" } // test user object
 		return(
 			<div style={{ display: 'flex' }}>
 				<div style={{ width: '57.5%', height: '100%' }}>
@@ -74,7 +74,8 @@ export default class Search extends React.Component {
 							<span style={styles.text}>Use the search bar to find your friends.</span>
 						</div>}
 						{this.state.results.map(user => {
-							return <UserCard user={user} key={user.username} />
+							if (this.props.user.username !== user.username)
+								return <UserCard user={user} key={user.username} />
 						})}
 					</div>
 				</div>

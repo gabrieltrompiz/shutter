@@ -223,9 +223,9 @@ public class SessionHandler {
 		String query = prop.getValue("searchUsers");
 		try {
 			PreparedStatement ps = con.prepareStatement(query);
-			ps.setString(1, search);
-			ps.setString(2, search);
-			ps.setString(3, search);
+			ps.setString(1, "%" + search + "%");
+			ps.setString(2, "%" + search + "%");
+			ps.setString(3, "%" + search + "%");
 			ResultSet rs = ps.executeQuery();
 
 			while (rs.next()) {
@@ -259,9 +259,9 @@ public class SessionHandler {
 		try {
 			PreparedStatement ps = con.prepareStatement(query);
 			ps.setString(1, name);
-			ps.setString(2, search);
-			ps.setString(3, search);
-			ps.setString(4, search);
+			ps.setString(2, "%" + search + "%");
+			ps.setString(3, "%" + search + "%");
+			ps.setString(4, "%" + search + "%");
 			ResultSet rs = ps.executeQuery();
 
 			while (rs.next()) {
