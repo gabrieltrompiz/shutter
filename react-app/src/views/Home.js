@@ -1,5 +1,4 @@
 import React from 'react';
-import { Container } from 'semantic-ui-react';
 import Poster from '../components/Poster.js';
 import Post from '../components/Post.js';
 
@@ -14,10 +13,9 @@ export default class Home extends React.Component {
 			.then(response => response.json())
 			.then(response => {
 				if(response.status === 200) {
-					this.setState({ posts: response.data})
+					this.setState({ posts: response.data, lastPost: response.data[response.data.length - 1].creationTime });
 				}
 			});
-		console.log(this.state.posts);
 	}
 
 	chargeMorePosts = async () => {
@@ -38,7 +36,6 @@ export default class Home extends React.Component {
 					return(
 						<Post post={post} key={post.idPost}/>
 					)
-					this.setState({ lastPost: post.postCreationTime })
 				})}
 				{this.state.posts.length === 0 && 
 					<div style={styles.empty}>

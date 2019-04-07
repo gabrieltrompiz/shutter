@@ -1,6 +1,5 @@
 import React from 'react';
 import { Container, Image, Divider } from 'semantic-ui-react';
-import Button from './Button.js';
 
 export default class Post extends React.Component {
 	constructor(props) {

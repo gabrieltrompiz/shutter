@@ -1,6 +1,5 @@
 import React from 'react';
 import { TextArea, Container, Image, Divider, Icon } from 'semantic-ui-react';
-import Button from './Button.js';
 
 export default class Poster extends React.Component {
 	constructor(props) {
@@ -17,7 +16,7 @@ export default class Poster extends React.Component {
 			typePost: this.state.typePost,
 			postText: this.state.postText
 		}
-		await fetch('http://localhost:8080/posts', { method: 'POST', credentials: 'include' })
+		await fetch('http://localhost:8080/posts', { method: 'POST', body: JSON.stringify(body), credentials: 'include' })
 		.then(response => {
 			if(response.status === 200) {
 				console.log("se postio mi rei")

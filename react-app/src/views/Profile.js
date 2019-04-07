@@ -27,7 +27,6 @@ export default class Profile extends React.Component {
 			.then(response => response.json())
 			.then(response => {
 				if (response.status === 200) {
-					console.log(response.data);
 					this.setState({ friendList: response.data });
 				} else console.log('cry');
 			});
@@ -104,7 +103,8 @@ export default class Profile extends React.Component {
 									<span style={{ fontSize: 20, textAlign: 'center' }}>{person}don't have any friends.</span>
 								</div>}
 								{this.state.friendList.map(friend => {
-									return <FriendContainer friend={friend} key={friend.username} />
+									return <FriendContainer friend={friend} key={friend.username} changeView={this.props.changeView}
+									changeUser={this.props.changeUser} />
 								})}
 							</Container>
 						</Grid.Column>

@@ -1,5 +1,4 @@
 import React from 'react'
-import Not from '../components/Not.js'
 import { Segment, Divider } from 'semantic-ui-react';
 
 export default class Inbox extends React.Component {

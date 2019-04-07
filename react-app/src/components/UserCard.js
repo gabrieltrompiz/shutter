@@ -2,10 +2,16 @@ import React from 'react';
 import { Image } from 'semantic-ui-react';
 
 export default class UserCard extends React.Component {
+
+	handleClick = () => {
+		this.props.changeUser(this.props.user);
+        this.props.changeView('OtherUserProfile');
+	}
+
 	render() {
 		const source = "http://localhost:8080/files?type=avatar&file=" + this.props.user.username + ".png"
 		return(
-			<div style={styles.container}>
+			<div style={styles.container} onClick={() => this.handleClick(this.props.user)}>
 				{this.props.user.username !== null && <Image
 					src={source}
 					circular={true}
@@ -32,7 +38,8 @@ const styles = {
         boxShadow: '0 0 37px -2px rgba(0,0,0,0.1)',
         borderRadius: 20,
 		backgroundColor: 'white',
-		textAlign: 'center'
+		textAlign: 'center',
+		cursor: 'pointer'
 	},
 	username: {
 		margin: 0,

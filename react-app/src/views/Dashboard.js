@@ -1,5 +1,5 @@
 import React from 'react'
-import { Menu, Label, Icon, Container, Grid, Header, Image, Segment } from 'semantic-ui-react'
+import { Menu, Icon, Container, Header, Image } from 'semantic-ui-react'
 import Home from './Home';
 import Notifications from './Notifications';
 import Profile from './Profile';
@@ -10,13 +10,12 @@ import EditProfile from './EditProfile';
 export default class Dashboard extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { activeItem : 'Home', notifications: 10 } //TODO: revisar xq se expira si pongo otra inicial
+		this.state = { activeItem : 'Home', notifications: 10, anotherUser: null } //TODO: revisar xq se expira si pongo otra inicial
 		this.socket = null;
 	}
 
 	componentDidMount = () => {
 		this.connectSocket();
-		console.log(this.socket);
 	}
 
 	componentWillDismount = () => {
@@ -61,6 +60,10 @@ export default class Dashboard extends React.Component {
 		this.props.handleLoggedIn(false)
 	}
 
+	changeUser = user => {
+		this.setState({ anotherUser: user })
+	}
+
 	getView = () => {
 		switch(this.state.activeItem) {
 			case 'Home':
@@ -71,13 +74,16 @@ export default class Dashboard extends React.Component {
 					</div>);
 			
 			case 'Profile':
-				return <Profile user={this.props.user} changeView={this.handleChangeView} own/>;
+				return <Profile user={this.props.user} changeView={this.handleChangeView} changeUser={this.changeUser} own/>;
 			
+			case 'OtherUserProfile':
+				return <Profile user={this.state.anotherUser} changeView={this.handleChangeView} />;
+
 			case 'EditProfile':
 				return <EditProfile user={this.props.user} changeView={this.handleChangeView} changeUser={this.props.changeUser}/>;
 			
 			case 'Search':
-				return <Search user={this.props.user}/>;
+				return <Search user={this.props.user} changeView={this.handleChangeView} changeUser={this.changeUser} />;
 			
 			case 'Settings':
 				return <Settings/>;

@@ -7,11 +7,15 @@ export default class FriendContainer extends React.Component {
         this.state = this.props.friend
     }
 
+    handleClick = () => {
+        this.props.changeUser(this.state);
+        this.props.changeView('OtherUserProfile');
+    }
+
     render() {
-        console.log(this.state)
         const source = 'http://localhost:8080/files?type=avatar&file=' + this.state.username + '.png'
         return(
-            <div style={styles.container}>
+            <div style={styles.container} onClick={() => this.handleClick()}>
                 <Image
                     src={source}
                     style={{ width: 60, height: 60, borderRadius: '100%' }} 
@@ -32,7 +36,8 @@ const styles = {
         height: 80, 
         marginLeft: '1.5%', 
         display: 'flex', 
-        alignItems: 'center' 
+        alignItems: 'center',
+        cursor: 'pointer'
     }, 
     name: {
 		fontFamily: 'Heebo',

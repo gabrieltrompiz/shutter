@@ -1,6 +1,5 @@
 import React from 'react';
-import { Input, Image, Grid, Segment, Divider } from 'semantic-ui-react';
-import UsersContainer from '../components/UsersContainer.js'
+import { Input, Segment, Divider } from 'semantic-ui-react';
 import UserCard from '../components/UserCard.js';
 export default class Search extends React.Component {
 	constructor(props) {
@@ -75,7 +74,8 @@ export default class Search extends React.Component {
 						</div>}
 						{this.state.results.map(user => {
 							if (this.props.user.username !== user.username)
-								return <UserCard user={user} key={user.username} />
+								return <UserCard user={user} key={user.username} changeView={this.props.changeView}
+								changeUser={this.props.changeUser} />
 						})}
 					</div>
 				</div>
