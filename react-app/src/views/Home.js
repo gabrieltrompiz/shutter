@@ -70,12 +70,12 @@ const styles = {
 		opacity: 0.8,
 	},
 	icon: {
-		fontSize: 50,
+		fontSize: 40,
 		paddingBottom: 20,
 		paddingTop: 20
 	},
 	text: {
-		fontSize: 30, 
+		fontSize: 22, 
 		fontWeight: '900', 
 		textAlign: 'center', 
 		lineHeight: 1.1, 

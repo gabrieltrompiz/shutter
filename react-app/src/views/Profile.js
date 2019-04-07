@@ -43,7 +43,7 @@ export default class Profile extends React.Component {
 			.then(response => response.json())
 			.then(response => {
 				if(response.status === 200) {
-					this.setState({ posts: response.data})
+					this.setState({ posts: response.data, lastPost: response.data[response.data.length - 1].creationTime})
 				}
 			});
 	}
@@ -62,12 +62,12 @@ export default class Profile extends React.Component {
 					
 					<Divider />
 					<Grid style={{ height: '96%' }}>
-						<Grid.Column width={11}>
-							<div style={{ display: 'flex', width: '100%', height: 'fit-content', paddingLeft: 20 }} id="mardicion">
+						<Grid.Column width={11} style={{ height: 'inherit' }}>
+							<div style={{ display: 'flex', width: '100%', paddingLeft: 20 }}>
 								<Image
 									src={source}
 									style={{ width: 100, height: 100, marginTop: 12 }}
-									circular
+									circular={true}
 									verticalAlign='middle'
 								/>
 								<div style={{ marginTop: 25, paddingLeft: 10 }}>
@@ -87,12 +87,9 @@ export default class Profile extends React.Component {
 								</Header>	
 							</div>
 							<Divider/>
-							<div style={{ backgroundColor: 'transparent', width: '100%', height: '72.5%' }}>
+							<div style={{ overflowY: 'scroll', width: '100%', height: '72.5%' }}>
 								{this.state.posts.map(post => {
-									return(
-										<Post post={post} key={post.idPost}/>
-										)
-									this.setState({ lastPost: post.postCreationTime })
+									return <Post post={post} key={post.idPost}/>
 								})}
 							</div>
 						</Grid.Column>
