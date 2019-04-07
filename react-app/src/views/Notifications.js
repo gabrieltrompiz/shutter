@@ -47,7 +47,7 @@ const styles = {
 	text: {
 		color: 'grey', 
 		opacity: 0.8,
-		fontSize: 26,
+		fontSize: 22,
 		fontFamily: 'Heebo', 
 		fontWeight: 'bolder',
 		textAlign: 'center',

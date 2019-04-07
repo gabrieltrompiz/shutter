@@ -13,8 +13,9 @@ export default class Search extends React.Component {
 	}
 
 	handleInput = (e, {name, value}) => {
-		this.setState({ search: value }, () => this.search(value)) // TODO: esto hay q cambiarlo, hace un fetch cada vez q cambia lo q escribis, deberia ser cuando le de a enter
-		//otro TODO: agregar a recent 
+		 // TODO: esto hay q cambiarlo, hace un fetch cada vez q cambia lo q escribis, deberia ser cuando le de a enter
+		if(value !== '') { this.setState({ search: value }, () => this.search(value)) }
+		else { this.setState({ results: [], search: value })}
 	}
 
 	 _retrieveState = async () => {
@@ -49,14 +50,13 @@ export default class Search extends React.Component {
 	}
 	
 	search = async (name) => {
-		if (name !== '' && name.length > 2)
-			await fetch('http://localhost:8080/search?search=' + name + '&&list=general')
-				.then(response => response.json())
-				.then(response => {
-					if(response.status === 200) {
-						this.setState({ results: response.data })
-					}
-			});
+		await fetch('http://localhost:8080/search?search=' + name + '&list=general')
+			.then(response => response.json())
+			.then(response => {
+				if(response.status === 200) {
+					this.setState({ results: response.data })
+				}
+			})
 	}
 	
 
@@ -104,7 +104,7 @@ const styles = {
 		flexDirection: 'column',
 		alignItems: 'center',
 		justifyContent: 'center',
-		height: '50%',
+		height: '100%',
 		width: '100%',
 		borderStyle: 'dashed',
 		borderWidth: 2,

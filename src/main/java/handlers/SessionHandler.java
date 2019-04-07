@@ -244,6 +244,7 @@ public class SessionHandler {
 			ps.setString(1, "%" + search + "%");
 			ps.setString(2, "%" + search + "%");
 			ps.setString(3, "%" + search + "%");
+			ps.setString(4, "%" + search + "%");
 			ResultSet rs = ps.executeQuery();
 
 			while (rs.next()) {
