@@ -11,6 +11,41 @@ export default class Dashboard extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = { activeItem : 'Home', notifications: 10 } //TODO: revisar xq se expira si pongo otra inicial
+		this.socket = null;
+	}
+
+	componentDidMount = () => {
+		this.connectSocket();
+		console.log(this.socket);
+	}
+
+	componentWillDismount = () => {
+		this.disconnectSocket();
+	}
+
+
+	connectSocket = async () => {
+		this.socket = new WebSocket("ws://localhost:8080/users");
+
+		this.socket.onmessage = evt => {
+			console.log('1');
+		}
+
+		this.socket.onopen = evt => {
+			console.log('2');
+		}
+
+		this.socket.onclose = evt => {
+			console.log('3');
+		}
+
+		this.socket.onerror = evt => {
+			console.log('4');
+		}
+	}
+
+	disconnectSocket = async () => {
+		await this.socket.close();
 	}
 
 	handleItemClick = (evt, {name}) => {
@@ -20,7 +55,6 @@ export default class Dashboard extends React.Component {
 	handleChangeView = view => {
 		this.setState({ activeItem: view })
 	}
-
 
 	logout = async () => {
 		await fetch('http://localhost:8080/logout', { credentials: 'include' })
