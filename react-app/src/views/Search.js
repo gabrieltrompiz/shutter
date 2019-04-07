@@ -77,12 +77,9 @@ export default class Search extends React.Component {
 							<span style={styles.text}>Use the search bar to find your friends.</span>
 						</div>}
 						{this.state.results.map(user => {
-<<<<<<< Updated upstream
 							if (this.props.user.username !== user.username)
 								return <UserCard user={user} key={user.username} changeView={this.props.changeView}
 								changeUser={this.props.changeUser} />
-=======
->>>>>>> Stashed changes
 							return <UserCard user={user} key={user.username} />
 						})}
 					</div>

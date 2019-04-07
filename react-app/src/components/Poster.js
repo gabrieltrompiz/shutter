@@ -26,12 +26,9 @@ export default class Poster extends React.Component {
 			}
 		})
 		let url = 'http://localhost:8080/files?typePost=' + this.state.typePost + '&id='
-<<<<<<< Updated upstream
 		this.state.files.forEach((file, index) => {
 			fetch('http://localhost:8080')
 		})
-=======
->>>>>>> Stashed changes
 	}
 
 	uploadFiles = (e, type) => {
