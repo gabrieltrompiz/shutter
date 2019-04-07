@@ -2,7 +2,9 @@ package servlets;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import models.Post;
 import models.Response;
+import models.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -14,6 +16,7 @@ import javax.servlet.http.Part;
 import java.io.*;
 import java.nio.file.Path;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 @MultipartConfig
 @WebServlet(urlPatterns = "/files", name = "File Upload Servlet")
@@ -28,7 +31,7 @@ public class FilesServlet extends HttpServlet {
         if(req.getParameter("type").equalsIgnoreCase("avatar"))
             target += "/web2p1/assets/avatars/";
         else if(req.getParameter("type").equalsIgnoreCase("post"))
-            target += "/web2p1/assets/users/";
+            target += "/web2p1/assets/users/" + req.getSession(false).getAttribute("username") + "/" + req.getParameter("id") + "/";
         FileInputStream fileObj = null;
         OutputStream out = resp.getOutputStream();
         try {
@@ -49,17 +52,22 @@ public class FilesServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        Response<?>  response = new Response<>();
         Collection<Part> files = req.getParts();
+        int typePost = Integer.parseInt(req.getParameter("typePost"));
+        String id = req.getParameter("id");
+        String extension = typePost == 2 ? ".png" : typePost == 3 ? ".mkv" : ".flac";
         InputStream fileContent = null;
         OutputStream out = null;
         File fileObj = null;
         try {
-            String baseDir = System.getenv("SystemDrive") + "web2p1/assets/users/" + req.getParameter("user") + "/"; // TODO: Agreagar filtro
+            String baseDir = System.getenv("SystemDrive") + "web2p1/assets/users/" + req.getSession(false).getAttribute("username") +
+            "/" + id + "/";
+            int i = 0;
             for (Part file : files) {
+                i++;
                 fileContent = file.getInputStream();
-                fileObj = new File(baseDir + this.getFileName(file));
+                fileObj = new File(baseDir + i + extension);
+                System.out.println(baseDir + i + extension);
                 fileObj.getParentFile().mkdirs();
                 out = new FileOutputStream(fileObj);
                 int read = 0;
@@ -69,16 +77,11 @@ public class FilesServlet extends HttpServlet {
                 }
                 fileContent.close();
                 out.close();
-                response.setStatus(200);
-                response.setMessage("File(s) uploaded successfully.");
             }
         }
         catch(Exception e) {
             e.printStackTrace();
-            response.setStatus(500);
-            response.setMessage("Error uploading files.");
         }
-        resp.getWriter().print(mapper.writeValueAsString(response));
     }
 
     @Override

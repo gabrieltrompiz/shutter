@@ -9,27 +9,39 @@ export default class Profile extends React.Component {
 		this.state = { user: this.props.user, friendList: [], posts: [], lastPost: null }
 	}
 
-	componentDidMount = async () => {
+	updateProfile = async () => {
 		const user = { username: this.state.user.username, name: this.state.user.name, 
 			lastName: this.state.user.lastName };
-		await fetch('http://localhost:8080/posts?user=' + this.props.user.username, { credentials: 'include' })
+		await fetch('http://localhost:8080/posts?user=' + this.state.user.username, { credentials: 'include' })
 			.then(response => response.json())
 			.then(response => {
 				if (response.status === 200) {
 					response.data.map(post => {
 						post.user = user;
 					})
-					this.setState({ posts: response.data, lastPost: response.data[response.data.length - 1].creationTime });
+					const lastPost = response.data[response.data.length - 1];
+					this.setState({ posts: response.data });
+					if(lastPost !== undefined) { this.setState({ lastPost: lastPost.creationTime })}
 				} else console.log('cry');
 			});
 
-		await fetch('http://localhost:8080/friends?username=' + this.props.user.username, { credentials: 'include' })
+		await fetch('http://localhost:8080/friends?username=' + this.state.user.username, { credentials: 'include' })
 			.then(response => response.json())
 			.then(response => {
 				if (response.status === 200) {
 					this.setState({ friendList: response.data });
 				} else console.log('cry');
 			});
+	}
+
+	componentWillReceiveProps = (nextProps) => {
+		if(nextProps.user.username !== this.props.user.username) {
+			this.setState({ user: nextProps.user }, () => this.updateProfile())
+		}
+	}
+
+	componentDidMount = async () => {
+		this.updateProfile()
 	}
 
 	chargeMorePosts = async () => {
@@ -46,7 +58,7 @@ export default class Profile extends React.Component {
 		const source = "http://localhost:8080/files?type=avatar&file=" + this.state.user.username + ".png"
 		const date = new Date(this.state.user.birthday)
 		const birthday = date.getDate() + "/" + (parseInt(date.getMonth(), 10) + 1) + "/" + date.getFullYear()
-		const person = this.props.own ? 'You ' : this.state.user.name + ' ' + this.props.user.lastName + ' '
+		const person = this.props.own ? 'You ' : this.state.user.name + ' ' + this.state.user.lastName + ' '
 		return(	
 			<Segment raised style={{ marginTop: '2.5vh', height: '95vh' }}>
 				<Container fluid style={{ height: '100%' }}>
@@ -68,7 +80,7 @@ export default class Profile extends React.Component {
 								<div style={{ marginTop: 25, paddingLeft: 10 }}>
 									<Header as='h2' style={{ marginTop: 0, marginBottom: 0, display: 'inline-block', color: 'black' }}>{this.state.user.name + " " + this.state.user.lastName}</Header><br />
 									<Header as='h5' style={{ marginTop: 5, marginLeft: 0, display: 'inline-block', color: 'black', opacity: 0.5 }}>
-										<Icon name='birthday cake' style={{ marginRight: 0, color: 'black' }} />
+										<Icon name='birthday cake' style={{ marginRight: 0, color: 'black', fontSize: 18 }} />
 										{birthday}
 									</Header>
 								</div>
@@ -83,7 +95,7 @@ export default class Profile extends React.Component {
 							</div>
 							<Divider/>
 							{this.state.posts.length > 0 && 
-							<div style={{ overflowY: 'scroll', width: '100%', height: '72.5%' }}>
+							<div style={{ overflowY: 'scroll', width: '100%', height: '72.5%', paddingRight: 10 }}>
 								{this.state.posts.map(post => {
 									return <Post post={post} key={post.idPost}/>
 								})}
@@ -153,8 +165,6 @@ const styles = {
 		justifyContent: 'center',
 		fontFamily: 'Heebo',
 		fontWeight: 'bolder',
-		border: 'grey dashed 2px',
-		borderRadius: 20,
 		fontSize: 20
 	},
 

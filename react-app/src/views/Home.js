@@ -13,7 +13,7 @@ export default class Home extends React.Component {
 			.then(response => response.json())
 			.then(response => {
 				if(response.status === 200) {
-					this.setState({ posts: response.data, lastPost: response.data[response.data.length - 1].creationTime });
+					this.setState({ posts: response.data, lastPost: response.data[response.data.length - 1] });
 				}
 			});
 	}

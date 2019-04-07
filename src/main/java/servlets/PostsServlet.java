@@ -25,7 +25,7 @@ public class PostsServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
 		Response<ArrayList<Post>> response = null;
-		String username = req.getSession(false).getAttribute("username").toString();
+		String username = req.getParameter("user");
 		String timePost = req.getParameter("time");
 
 		if(timePost == null) {

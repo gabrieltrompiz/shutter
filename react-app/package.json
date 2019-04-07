@@ -5,8 +5,10 @@
   "dependencies": {
     "email-validator": "^2.0.4",
     "react": "^16.8.1",
+    "react-audio-player": "^0.11.0",
     "react-dom": "^16.8.1",
     "react-masonry-component": "^6.2.1",
+    "react-player": "^1.10.0",
     "react-scripts": "^2.1.8",
     "semantic-ui-calendar-react": "^0.14.1",
     "semantic-ui-css": "^2.4.1",

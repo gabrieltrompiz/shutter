@@ -219,6 +219,7 @@ public class SessionHandler {
 				u.setName(rs.getString(2));
 				u.setLastName(rs.getString(3));
 				u.setAvatar(rs.getString(4));
+				u.setBirthday(rs.getDate(5));
 				friends.add(u);
 			}
 			response.setData(friends);
@@ -253,6 +254,7 @@ public class SessionHandler {
 				user.setName(rs.getString(2));
 				user.setLastName(rs.getString(3));
 				user.setAvatar(rs.getString(4));
+				user.setBirthday(rs.getDate(5));
 				users.add(user);
 			}
 
@@ -289,6 +291,7 @@ public class SessionHandler {
 				user.setName(rs.getString(2));
 				user.setLastName(rs.getString(3));
 				user.setAvatar(rs.getString(4));
+				user.setBirthday(rs.getDate(5));
 				friends.add(user);
 			}
 

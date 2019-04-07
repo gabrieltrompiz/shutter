@@ -1,10 +1,12 @@
 import React from 'react';
 import { TextArea, Container, Image, Divider, Icon } from 'semantic-ui-react';
+import ReactAudioPlayer from 'react-audio-player'
+import ReactPlayer from 'react-player';
 
 export default class Poster extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { typePost: 1, postText: '' }
+		this.state = { typePost: 1, postText: '', files: [] }
 	}
 
 	handleInput = (event, {name, value}) => {
@@ -16,15 +18,21 @@ export default class Poster extends React.Component {
 			typePost: this.state.typePost,
 			postText: this.state.postText
 		}
-		await fetch('http://localhost:8080/posts', { method: 'POST', body: JSON.stringify(body), credentials: 'include' })
+		await fetch('http://localhost:8080/posts?', { method: 'POST', credentials: 'include', body: JSON.stringify(body) })
+		.then(response => response.json())
 		.then(response => {
-			if(response.status === 200) {
-				console.log("se postio mi rei")
-			}
-			else {
-				console.log("no se postio bro")
+			if(response.status !== 200) {
+				return;
 			}
 		})
+		let url = 'http://localhost:8080/files?typePost=' + this.state.typePost + '&id='
+		this.state.files.forEach((file, index) => {
+			fetch('http://localhost:8080')
+		})
+	}
+
+	uploadFiles = (e, type) => {
+		this.setState({ typePost: type, files: [...e.target.files] })
 	}
 
 	render() {
@@ -43,25 +51,35 @@ export default class Poster extends React.Component {
 				</div>			
 				<Divider style={{ marginLeft: 12, marginRight: 12 }}/>
 				<div style={{ display: 'flex', width: '100%', paddingLeft: 15 }}>
-					<button className='posterButtons' onClick={() => this.setState({ typePost: 2 })}>
+					<input type="file" accept="image/*" style={{ display: 'none' }} ref={(ref) => this.uploadPhoto = ref} multiple onChange={(e) => this.uploadFiles(e, 2)}/>
+					<button className='posterButtons' onClick={() => this.uploadPhoto.click()}>
 						<Icon name='photo' style={{ color: 'white' }}/>Photo
 					</button>
-					<button className='posterButtons' onClick={() => this.setState({ typePost: 3 })}>
+					<input type='file' accept='video/*' style={{ display: 'none' }} ref={(ref) => this.uploadVideo = ref} multiple onChange={(e) => this.uploadFiles(e, 3)} />
+					<button className='posterButtons' onClick={() => this.uploadVideo.click()}>
 						<Icon name='video' style={{ color: 'white' }}/>Video
 					</button>
-					<button className='posterButtons' onClick={() => this.setState({ typePost: 4 })}>
+					<input type='file' accept='audio/*' style={{ display: 'none' }} ref={(ref) => this.uploadAudio = ref} multiple onChange={(e) => this.uploadFiles(e, 4)} />
+					<button className='posterButtons' onClick={() => this.uploadAudio.click()}>
 						<Icon name='file audio' style={{ color: 'white' }}/>Audio
 					</button>
 					<div style={{ width: '35%' }}></div>
-					<button id='postBtn'>
+					<button id='postBtn' onClick={() => this.post()}>
 						Post <Icon name='send' style={{ color: 'white' }}/>
 					</button>
 				</div>
-				<div>
-					{/*Este div va a ser pa cuando el coño suba una foto/video, aquí se muestran
-				las miniaturas. Obviamente no lo he hecho XD. Se supone que cuando se suba algo,
-				debe aparecer al lado izquierdo, tomando espacio del textArea y con overflow.*/}
-				</div>
+				{this.state.files.length > 0 &&
+				<div style={{ display: 'flex', flexDirection: 'column' }}>
+					<div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', paddingBottom: 20 }}>
+						{this.state.files.map(file => {
+							const fileObj = URL.createObjectURL(file)
+							if(this.state.typePost === 2) { return <Image src={fileObj} style={{ maxWidth: 'auto', maxHeight: 100, padding: 20 }} /> }
+							else if(this.state.typePost === 3) { return <ReactPlayer url={fileObj} controls style={{ backgroundColor: 'black' }}/> }
+							else return <ReactAudioPlayer src={fileObj} controls style={{ marginLeft: 50, marginRight: 50, marginTop: 10 }}/> 
+						})}
+					</div>
+					<button className='posterButtons' onClick={() => this.setState({ files: [] })} style={{ alignSelf: 'flex-end', marginRight: 10 }}>Delete Files</button>
+				</div>}
 			</Container>
 			);
 	}

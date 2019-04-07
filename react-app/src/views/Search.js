@@ -13,7 +13,7 @@ export default class Search extends React.Component {
 
 	handleInput = (e, {name, value}) => {
 		 // TODO: esto hay q cambiarlo, hace un fetch cada vez q cambia lo q escribis, deberia ser cuando le de a enter
-		if(value !== '') { this.setState({ search: value }, () => this.search(value)) }
+		if(value.trim() !== '' && value.length > 3) { this.setState({ search: value }, () => this.search(value.trim().replace(/ +/g, ' '))) }
 		else { this.setState({ results: [], search: value })}
 	}
 
@@ -53,6 +53,11 @@ export default class Search extends React.Component {
 			.then(response => response.json())
 			.then(response => {
 				if(response.status === 200) {
+					response.data.map(user => {
+						if(user.username === this.props.user.username) {
+							response.data.pop(user)
+						}
+					})
 					this.setState({ results: response.data })
 				}
 			})
@@ -64,8 +69,7 @@ export default class Search extends React.Component {
 			<div style={{ display: 'flex' }}>
 				<div style={{ width: '57.5%', height: '100%' }}>
 					<Input placeholder='Search' style={{ width: '80%', marginLeft: '10%', height: 40, fontSize: 18, marginTop: '2.5vh' }} 
-					icon={{ name: 'search' }} onChange={this.handleInput} autoComplete='off' maxLength={50} value={this.state.search}
-					onSubmit={(e) => console.log(e)}/>
+					icon={{ name: 'search' }} onChange={this.handleInput} autoComplete='off' maxLength={50} value={this.state.search}/>
 					<div style={styles.container}>
 					{this.state.results.length === 0 && 
 						<div style={styles.empty}>
@@ -76,6 +80,7 @@ export default class Search extends React.Component {
 							if (this.props.user.username !== user.username)
 								return <UserCard user={user} key={user.username} changeView={this.props.changeView}
 								changeUser={this.props.changeUser} />
+							return <UserCard user={user} key={user.username} />
 						})}
 					</div>
 				</div>
