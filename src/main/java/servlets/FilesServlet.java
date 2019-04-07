@@ -52,6 +52,8 @@ public class FilesServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        Response<?> response = new Response<>();
         Collection<Part> files = req.getParts();
         int typePost = Integer.parseInt(req.getParameter("typePost"));
         String id = req.getParameter("id");
@@ -77,11 +79,16 @@ public class FilesServlet extends HttpServlet {
                 }
                 fileContent.close();
                 out.close();
+                response.setStatus(200);
+                response.setMessage("Uploaded files successfully.");
             }
         }
         catch(Exception e) {
             e.printStackTrace();
+            response.setStatus(500);
+            response.setMessage("Error uploading files");
         }
+        resp.getWriter().print(mapper.writeValueAsString(response));
     }
 
     @Override

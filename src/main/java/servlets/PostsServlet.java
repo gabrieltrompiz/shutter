@@ -46,7 +46,7 @@ public class PostsServlet extends HttpServlet {
         User user = new User();
         user.setLowercaseUsername(req.getSession(false).getAttribute("username").toString());
         post.setUser(user);
-        Response<Boolean> response = SessionHandler.addPost(post);
+        Response<Integer> response = SessionHandler.addPost(post);
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         resp.getWriter().print(mapper.writeValueAsString(response));
     }

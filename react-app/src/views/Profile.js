@@ -16,7 +16,7 @@ export default class Profile extends React.Component {
 			.then(response => response.json())
 			.then(response => {
 				if (response.status === 200) {
-					response.data.map(post => {
+					response.data.forEach(post => {
 						post.user = user;
 					})
 					const lastPost = response.data[response.data.length - 1];
@@ -26,12 +26,12 @@ export default class Profile extends React.Component {
 			});
 
 		await fetch('http://localhost:8080/friends?username=' + this.state.user.username, { credentials: 'include' })
-			.then(response => response.json())
-			.then(response => {
-				if (response.status === 200) {
-					this.setState({ friendList: response.data });
-				} else console.log('cry');
-			});
+		.then(response => response.json())
+		.then(response => {
+			if (response.status === 200) {
+				this.setState({ friendList: response.data });
+			} else console.log('cry');
+		});
 	}
 
 	componentWillReceiveProps = (nextProps) => {

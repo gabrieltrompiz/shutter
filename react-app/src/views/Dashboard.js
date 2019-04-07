@@ -10,7 +10,7 @@ import EditProfile from './EditProfile';
 export default class Dashboard extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { activeItem : 'Home', notifications: 10, anotherUser: null } //TODO: revisar xq se expira si pongo otra inicial
+		this.state = { activeItem : 'Home', notifications: 10, anotherUser: {} } //TODO: revisar xq se expira si pongo otra inicial
 		this.socket = null;
 	}
 
@@ -77,7 +77,7 @@ export default class Dashboard extends React.Component {
 				return <Profile user={this.props.user} changeView={this.handleChangeView} changeUser={this.changeUser} own/>;
 			
 			case 'OtherUserProfile':
-				return <Profile user={this.state.anotherUser} changeView={this.handleChangeView} />;
+				return <Profile user={this.state.anotherUser} changeView={this.handleChangeView} changeUser={this.changeUser} own={this.props.user.username === this.state.anotherUser.username}/>;
 
 			case 'EditProfile':
 				return <EditProfile user={this.props.user} changeView={this.handleChangeView} changeUser={this.props.changeUser}/>;
