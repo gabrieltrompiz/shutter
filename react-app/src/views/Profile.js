@@ -10,19 +10,16 @@ export default class Profile extends React.Component {
 	}
 
 	componentDidMount = async () => {
-		let user = {username: this.state.user.username, name: this.state.user.name, 
-			lastName: this.state.user.lastName};
+		const user = { username: this.state.user.username, name: this.state.user.name, 
+			lastName: this.state.user.lastName };
 		await fetch('http://localhost:8080/posts?user=' + this.props.user.username, { credentials: 'include' })
 			.then(response => response.json())
 			.then(response => {
 				if (response.status === 200) {
-					let res = response.data;
-					res.map(post => {
+					response.data.map(post => {
 						post.user = user;
 					})
-
-					this.setState({ posts: res });
-					console.log(res);
+					this.setState({ posts: response.data, lastPost: response.data[response.data.length - 1].creationTime });
 				} else console.log('cry');
 			});
 
@@ -52,6 +49,7 @@ export default class Profile extends React.Component {
 		const source = "http://localhost:8080/files?type=avatar&file=" + this.state.user.username + ".png"
 		const date = new Date(this.state.user.birthday)
 		const birthday = date.getDate() + "/" + (parseInt(date.getMonth(), 10) + 1) + "/" + date.getFullYear()
+		const person = this.props.own ? 'You ' : this.state.user.name + ' ' + this.props.user.lastName + ' '
 		return(	
 			<Segment raised style={{ marginTop: '2.5vh', height: '95vh' }}>
 				<Container fluid style={{ height: '100%' }}>
@@ -87,11 +85,16 @@ export default class Profile extends React.Component {
 								</Header>	
 							</div>
 							<Divider/>
+							{this.state.posts.length > 0 && 
 							<div style={{ overflowY: 'scroll', width: '100%', height: '72.5%' }}>
 								{this.state.posts.map(post => {
 									return <Post post={post} key={post.idPost}/>
 								})}
-							</div>
+							</div>}
+							{this.state.posts.length === 0 &&
+							<div style={styles.emptyPosts}>
+								<p>{person}haven't posted anything yet.</p>
+							</div>}
 						</Grid.Column>
 						<Grid.Column width={5}>
 							<Container style={styles.friendList}>
@@ -100,7 +103,7 @@ export default class Profile extends React.Component {
 								{this.state.friendList.length === 0 &&
 								<div style={styles.empty}>
 									<span><i className="far fa-frown" style={{ fontSize: 50, marginBottom: 10 }}></i></span>
-									<span style={{ fontSize: 20, textAlign: 'center' }}>You don't have any friends.</span>
+									<span style={{ fontSize: 20, textAlign: 'center' }}>{person}don't have any friends.</span>
 								</div>}
 								{this.state.friendList.map(friend => {
 									return <FriendContainer friend={friend} key={friend.username} />
@@ -141,5 +144,20 @@ const styles = {
 		justifyContent: 'center',
 		fontFamily: 'Heebo',
 		fontWeight: 'bolder'
-	}
+	},
+	emptyPosts: {
+		display: 'flex',
+		height: '75%',
+		flexDirection: 'column',
+		color: 'grey',
+		opacity: 0.8,
+		alignItems: 'center',
+		justifyContent: 'center',
+		fontFamily: 'Heebo',
+		fontWeight: 'bolder',
+		border: 'grey dashed 2px',
+		borderRadius: 20,
+		fontSize: 20
+	},
+
 }

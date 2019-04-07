@@ -50,7 +50,7 @@ export default class Search extends React.Component {
 	}
 	
 	search = async (name) => {
-		await fetch('http://localhost:8080/search?search=' + name + '&&list=general')
+		await fetch('http://localhost:8080/search?search=' + name + '&list=general')
 			.then(response => response.json())
 			.then(response => {
 				if(response.status === 200) {

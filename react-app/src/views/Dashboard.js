@@ -37,7 +37,7 @@ export default class Dashboard extends React.Component {
 					</div>);
 			
 			case 'Profile':
-				return <Profile user={this.props.user} changeView={this.handleChangeView}/>;
+				return <Profile user={this.props.user} changeView={this.handleChangeView} own/>;
 			
 			case 'EditProfile':
 				return <EditProfile user={this.props.user} changeView={this.handleChangeView} changeUser={this.props.changeUser}/>;
