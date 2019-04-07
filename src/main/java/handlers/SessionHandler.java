@@ -7,9 +7,13 @@ import utilities.PropertiesReader;
 import utilities.PoolManager;
 import utilities.Pool;
 
+import javax.websocket.Session;
 import java.sql.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Ptthappy
@@ -20,6 +24,20 @@ public class SessionHandler {
 	private static Pool pool = Pool.getPool();
 	private static PoolManager poolManager = PoolManager.getPoolManager();
 	private static PropertiesReader prop = PropertiesReader.getInstance();
+
+	private static Set<Session> clients = Collections.synchronizedSet(new HashSet<>());
+
+	public static void addClient(Session session) {
+		clients.add(session);
+	}
+
+	public static void removeClient(Session session) {
+		clients.remove(session);
+	}
+
+	public static Set<Session> getClients() {
+		return clients;
+	}
 
 	public static Response<User> login(User user) {
 		Connection con = poolManager.getConn();

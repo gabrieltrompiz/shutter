@@ -21,9 +21,7 @@ export default class Home extends React.Component {
 	}
 
 	chargeMorePosts = async () => {
-		let date = new Date(this.state.lastPost);
-		date.setMilliseconds(date.getMilliseconds() + 1);
-		await fetch('http://localhost:8080/feed?time=' + date, { credentials: 'include' })
+		await fetch('http://localhost:8080/feed?time=' + this.state.lastPost, { credentials: 'include' })
 			.then(response => response.json())
 			.then(response => {
 				if(response.status === 200) {
