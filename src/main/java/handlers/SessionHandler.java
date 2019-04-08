@@ -8,6 +8,7 @@ import utilities.PoolManager;
 import utilities.Pool;
 
 import javax.websocket.Session;
+import java.io.File;
 import java.sql.*;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -329,6 +330,7 @@ public class SessionHandler {
 				post.setPostText(rs.getString(3));
 				post.setUrl(rs.getString(4));
 				post.setCreationTime(rs.getTimestamp(5));
+				post.setFileCount(getFileCount(username, post.getIdPost()));
 				user.setUsername(rs.getString(6));
 				user.setName(rs.getString(7));
 				user.setLastName(rs.getString(8));
@@ -371,6 +373,7 @@ public class SessionHandler {
 				post.setPostText(rs.getString(3));
 				post.setUrl(rs.getString(4));
 				post.setCreationTime(rs.getTimestamp(5));
+				post.setFileCount(getFileCount(username, post.getIdPost()));
 				user.setUsername(rs.getString(6));
 				user.setName(rs.getString(7));
 				user.setLastName(rs.getString(8));
@@ -410,6 +413,7 @@ public class SessionHandler {
 				post.setPostText(rs.getString(3));
 				post.setUrl(rs.getString(4));
 				post.setCreationTime(rs.getTimestamp(5));
+				post.setFileCount(getFileCount(username, post.getIdPost()));
 
 				posts.add(post);
 			}
@@ -564,4 +568,16 @@ public class SessionHandler {
 		poolManager.returnConn(con);
 		return false;
 	}
+
+	private static int getFileCount(String username, int id) {
+        String baseDir = System.getenv("SystemDrive") + "/web2p1/assets/users/" + username + "/" + id + "/";
+        System.out.println(baseDir);
+        int count;
+        try {
+            File file = new File(baseDir);
+            count = file.listFiles().length;
+        }
+        catch(NullPointerException e) { count = 0; }
+        return count;
+    }
 }
