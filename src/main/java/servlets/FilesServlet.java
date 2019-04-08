@@ -62,7 +62,7 @@ public class FilesServlet extends HttpServlet {
         OutputStream out = null;
         File fileObj = null;
         try {
-        String baseDir = System.getenv("SystemDrive") + "web2p1/assets/users/" + req.getSession(false).getAttribute("username") +
+        String baseDir = System.getenv("SystemDrive") + "/web2p1/assets/users/" + req.getSession(false).getAttribute("username") +
             "/" + id + "/";
             int i = 0;
             for (Part file : files) {
@@ -101,7 +101,7 @@ public class FilesServlet extends HttpServlet {
         OutputStream out = null;
         File fileObj = null;
         try {
-            String baseDir = System.getenv("SystemDrive") + "web2p1/assets/avatars/";
+            String baseDir = System.getenv("SystemDrive") + "/web2p1/assets/avatars/";
             fileContent = file.getInputStream();
             fileObj = new File(baseDir + this.getFileName(file));
             fileObj.getParentFile().mkdirs();

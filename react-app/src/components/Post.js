@@ -1,7 +1,9 @@
 import React from 'react';
-import { Container, Image, Divider } from 'semantic-ui-react';
+import { Container, Image, Divider, Button } from 'semantic-ui-react';
 import ReactPlayer from 'react-player';
 import ReactAudioPlayer from 'react-audio-player'
+import Slider from 'react-animated-slider';
+import 'react-animated-slider/build/horizontal.css'
 
 export default class Post extends React.Component {
 	constructor(props) {
@@ -12,7 +14,7 @@ export default class Post extends React.Component {
 	getBeautifiedDate = () => {
 		const seconds = Math.floor((Date.now() - this.state.creationTime) / 1000)
 		const date = new Date(this.state.creationTime)
-		if(seconds <= 0) { return '' }
+		if(seconds < 0) { return '' }
         if(seconds <= 10) { return 'a few seconds ago' }
         else if(seconds <= 60) { return seconds + ' seconds ago' }
         else if(seconds <= 3600) { 
@@ -44,9 +46,30 @@ export default class Post extends React.Component {
 		}
 	}
 
+	fillContent = (baseDir) => { // may work if we want to implement multi video/audio upload
+		let content = []
+		if(this.state.typePost === 2) {
+			[...Array(this.state.fileCount)].forEach((e, i) => {
+				content.push(<Image src={baseDir + (i + 1) + ".png"} key={i}/>)
+			})
+		}
+		else if(this.state.typePost === 3) {
+			[...Array(this.state.fileCount)].forEach((e, i) => {
+				content.push(<ReactPlayer url={baseDir + (i + 1) + ".mkv"} key={i} controls style={{ backgroundColor: 'black' }} />)
+			})
+		}
+		else if(this.state.typePost === 4){
+			[...Array(this.state.fileCount)].forEach((e, i) => {
+				content.push(<ReactAudioPlayer src={baseDir + (i + 1) + ".flac"} controls key={i}/>)
+			})
+		}
+		return content;
+	}
+
 	render() {
 		const source = 'http://localhost:8080/files?type=avatar&file=' + this.state.user.username + '.png'
 		const baseDir = 'http://localhost:8080/files?type=post&typePost=' + this.state.typePost + '&id=' + this.state.idPost + "&file="
+		const content = this.fillContent(baseDir)
 		return(
 			<Container style={{ width: '100%', height: 'auto', marginBottom: '2.5vh', backgroundColor: 'white', borderColor: '#DDDFE2', 
 			borderRadius: 5, borderWidth: 1.5, borderStyle: 'solid', breakInside: 'avoid', display: 'inline-block' }}>
@@ -62,28 +85,18 @@ export default class Post extends React.Component {
 					</div>
 				</div>
 				<p style={styles.text}>{this.state.postText}</p>
+				{this.state.typePost !== 1 &&
+				<div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginTop: 10, marginBottom: 20 }}>
+					{this.state.typePost === 2 && 
+					<Slider duration={1000} disabled={content.length === 1}>
+						{content.map(file => file)}
+					</Slider>}
+					{this.state.typePost !== 2 && content[0]}
+				</div>}
 				<div style={{ width: '96%', height: 'auto', display: 'flex', alignItems: 'center', marginLeft: '2%', marginBottom: 10 }}>
 					<span style={{ paddingRight: 20 }}><span style={styles.stats}>200</span><span style={styles.statsText}>Likes</span></span>
 					<span><span style={styles.stats}>5</span><span style={styles.statsText}>Comments</span></span>
 				</div>
-				{this.state.typePost !== 1 &&
-				<div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginTop: 10, marginBottom: 10 }}>
-					{this.state.typePost === 2 &&
-						[...Array(this.state.fileCount)].map((e, i) => {
-							return <Image src={baseDir + (i + 1) + ".png"} key={i}/>
-						})
-					}
-					{this.state.typePost === 3 &&
-						[...Array(this.state.fileCount)].map((e, i) => {
-							return <ReactPlayer url={baseDir + (i + 1) + ".mkv"} controls style={{ backgroundColor: 'black' }}/>
-						})	
-					}
-					{this.state.typePost === 4 &&
-						[...Array(this.state.fileCount)].map((e, i) => {
-							return <ReactAudioPlayer src={baseDir + (i + 1) + ".flac"} controls />
-						})
-					}
-				</div>}
 				<Divider fitted />
 				<div style={{ width: '100%', height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
 					<button className="reactionsBtns"><i className="far fa-heart"></i>  Like</button>

@@ -64,11 +64,11 @@ export default class Poster extends React.Component {
 					<button className='posterButtons' onClick={() => this.uploadPhoto.click()}>
 						<Icon name='photo' style={{ color: 'white' }}/>Photo
 					</button>
-					<input type='file' accept='video/*' style={{ display: 'none' }} ref={(ref) => this.uploadVideo = ref} multiple onChange={(e) => this.uploadFiles(e, 3)} />
+					<input type='file' accept='video/*' style={{ display: 'none' }} ref={(ref) => this.uploadVideo = ref} onChange={(e) => this.uploadFiles(e, 3)} />
 					<button className='posterButtons' onClick={() => this.uploadVideo.click()}>
 						<Icon name='video' style={{ color: 'white' }}/>Video
 					</button>
-					<input type='file' accept='audio/*' style={{ display: 'none' }} ref={(ref) => this.uploadAudio = ref} multiple onChange={(e) => this.uploadFiles(e, 4)} />
+					<input type='file' accept='audio/*' style={{ display: 'none' }} ref={(ref) => this.uploadAudio = ref} onChange={(e) => this.uploadFiles(e, 4)} />
 					<button className='posterButtons' onClick={() => this.uploadAudio.click()}>
 						<Icon name='file audio' style={{ color: 'white' }}/>Audio
 					</button>
