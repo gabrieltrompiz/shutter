@@ -87,10 +87,7 @@ export default class Post extends React.Component {
 				<p style={styles.text}>{this.state.postText}</p>
 				{this.state.typePost !== 1 &&
 				<div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginTop: 10, marginBottom: 20 }}>
-					{this.state.typePost === 2 && 
-					<Slider duration={1000} disabled={content.length === 1}>
-						{content.map(file => file)}
-					</Slider>}
+					{this.state.typePost === 2 && content.map(file => file)} {/* aqui va el carousel */}
 					{this.state.typePost !== 2 && content[0]}
 				</div>}
 				<div style={{ width: '96%', height: 'auto', display: 'flex', alignItems: 'center', marginLeft: '2%', marginBottom: 10 }}>
