@@ -8,6 +8,7 @@ import utilities.PoolManager;
 import utilities.Pool;
 
 import javax.websocket.Session;
+import java.io.File;
 import java.sql.*;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -328,6 +329,7 @@ public class SessionHandler {
 				post.setPostText(rs.getString(3));
 				post.setUrl(rs.getString(4));
 				post.setCreationTime(rs.getTimestamp(5));
+				post.setFileCount(getFileCount(username, post.getIdPost()));
 				user.setUsername(rs.getString(6));
 				user.setName(rs.getString(7));
 				user.setLastName(rs.getString(8));
@@ -370,6 +372,7 @@ public class SessionHandler {
 				post.setPostText(rs.getString(3));
 				post.setUrl(rs.getString(4));
 				post.setCreationTime(rs.getTimestamp(5));
+				post.setFileCount(getFileCount(username, post.getIdPost()));
 				user.setUsername(rs.getString(6));
 				user.setName(rs.getString(7));
 				user.setLastName(rs.getString(8));
@@ -409,6 +412,7 @@ public class SessionHandler {
 				post.setPostText(rs.getString(3));
 				post.setUrl(rs.getString(4));
 				post.setCreationTime(rs.getTimestamp(5));
+				post.setFileCount(getFileCount(username, post.getIdPost()));
 
 				posts.add(post);
 			}
@@ -463,25 +467,27 @@ public class SessionHandler {
 		return response;
 	}
 
-	public static Response<Boolean> addPost(Post post) {
-	    Response<Boolean> response = new Response<>();
+	public static Response<Integer> addPost(Post post) {
+	    Response<Integer> response = new Response<>();
 	    Connection con = poolManager.getConn();
 	    String query = prop.getValue("addPost");
 	    try {
-	        PreparedStatement ps = con.prepareStatement(query);
+	        PreparedStatement ps = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 	        ps.setInt(1, post.getTypePost());
 	        ps.setString(2, post.getPostText());
 	        ps.setString(3, post.getUser().getLowercaseUsername());
 	        ps.execute();
 	        response.setMessage("Added post successfully.");
 	        response.setStatus(200);
-	        response.setData(true);
+	        ResultSet rs = ps.getGeneratedKeys();
+	        rs.next();
+	        response.setData(rs.getInt(1));
         }
         catch (SQLException e) {
 	        e.printStackTrace();
 	        response.setMessage("Error while posting.");
 	        response.setStatus(500);
-	        response.setData(false);
+	        response.setData(-1);
         }
         finally {
 	        poolManager.returnConn(con);
@@ -561,4 +567,16 @@ public class SessionHandler {
 		poolManager.returnConn(con);
 		return false;
 	}
+
+	private static int getFileCount(String username, int id) {
+        String baseDir = System.getenv("SystemDrive") + "/web2p1/assets/users/" + username + "/" + id + "/";
+        System.out.println(baseDir);
+        int count;
+        try {
+            File file = new File(baseDir);
+            count = file.listFiles().length;
+        }
+        catch(NullPointerException e) { count = 0; }
+        return count;
+    }
 }

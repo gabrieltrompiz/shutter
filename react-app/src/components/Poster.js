@@ -18,17 +18,26 @@ export default class Poster extends React.Component {
 			typePost: this.state.typePost,
 			postText: this.state.postText
 		}
+		let id = -1;
 		await fetch('http://localhost:8080/posts?', { method: 'POST', credentials: 'include', body: JSON.stringify(body) })
 		.then(response => response.json())
 		.then(response => {
-			if(response.status !== 200) {
-				return;
-			}
+			if(response.status === 200) {
+				id = response.data
+			}		
 		})
-		let url = 'http://localhost:8080/files?typePost=' + this.state.typePost + '&id='
-		this.state.files.forEach((file, index) => {
-			fetch('http://localhost:8080')
-		})
+		if(id !== 1) {
+			let url = 'http://localhost:8080/files?typePost=' + this.state.typePost + '&id=' + id 
+			let body = new FormData()
+			this.state.files.forEach(file => {
+				body.append('files[]', file)
+			})
+			fetch(url, { method: 'POST', credentials: 'include', body: body })
+			.then(response => response.json()) 
+			.then(response => {
+				this.setState({ files: [], typePost: 1, postText: '' }, () => this.props.updateFeed())		
+			})
+		}	
 	}
 
 	uploadFiles = (e, type) => {
@@ -73,9 +82,9 @@ export default class Poster extends React.Component {
 					<div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', paddingBottom: 20 }}>
 						{this.state.files.map(file => {
 							const fileObj = URL.createObjectURL(file)
-							if(this.state.typePost === 2) { return <Image src={fileObj} style={{ maxWidth: 'auto', maxHeight: 100, padding: 20 }} /> }
-							else if(this.state.typePost === 3) { return <ReactPlayer url={fileObj} controls style={{ backgroundColor: 'black' }}/> }
-							else return <ReactAudioPlayer src={fileObj} controls style={{ marginLeft: 50, marginRight: 50, marginTop: 10 }}/> 
+							if(this.state.typePost === 2) { return <Image src={fileObj} style={{ maxWidth: 'auto', maxHeight: 100, padding: 20 }} key={file.name}/> }
+							else if(this.state.typePost === 3) { return <ReactPlayer url={fileObj} controls style={{ backgroundColor: 'black' }} key={file.name}/> }
+							else return <ReactAudioPlayer src={fileObj} controls style={{ marginLeft: 50, marginRight: 50, marginTop: 10 }} key={file.name}/> 
 						})}
 					</div>
 					<button className='posterButtons' onClick={() => this.setState({ files: [] })} style={{ alignSelf: 'flex-end', marginRight: 10 }}>Delete Files</button>

@@ -1,5 +1,7 @@
 import React from 'react';
 import { Container, Image, Divider } from 'semantic-ui-react';
+import ReactPlayer from 'react-player';
+import ReactAudioPlayer from 'react-audio-player'
 
 export default class Post extends React.Component {
 	constructor(props) {
@@ -44,6 +46,7 @@ export default class Post extends React.Component {
 
 	render() {
 		const source = 'http://localhost:8080/files?type=avatar&file=' + this.state.user.username + '.png'
+		const baseDir = 'http://localhost:8080/files?type=post&typePost=' + this.state.typePost + '&id=' + this.state.idPost + "&file="
 		return(
 			<Container style={{ width: '100%', height: 'auto', marginBottom: '2.5vh', backgroundColor: 'white', borderColor: '#DDDFE2', 
 			borderRadius: 5, borderWidth: 1.5, borderStyle: 'solid', breakInside: 'avoid', display: 'inline-block' }}>
@@ -63,6 +66,24 @@ export default class Post extends React.Component {
 					<span style={{ paddingRight: 20 }}><span style={styles.stats}>200</span><span style={styles.statsText}>Likes</span></span>
 					<span><span style={styles.stats}>5</span><span style={styles.statsText}>Comments</span></span>
 				</div>
+				{this.state.typePost !== 1 &&
+				<div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginTop: 10, marginBottom: 10 }}>
+					{this.state.typePost === 2 &&
+						[...Array(this.state.fileCount)].map((e, i) => {
+							return <Image src={baseDir + (i + 1) + ".png"} key={i}/>
+						})
+					}
+					{this.state.typePost === 3 &&
+						[...Array(this.state.fileCount)].map((e, i) => {
+							return <ReactPlayer url={baseDir + (i + 1) + ".mkv"} controls style={{ backgroundColor: 'black' }}/>
+						})	
+					}
+					{this.state.typePost === 4 &&
+						[...Array(this.state.fileCount)].map((e, i) => {
+							return <ReactAudioPlayer src={baseDir + (i + 1) + ".flac"} controls />
+						})
+					}
+				</div>}
 				<Divider fitted />
 				<div style={{ width: '100%', height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
 					<button className="reactionsBtns"><i className="far fa-heart"></i>  Like</button>

@@ -50,17 +50,17 @@ export default class Search extends React.Component {
 	
 	search = async (name) => {
 		await fetch('http://localhost:8080/search?search=' + name + '&list=general')
-			.then(response => response.json())
-			.then(response => {
-				if(response.status === 200) {
-					response.data.map(user => {
-						if(user.username === this.props.user.username) {
-							response.data.pop(user)
-						}
-					})
-					this.setState({ results: response.data })
-				}
-			})
+		.then(response => response.json())
+		.then(response => {
+			if(response.status === 200) {
+				response.data.forEach(user => {
+					if(user.username === this.props.user.username) {
+						response.data.pop(user)
+					}
+				})
+				this.setState({ results: response.data })
+			}
+		})
 	}
 	
 

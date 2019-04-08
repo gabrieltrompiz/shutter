@@ -52,6 +52,8 @@ public class FilesServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        Response<?> response = new Response<>();
         Collection<Part> files = req.getParts();
         int typePost = Integer.parseInt(req.getParameter("typePost"));
         String id = req.getParameter("id");
@@ -60,7 +62,7 @@ public class FilesServlet extends HttpServlet {
         OutputStream out = null;
         File fileObj = null;
         try {
-            String baseDir = System.getenv("SystemDrive") + "web2p1/assets/users/" + req.getSession(false).getAttribute("username") +
+        String baseDir = System.getenv("SystemDrive") + "web2p1/assets/users/" + req.getSession(false).getAttribute("username") +
             "/" + id + "/";
             int i = 0;
             for (Part file : files) {
@@ -77,11 +79,16 @@ public class FilesServlet extends HttpServlet {
                 }
                 fileContent.close();
                 out.close();
+                response.setStatus(200);
+                response.setMessage("Uploaded files successfully.");
             }
         }
         catch(Exception e) {
             e.printStackTrace();
+            response.setStatus(500);
+            response.setMessage("Error uploading files");
         }
+        resp.getWriter().print(mapper.writeValueAsString(response));
     }
 
     @Override

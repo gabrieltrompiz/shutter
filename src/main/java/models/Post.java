@@ -14,7 +14,7 @@ public class Post {
 	private String url;
 	private Timestamp creationTime;
 	private User user;
-
+	private int fileCount;
 	//Setters
 	public void setIdPost(Integer idPost) { this.idPost = idPost; }
 
@@ -28,6 +28,8 @@ public class Post {
 
 	public void setUser(User user) { this.user = user; }
 
+	public void setFileCount(int fileCount) { this.fileCount = fileCount; }
+
 	//Getters
 	public Integer getIdPost() { return idPost; }
 
@@ -40,4 +42,6 @@ public class Post {
 	public String getUrl() { return url; }
 
 	public User getUser() { return user; }
+
+	public int getFileCount() { return fileCount; }
 }

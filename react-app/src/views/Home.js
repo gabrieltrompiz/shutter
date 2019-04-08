@@ -8,14 +8,18 @@ export default class Home extends React.Component {
 		this.state = { user: this.props.user, posts: [], lastPost: null }
 	}
 
-	componentDidMount = async () => {
+	updateFeed = async () => {
 		await fetch('http://localhost:8080/feed', { credentials: 'include' })
-			.then(response => response.json())
-			.then(response => {
-				if(response.status === 200) {
-					this.setState({ posts: response.data, lastPost: response.data[response.data.length - 1] });
-				}
-			});
+		.then(response => response.json())
+		.then(response => {
+			if(response.status === 200) {
+				this.setState({ posts: response.data, lastPost: response.data[response.data.length - 1] });
+			}
+		});
+	}
+
+	componentDidMount = () => {
+		this.updateFeed()
 	}
 
 	chargeMorePosts = async () => {
@@ -31,7 +35,7 @@ export default class Home extends React.Component {
 	render() {
 		return(
 			<div style={{ backgroundColor: 'transparent', width: '60%', height: '97vh' }}>
-				<Poster user={this.state.user}/>
+				<Poster user={this.state.user} updateFeed={this.updateFeed} />
 				{this.state.posts.map(post => {
 					return(
 						<Post post={post} key={post.idPost}/>
