@@ -10,9 +10,12 @@ export default class Profile extends React.Component {
 	}
 
 	updateProfile = async () => {
-		const user = { username: this.state.user.username, name: this.state.user.name, 
-			lastName: this.state.user.lastName };
-		await fetch('http://localhost:8080/posts?user=' + this.state.user.username, { credentials: 'include' })
+		let user = this.state.user;
+		user.lowercaseUsername = this.state.user.username.toLowerCase();
+		    this.setState({ user: user });
+			console.log(this.state.user);
+			console.log(user);
+		await fetch('http://localhost:8080/posts?user=' + this.state.user.lowercaseUsername, { credentials: 'include' })
 			.then(response => response.json())
 			.then(response => {
 				if (response.status === 200) {

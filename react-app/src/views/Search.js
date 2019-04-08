@@ -13,7 +13,7 @@ export default class Search extends React.Component {
 
 	handleInput = (e, {name, value}) => {
 		 // TODO: esto hay q cambiarlo, hace un fetch cada vez q cambia lo q escribis, deberia ser cuando le de a enter
-		if(value.trim() !== '' && value.length > 3) { this.setState({ search: value }, () => this.search(value.trim().replace(/ +/g, ' '))) }
+		if(value.trim() !== '' && value.length > 2) { this.setState({ search: value }, () => this.search(value.trim().replace(/ +/g, ' '))) }
 		else { this.setState({ results: [], search: value })}
 	}
 
