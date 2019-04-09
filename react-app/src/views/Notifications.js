@@ -1,7 +1,7 @@
 import React from 'react'
 import { Segment, Divider } from 'semantic-ui-react';
 
-export default class Inbox extends React.Component {
+export default class Notifications extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = { notifications: [] }
@@ -9,7 +9,7 @@ export default class Inbox extends React.Component {
 
 	render() {
 		return(
-			<Segment raised style={{ width: '30%', height: '94vh', left: '67.5%', marginTop: '2.5vh', position: 'fixed' }}>
+			<Segment raised style={{ width: '75%', height: '94vh', left: '20.5%', marginTop: '2.5vh', position: 'fixed' }}>
 				<p style={styles.title}>Notifications</p>
 				<Divider fitted style={{ marginTop: 2 }} />
 				{this.state.notifications.length === 0 && 

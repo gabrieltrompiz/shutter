@@ -26,17 +26,17 @@ public class SessionHandler {
 	private static PoolManager poolManager = PoolManager.getPoolManager();
 	private static PropertiesReader prop = PropertiesReader.getInstance();
 
-	private static Set<Session> clients = Collections.synchronizedSet(new HashSet<>());
+	private static Set<String> clients = Collections.synchronizedSet(new HashSet<>());
 
-	public static void addClient(Session session) {
-		clients.add(session);
+	public static void addClient(String username) {
+		clients.add(username);
 	}
 
-	public static void removeClient(Session session) {
-		clients.remove(session);
+	public static void removeClient(String username) {
+		clients.remove(username);
 	}
 
-	public static Set<Session> getClients() {
+	public static Set<String> getClients() {
 		return clients;
 	}
 

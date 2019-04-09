@@ -6,41 +6,68 @@ import Profile from './Profile';
 import Search from './Search';
 import Settings from './Settings';
 import EditProfile from './EditProfile';
+import Inbox from './/Inbox.js';
 
 export default class Dashboard extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = { activeItem : 'Home', notifications: 10, anotherUser: {} } //TODO: revisar xq se expira si pongo otra inicial
-		this.socket = null;
+		this.notificationSocket = null;
+		this.userSocket = null;
 	}
 
 	componentDidMount = () => {
-		this.connectSocket();
+		this.connectSockets();
 	}
 
 	componentWillDismount = () => {
-		this.disconnectSocket();
+		this.disconnectSockets();
 	}
 
 
-	connectSocket = async () => {
-		this.socket = new WebSocket("ws://localhost:8080/users");
+	connectSockets = async () => {
+		this.notificationSocket = new WebSocket("ws://localhost:8080/notifications");
+		this.userSocket = new WebSocket("ws://localhost:8080/users");
 
-		this.socket.onmessage = evt => {
+		console.log(this.notificationSocket);
+		console.log(this.userSocket);
+		
+		this.userSocket.onmessage = evt => {
 			console.log('1');
 		}
 
-		this.socket.onopen = evt => {
-			console.log('2');
+		this.userSocket.onopen = evt => {
+			console.log('Connected on Users Sockets');
 		}
 
-		this.socket.onclose = evt => {
-			console.log('3');
+		this.userSocket.onclose = evt => {
+			console.log('Disconnected from Notifications Sockets');
 		}
 
-		this.socket.onerror = evt => {
+		this.userSocket.onerror = evt => {
 			console.log('4');
 		}
+
+
+		this.notificationSocket.onmessage = evt => {
+			this.newNotification(evt);
+		}
+
+		this.notificationSocket.onopen = evt => {
+			console.log('Connected on Notifications Sockets');
+		}
+
+		this.notificationSocket.onclose = evt => {
+			console.log('Disconnected from Notifications Sockets');
+		}
+
+		this.notificationSocket.onerror = evt => {
+			console.log('8');
+		}
+	}
+
+	newNotification = notification => {
+
 	}
 
 	disconnectSocket = async () => {
@@ -70,7 +97,7 @@ export default class Dashboard extends React.Component {
 				return (
 					<div style={{ display: 'flex' }}>
 						<Home user={this.props.user} changeView={this.handleChangeView} changeUser={this.props.changeUser} handleLoggedIn={this.props.handleLoggedIn}/>
-						<Notifications />
+						<Inbox />
 					</div>);
 			
 			case 'Profile':
@@ -81,6 +108,9 @@ export default class Dashboard extends React.Component {
 
 			case 'EditProfile':
 				return <EditProfile user={this.props.user} changeView={this.handleChangeView} changeUser={this.props.changeUser}/>;
+
+			case 'Notifications':
+				return <Notifications user={this.props.user} changeView={this.handleChangeView} />
 			
 			case 'Search':
 				return <Search user={this.props.user} changeView={this.handleChangeView} changeUser={this.changeUser} />;
@@ -116,6 +146,12 @@ export default class Dashboard extends React.Component {
 							<Header as='h5' style={{ paddingLeft: 10, marginTop: 0.5 }}>
 								<Icon name='user' style={{ float: 'left', fontSize: 16 }}/>
 								Profile
+							</Header>
+						</Menu.Item>
+						<Menu.Item active={this.state.activeItem === 'Notifications'} onClick={this.handleItemClick} name='Notifications'>
+							<Header as='h5' style={{ paddingLeft: 10, marginTop: 0.5 }}>
+								<Icon name='inbox' style={{ float: 'left', fontSize: 16 }}/>
+								Notifications
 							</Header>
 						</Menu.Item>
 						<Menu.Item active={this.state.activeItem === 'Search'} onClick={this.handleItemClick} name='Search'>

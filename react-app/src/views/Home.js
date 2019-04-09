@@ -34,7 +34,7 @@ export default class Home extends React.Component {
 
 	render() {
 		return(
-			<div style={{ backgroundColor: 'transparent', width: '60%', height: '97vh' }}>
+			<div style={{ backgroundColor: 'transparent', width: '67%', height: '97vh' }}>
 				<Poster user={this.state.user} updateFeed={this.updateFeed} />
 				{this.state.posts.map(post => {
 					return(

@@ -3,6 +3,7 @@ import { Image, Container, Divider, Grid, Header, Icon, Segment } from 'semantic
 import Button from '../components/Button';
 import FriendContainer from '../components/FriendContainer';
 import Post from '../components/Post.js';
+
 export default class Profile extends React.Component {
 	constructor(props) {
 		super(props);
@@ -13,8 +14,6 @@ export default class Profile extends React.Component {
 		let user = this.state.user;
 		user.lowercaseUsername = this.state.user.username.toLowerCase();
 		    this.setState({ user: user });
-			console.log(this.state.user);
-			console.log(user);
 		await fetch('http://localhost:8080/posts?user=' + this.state.user.lowercaseUsername, { credentials: 'include' })
 			.then(response => response.json())
 			.then(response => {

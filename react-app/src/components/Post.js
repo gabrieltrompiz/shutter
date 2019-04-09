@@ -2,8 +2,8 @@ import React from 'react';
 import { Container, Image, Divider, Button } from 'semantic-ui-react';
 import ReactPlayer from 'react-player';
 import ReactAudioPlayer from 'react-audio-player'
-import Slider from 'react-animated-slider';
-import 'react-animated-slider/build/horizontal.css'
+//import Slider from 'react-animated-slider';
+//import 'react-animated-slider/build/horizontal.css'
 
 export default class Post extends React.Component {
 	constructor(props) {
