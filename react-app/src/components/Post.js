@@ -1,9 +1,8 @@
 import React from 'react';
-import { Container, Image, Divider, Button } from 'semantic-ui-react';
+import { Container, Image, Divider } from 'semantic-ui-react';
 import ReactPlayer from 'react-player';
 import ReactAudioPlayer from 'react-audio-player'
-//import Slider from 'react-animated-slider';
-//import 'react-animated-slider/build/horizontal.css'
+import Slider from "react-slick";
 
 export default class Post extends React.Component {
 	constructor(props) {
@@ -50,7 +49,7 @@ export default class Post extends React.Component {
 		let content = []
 		if(this.state.typePost === 2) {
 			[...Array(this.state.fileCount)].forEach((e, i) => {
-				content.push(<Image src={baseDir + (i + 1) + ".png"} key={i}/>)
+				content.push(<Image src={baseDir + (i + 1) + ".png"} key={i} style={{ margin: '0 auto' }}/>)
 			})
 		}
 		else if(this.state.typePost === 3) {
@@ -70,6 +69,15 @@ export default class Post extends React.Component {
 		const source = 'http://localhost:8080/files?type=avatar&file=' + this.state.user.username + '.png'
 		const baseDir = 'http://localhost:8080/files?type=post&typePost=' + this.state.typePost + '&id=' + this.state.idPost + "&file="
 		const content = this.fillContent(baseDir)
+		const settings = {
+			dots: true,
+			infinite: false,
+			speed: 500,
+			slidesToShow: 1,
+			slidesToScroll: 1,
+			adaptiveHeight: true,
+			arrows: true
+		};
 		return(
 			<Container style={{ width: '100%', height: 'auto', marginBottom: '2.5vh', backgroundColor: 'white', borderColor: '#DDDFE2', 
 			borderRadius: 5, borderWidth: 1.5, borderStyle: 'solid', breakInside: 'avoid', display: 'inline-block' }}>
@@ -85,10 +93,15 @@ export default class Post extends React.Component {
 					</div>
 				</div>
 				<p style={styles.text}>{this.state.postText}</p>
-				{this.state.typePost !== 1 &&
+				{this.state.typePost !== 1 && this.state.typePost !== 2 && 
 				<div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginTop: 10, marginBottom: 20 }}>
-					{this.state.typePost === 2 && content.map(file => file)} {/* aqui va el carousel */}
-					{this.state.typePost !== 2 && content[0]}
+					{content[0]}
+				</div>}
+				{this.state.typePost === 2 &&
+				<div style={{ padding: 40 }}> 
+					<Slider {...settings}>	
+						{content.map((file, i) => <div key={i}>{file}</div>)}
+					</Slider>
 				</div>}
 				<div style={{ width: '96%', height: 'auto', display: 'flex', alignItems: 'center', marginLeft: '2%', marginBottom: 10 }}>
 					<span style={{ paddingRight: 20 }}><span style={styles.stats}>200</span><span style={styles.statsText}>Likes</span></span>

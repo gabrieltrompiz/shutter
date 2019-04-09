@@ -1,3 +1,6 @@
+@import "~slick-carousel/slick/slick.css";
+@import "~slick-carousel/slick/slick-theme.css";
+
 body {
   margin: 0;
   padding: 0;
@@ -96,6 +99,6 @@ code {
   color: #00b5ad;
 }
 
-/* .slider {
-  height: auto !important;
-} */
+.slick-prev:before, .slick-next:before {
+  color: black
+}

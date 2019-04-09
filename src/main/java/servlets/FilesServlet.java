@@ -43,7 +43,7 @@ public class FilesServlet extends HttpServlet {
                 out.write(bytes, 0, read);
             }
             fileObj.close();
-            out.flush();
+            out.close();
         }
         catch (Exception e) {
             e.printStackTrace();

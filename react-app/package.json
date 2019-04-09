@@ -10,9 +10,11 @@
     "react-masonry-component": "^6.2.1",
     "react-player": "^1.10.0",
     "react-scripts": "^2.1.8",
+    "react-slick": "^0.23.2",
     "semantic-ui-calendar-react": "^0.14.1",
     "semantic-ui-css": "^2.4.1",
-    "semantic-ui-react": "^0.85.0"
+    "semantic-ui-react": "^0.85.0",
+    "slick-carousel": "^1.8.1"
   },
   "scripts": {
     "start": "react-scripts start",
