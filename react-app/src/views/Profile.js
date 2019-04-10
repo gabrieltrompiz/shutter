@@ -14,6 +14,15 @@ export default class Profile extends React.Component {
 		let user = this.state.user;
 		user.lowercaseUsername = this.state.user.username.toLowerCase();
 		    this.setState({ user: user });
+		if(!this.props.own) {
+			await fetch('http://localhost:8080/friends?username=' + this.state.user.username, { credentials: 'include' })
+			.then(response => response.json())
+			.then(response => {
+				if (response.status === 200) {
+					this.setState({ otherFriendList: response.data });
+				} else console.log('cry');
+			});
+		}
 		await fetch('http://localhost:8080/posts?user=' + this.state.user.lowercaseUsername, { credentials: 'include' })
 		.then(response => response.json())
 		.then(response => {
@@ -26,15 +35,6 @@ export default class Profile extends React.Component {
 				if(lastPost !== undefined) { this.setState({ lastPost: lastPost.creationTime })}
 			} else console.log('cry');
 		});
-		if(!this.props.own) {
-			await fetch('http://localhost:8080/friends?username=' + this.state.user.username, { credentials: 'include' })
-			.then(response => response.json())
-			.then(response => {
-				if (response.status === 200) {
-					this.setState({ otherFriendList: response.data });
-				} else console.log('cry');
-			});
-		}
 	}
 
 	componentWillReceiveProps = (nextProps) => {
@@ -57,6 +57,17 @@ export default class Profile extends React.Component {
 				}
 			});
 	}
+
+	addFriend = async () => {
+		await fetch('http://localhost:8080/friends?user=' + this.state.user.lowercaseUsername, { method: 'POST', credentials: 'include'})
+		.then(response => response.json())
+		.then(response => {
+			if(response.status === 200) {
+				this.updateProfile()
+				this.props.updateDashboard()
+			}
+		})
+	}
 	
 	render() {
 		const source = "http://localhost:8080/files?type=avatar&file=" + this.state.user.username + ".png"
@@ -64,7 +75,6 @@ export default class Profile extends React.Component {
 		const birthday = date.getDate() + "/" + (parseInt(date.getMonth(), 10) + 1) + "/" + date.getFullYear()
 		const person = this.props.own ? 'You ' : this.state.user.name + ' ' + this.state.user.lastName + ' '
 		const shouldShowPosts = (this.props.own || this.props.isFriend)
-		console.log(shouldShowPosts)
 		const shouldShowEmpty = (this.props.own && this.state.ownFriendList.length === 0) || (!this.props.own && this.state.otherFriendList.length === 0)
 		return(	
 			<Segment raised style={{ marginTop: '2.5vh', height: '95vh' }}>

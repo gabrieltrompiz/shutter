@@ -34,11 +34,21 @@ export default class Dashboard extends React.Component {
 	checkIfFriend = () => {
 		let isFriend = false;
 		this.state.ownFriendList.map(friend => {
-			if(friend.lowercaseUsername === this.state.anotherUser.lowercaseUsername) {
+			if(friend.username === this.state.anotherUser.username) {
 				isFriend = true;
 			}
 		})
 		return isFriend
+	}
+
+	updateDashboard = async () => {
+		await fetch('http://localhost:8080/friends?username=' + this.props.user.username, { credentials: 'include' })
+		.then(response => response.json())
+		.then(response => {
+			if (response.status === 200) {
+				this.setState({ ownFriendList: response.data });
+			} else console.log('cry');
+		});
 	}
 
 	// connectSockets = async () => {
@@ -106,6 +116,7 @@ export default class Dashboard extends React.Component {
 	changeUser = user => {
 		this.setState({ anotherUser: user })
 	}
+	
 
 	getView = () => {
 		switch(this.state.activeItem) {
@@ -121,7 +132,7 @@ export default class Dashboard extends React.Component {
 			
 			case 'OtherUserProfile':
 				return <Profile user={this.state.anotherUser} changeView={this.handleChangeView} changeUser={this.changeUser} own={this.props.user.username === this.state.anotherUser.username}
-				isFriend={this.checkIfFriend()}/>;
+				isFriend={this.checkIfFriend()} updateDashboard={this.updateDashboard}/>;
 
 			case 'EditProfile':
 				return <EditProfile user={this.props.user} changeView={this.handleChangeView} changeUser={this.props.changeUser}/>;
