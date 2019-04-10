@@ -22,7 +22,6 @@ public class NotificationsSocket {
 
 	@OnClose
 	public void onClose(Session session) throws IOException {
-		SessionHandler.removeClient(session);
 		System.out.println("User disconnected from notifications web socket");
 	}
 
