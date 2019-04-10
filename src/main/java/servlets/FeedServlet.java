@@ -1,8 +1,12 @@
 package servlets;
 
 import java.io.IOException;
+import java.sql.Date;
+import java.sql.Time;
 import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -35,7 +39,7 @@ public class FeedServlet extends HttpServlet {
 		if(timePost == null) {
 			response = SessionHandler.getPosts(username);
 		} else {
-			Timestamp time = Timestamp.valueOf(timePost);
+			Long time = Long.parseLong(timePost);
 			response = SessionHandler.getPosts(username, time);
 		}
 

@@ -11,68 +11,84 @@ import Inbox from './/Inbox.js';
 export default class Dashboard extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { activeItem : 'Home', notifications: 10, anotherUser: {} } //TODO: revisar xq se expira si pongo otra inicial
+		this.state = { activeItem : 'Home', notifications: 10, anotherUser: {}, ownFriendList: [] } //TODO: revisar xq se expira si pongo otra inicial
 		this.notificationSocket = null;
 		this.userSocket = null;
 	}
 
-	componentDidMount = () => {
-		this.connectSockets();
+	componentDidMount = async () => {
+		await fetch('http://localhost:8080/friends?username=' + this.props.user.username, { credentials: 'include' })
+		.then(response => response.json())
+		.then(response => {
+			if (response.status === 200) {
+				this.setState({ ownFriendList: response.data });
+			} else console.log('cry');
+		});
+		// this.connectSockets();
 	}
 
 	componentWillDismount = () => {
-		this.disconnectSockets();
+		// this.disconnectSockets();
 	}
 
+	checkIfFriend = () => {
+		let isFriend = false;
+		this.state.ownFriendList.map(friend => {
+			if(friend.lowercaseUsername === this.state.anotherUser.lowercaseUsername) {
+				isFriend = true;
+			}
+		})
+		return isFriend
+	}
 
-	connectSockets = async () => {
-		this.notificationSocket = new WebSocket("ws://localhost:8080/notifications");
-		this.userSocket = new WebSocket("ws://localhost:8080/users");
+	// connectSockets = async () => {
+	// 	this.notificationSocket = new WebSocket("ws://localhost:8080/notifications");
+	// 	this.userSocket = new WebSocket("ws://localhost:8080/users");
 
-		console.log(this.notificationSocket);
-		console.log(this.userSocket);
+	// 	console.log(this.notificationSocket);
+	// 	console.log(this.userSocket);
 		
-		this.userSocket.onmessage = evt => {
-			console.log('1');
-		}
+	// 	this.userSocket.onmessage = evt => {
+	// 		console.log('1');
+	// 	}
 
-		this.userSocket.onopen = evt => {
-			console.log('Connected on Users Sockets');
-		}
+	// 	this.userSocket.onopen = evt => {
+	// 		console.log('Connected on Users Sockets');
+	// 	}
 
-		this.userSocket.onclose = evt => {
-			console.log('Disconnected from Notifications Sockets');
-		}
+	// 	this.userSocket.onclose = evt => {
+	// 		console.log('Disconnected from Notifications Sockets');
+	// 	}
 
-		this.userSocket.onerror = evt => {
-			console.log('4');
-		}
+	// 	this.userSocket.onerror = evt => {
+	// 		console.log('4');
+	// 	}
 
 
-		this.notificationSocket.onmessage = evt => {
-			this.newNotification(evt);
-		}
+	// 	this.notificationSocket.onmessage = evt => {
+	// 		this.newNotification(evt);
+	// 	}
 
-		this.notificationSocket.onopen = evt => {
-			console.log('Connected on Notifications Sockets');
-		}
+	// 	this.notificationSocket.onopen = evt => {
+	// 		console.log('Connected on Notifications Sockets');
+	// 	}
 
-		this.notificationSocket.onclose = evt => {
-			console.log('Disconnected from Notifications Sockets');
-		}
+	// 	this.notificationSocket.onclose = evt => {
+	// 		console.log('Disconnected from Notifications Sockets');
+	// 	}
 
-		this.notificationSocket.onerror = evt => {
-			console.log('8');
-		}
-	}
+	// 	this.notificationSocket.onerror = evt => {
+	// 		console.log('8');
+	// 	}
+	// }
 
-	newNotification = notification => {
+	// newNotification = notification => {
 
-	}
+	// }
 
-	disconnectSocket = async () => {
-		await this.socket.close();
-	}
+	// disconnectSocket = async () => {
+	// 	await this.socket.close();
+	// }
 
 	handleItemClick = (evt, {name}) => {
 		this.setState({ activeItem : name });
@@ -101,10 +117,11 @@ export default class Dashboard extends React.Component {
 					</div>);
 			
 			case 'Profile':
-				return <Profile user={this.props.user} changeView={this.handleChangeView} changeUser={this.changeUser} own/>;
+				return <Profile user={this.props.user} changeView={this.handleChangeView} changeUser={this.changeUser} own ownFriendList={this.state.ownFriendList}/>;
 			
 			case 'OtherUserProfile':
-				return <Profile user={this.state.anotherUser} changeView={this.handleChangeView} changeUser={this.changeUser} own={this.props.user.username === this.state.anotherUser.username}/>;
+				return <Profile user={this.state.anotherUser} changeView={this.handleChangeView} changeUser={this.changeUser} own={this.props.user.username === this.state.anotherUser.username}
+				isFriend={this.checkIfFriend()}/>;
 
 			case 'EditProfile':
 				return <EditProfile user={this.props.user} changeView={this.handleChangeView} changeUser={this.props.changeUser}/>;
