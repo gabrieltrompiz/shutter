@@ -10,21 +10,26 @@ export default class Post extends React.Component {
 		this.state = this.props.post;
 	}
 
+	componentDidMount = () => {
+		this.setState({ date: 'loading...'})
+		setInterval(() => this.setState({ date: this.getBeautifiedDate() }), 1000)
+	}
+
 	getBeautifiedDate = () => {
 		const seconds = Math.floor((Date.now() - this.state.creationTime) / 1000)
 		const date = new Date(this.state.creationTime)
 		if(seconds < 0) { return '' }
         if(seconds <= 10) { return 'a few seconds ago' }
-        else if(seconds <= 60) { return seconds + ' seconds ago' }
-        else if(seconds <= 3600) { 
+        else if(seconds < 60) { return seconds + ' seconds ago' }
+        else if(seconds < 3600) { 
             const unit = Math.trunc(seconds / 60) === 1 ? ' minute ago' : ' minutes ago'
             return Math.trunc(seconds / 60) + unit
         }
-        else if(seconds <= 86400) { 
+        else if(seconds < 86400) { 
             const unit = Math.trunc(seconds / 3600) === 1 ? ' hour ago' : ' hours ago'
             return Math.trunc(seconds / 3600) + unit 
         }
-		else if(seconds <= 172800) {
+		else if(seconds < 172800) {
 			let hours, suffix, minutes;
 			if(date.getHours() > 12) { hours = date.getHours() - 12; suffix = " PM" }
 			else { hours = date.getHours(); suffix = " AM" }
@@ -71,7 +76,7 @@ export default class Post extends React.Component {
 		const content = this.fillContent(baseDir)
 		const settings = {
 			dots: true,
-			infinite: false,
+			infinite: true,
 			speed: 500,
 			slidesToShow: 1,
 			slidesToScroll: 1,
@@ -89,7 +94,7 @@ export default class Post extends React.Component {
 					<div style={{ paddingTop: 5 }}>
 						<span style={styles.name}>{this.state.user.name + " " + this.state.user.lastName}</span>
 						<span style={styles.username}>{"· @" + this.state.user.username}</span><br/>
-						<span style={styles.date}>{this.getBeautifiedDate()}</span>
+						<span style={styles.date}>{this.state.date}</span>
 					</div>
 				</div>
 				<p style={styles.text}>{this.state.postText}</p>
@@ -98,7 +103,7 @@ export default class Post extends React.Component {
 					{content[0]}
 				</div>}
 				{this.state.typePost === 2 &&
-				<div style={{ padding: 40 }}> 
+				<div style={{ paddingTop: 10, paddingBottom: 40, paddingLeft: 40, paddingRight: 40 }}> 
 					<Slider {...settings}>	
 						{content.map((file, i) => <div key={i}>{file}</div>)}
 					</Slider>

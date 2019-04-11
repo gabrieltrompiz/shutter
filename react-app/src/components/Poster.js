@@ -26,13 +26,13 @@ export default class Poster extends React.Component {
 				id = response.data
 			}		
 		})
-		if(id !== 1) {
+		if(id !== -1) {
 			let url = 'http://localhost:8080/files?typePost=' + this.state.typePost + '&id=' + id 
 			let body = new FormData()
 			this.state.files.forEach(file => {
 				body.append('files[]', file)
 			})
-			fetch(url, { method: 'POST', credentials: 'include', body: body })
+			await fetch(url, { method: 'POST', credentials: 'include', body: body })
 			.then(response => response.json()) 
 			.then(response => {
 				this.setState({ files: [], typePost: 1, postText: '' }, () => this.props.updateFeed())		
@@ -41,11 +41,16 @@ export default class Poster extends React.Component {
 	}
 
 	uploadFiles = (e, type) => {
-		this.setState({ typePost: type, files: [...e.target.files] })
+		this.setState({ typePost: type, files: [...e.target.files] }, () => {
+			this.uploadPhoto.value = ""
+			this.uploadAudio.value = ""
+			this.uploadVideo.value = ""
+		})
 	}
 
 	render() {
 		const source = 'http://localhost:8080/files?type=avatar&file=' + this.props.user.username + '.png'
+		const disabled = this.state.postText === "" ?  this.state.files.length === 0 ? true : false : false;
 		return(
 			<Container style={{ width: 'auto', maxHeight: 'auto', marginTop: '2.5vh', backgroundColor: 'white', borderColor: '#DDDFE2', 
 			borderRadius: 5, borderWidth: 1.5, borderStyle: 'solid', marginBottom: '1.5vh' }}>
@@ -55,8 +60,8 @@ export default class Poster extends React.Component {
 						style={{ width: 80, height: 80, borderRadius: '100%', marginTop: '1.5vw', marginLeft: '1.5vw' }}
 					/>
 					<TextArea placeholder={'What\'s on your mind, ' + this.props.user.name + '?'} style={{ resize: 'none', width: '100%', height: 100,
-			        marginTop: '1.5vh', marginRight: '1vw', paddingLeft: '1vw', paddingTop: '1vh', fontFamily: 'Arial', fontSize: '22px', border: 'none', outline: 0,
-					lineHeight: 3 }} onChange={this.handleInput} value={this.state.postText}/>
+			        marginTop: '1.5vh', marginRight: '1vw', paddingLeft: '1vw', paddingTop: '1vh', fontFamily: 'Arial', fontSize: '22px', border: 'none', outline: 0 }} 
+					onChange={this.handleInput} value={this.state.postText}/>
 				</div>			
 				<Divider style={{ marginLeft: 12, marginRight: 12 }}/>
 				<div style={{ display: 'flex', width: '100%', paddingLeft: 15 }}>
@@ -73,7 +78,7 @@ export default class Poster extends React.Component {
 						<Icon name='file audio' style={{ color: 'white' }}/>Audio
 					</button>
 					<div style={{ width: '35%' }}></div>
-					<button id='postBtn' onClick={() => this.post()}>
+					<button id='postBtn' onClick={() => this.post()} disabled={disabled}>
 						Post <Icon name='send' style={{ color: 'white' }}/>
 					</button>
 				</div>

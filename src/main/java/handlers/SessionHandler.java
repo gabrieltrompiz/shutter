@@ -318,6 +318,7 @@ public class SessionHandler {
 		try {
 			PreparedStatement ps = con.prepareStatement(query);
 			ps.setString(1, username);
+			ps.setString(2, username);
 			ResultSet rs = ps.executeQuery();
 
 			while (rs.next()) {
@@ -352,7 +353,7 @@ public class SessionHandler {
 		return response;
 	}
 
-	public static Response<ArrayList<Post>> getPosts(String username, Timestamp time) {
+	public static Response<ArrayList<Post>> getPosts(String username, Long time) {
 		Response<ArrayList<Post>> response = new Response<>();
 		ArrayList<Post> posts = new ArrayList<>();
 		Connection con = poolManager.getConn();
@@ -360,7 +361,8 @@ public class SessionHandler {
 		try {
 			PreparedStatement ps = con.prepareStatement(query);
 			ps.setString(1, username);
-			ps.setTimestamp(2, time);
+			ps.setString(2, username);
+			ps.setLong(3, time);
 			ResultSet rs = ps.executeQuery();
 
 			while (rs.next()) {

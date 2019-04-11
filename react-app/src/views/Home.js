@@ -23,11 +23,14 @@ export default class Home extends React.Component {
 	}
 
 	chargeMorePosts = async () => {
-		await fetch('http://localhost:8080/feed?time=' + this.state.lastPost, { credentials: 'include' })
+		await fetch('http://localhost:8080/feed?time=' + this.state.lastPost.creationTime, { credentials: 'include' })
 			.then(response => response.json())
 			.then(response => {
 				if(response.status === 200) {
-					this.setState({ posts: response.data})
+					if(response.data.length === 0) { this.button.style.display = 'none' }
+					let posts = [...this.state.posts]
+					posts.push(...response.data)
+					this.setState({ posts: posts, lastPost: posts[posts.length - 1] })
 				}
 			});
 	}
@@ -46,6 +49,11 @@ export default class Home extends React.Component {
 						<span style={styles.icon}><i className="far fa-frown"></i></span>
 						<span style={styles.text}>It seems like you don't have friends <br /> or they haven't posted yet.</span>
 					</div>
+				}
+				{this.state.posts.length % 20 === 0 && this.state.posts.length !== 0 &&
+					<button style={styles.button} onMouseOver={() => { this.button.style.cursor = 'pointer' }} onClick={() => this.chargeMorePosts()} ref={(ref) => this.button = ref}>
+						Charge more posts
+					</button>
 				}
 			</div>
 		);
@@ -79,5 +87,19 @@ const styles = {
 		textAlign: 'center', 
 		lineHeight: 1.1, 
 		paddingBottom: 20
+	},
+	button: {
+		width: '100%',
+		height: 80,
+		marginBottom: 30,
+		outline: 0,
+		bordeCrolor: 'rgb(221, 223, 226)',
+		borderRadius: 5,
+		borderWidth: 1.5,
+		borderStyle: 'solid',
+		backgroundColor: 'white',
+		fontFamily: 'Heebo',
+		fontWeight: 'bolder',
+		fontSize: 16
 	}
 }

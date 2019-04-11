@@ -164,7 +164,7 @@ export default class RegisterCard extends React.Component {
                             <Form.Group widths='equal'>
                                 <Form.Field label="Birthday" control={DateInput} value={this.state.birthday} iconPosition='left' error={this.state.errorBirthday}
                                 onChange={this.handleInput} name='birthday' closable placeholder='Click to select a date' maxDate={maxDate} initialDate='01-01-2000'
-                                onKeyDown={(e) => e.preventDefault()} dateFormat="YYYY-MM-DD"/>
+                                onKeyDown={(e) => e.preventDefault()} dateFormat="DD-MM-YYYY"/>
                                 <Form.Select label='Gender' options={options} placeholder='Gender' name='gender' onChange={this.handleInput} 
                                 value={this.state.gender} error={this.state.errorGender}/>
                             </Form.Group>

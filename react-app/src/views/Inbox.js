@@ -14,7 +14,7 @@ export default class Inbox extends React.Component {
 				<Divider fitted style={{ marginTop: 2 }} />
 				{this.state.friends.length === 0 && 
 				<div style={styles.empty}>
-					<i className="fas fa-inbox" style={styles.icon}></i>
+					<i className="fas fa-exclamation" style={styles.icon}></i>
 					<p style={styles.text}>You don't have any <br /> connected friends.</p>
 				</div>}
 			</Segment>
