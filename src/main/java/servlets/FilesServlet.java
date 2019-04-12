@@ -103,7 +103,7 @@ public class FilesServlet extends HttpServlet {
         try {
             String baseDir = System.getenv("SystemDrive") + "/web2p1/assets/avatars/";
             fileContent = file.getInputStream();
-            fileObj = new File(baseDir + this.getFileName(file));
+            fileObj = new File(baseDir + req.getSession(false).getAttribute("username") + ".png");
             fileObj.getParentFile().mkdirs();
             out = new FileOutputStream(fileObj);
             int read = 0;
@@ -122,14 +122,5 @@ public class FilesServlet extends HttpServlet {
             response.setMessage("Error uploading file.");
         }
         resp.getWriter().print(mapper.writeValueAsString(response));
-    }
-
-    private String getFileName(Part part) {
-        for (String content : part.getHeader("content-disposition").split(";")) {
-            if (content.trim().startsWith("filename")) {
-                return content.substring(content.indexOf('=') + 1).trim().replace("\"", "").split("[.]")[0] + ".png";
-            }
-        }
-        return null;
     }
 }

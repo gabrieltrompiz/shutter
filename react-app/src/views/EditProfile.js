@@ -14,7 +14,7 @@ export default class EditProfile extends React.Component {
         return {
             pwdVisible: false, confVisible: false, firstname: this.props.user.name, lastname: this.props.user.lastName, birthday: new Date(this.props.user.birthday),
             gender: this.props.user.sex, username: this.props.user.username, email: this.props.user.email, password: '', passwordConf: '', errorFirstname: false, errorLastname: false, errorBirthday: false, errorGender: false,
-            errorUsername: false, errorEmail: false,  errorPwd: false, errorPwdConf: false, usernameAvailable: true, emailAvailable: true, loading: false, errorEdit: false
+            errorUsername: false, errorEmail: false,  errorPwd: false, errorPwdConf: false, usernameAvailable: true, emailAvailable: true, loading: false, errorEdit: false, file: null
         }
     }
 
@@ -80,6 +80,7 @@ export default class EditProfile extends React.Component {
 	edit = async () => {
         this.setState({ loading: true })
         const body = {
+			id: this.props.user.id,
             username: this.state.username,
             lowercaseUsername: this.state.username.toLowerCase(),
             password: this.state.password,
@@ -96,7 +97,7 @@ export default class EditProfile extends React.Component {
         .then((res) => res.json().then(
         	json => {
 				if (json.status === 200) 
-					this.props.changeUser(json.data)
+					this.props.changeUser(body)
     			else 
 					this.setState ({ errorEdit: true })
 			}
@@ -104,27 +105,46 @@ export default class EditProfile extends React.Component {
 		.catch(() => {
 			this.setState({ errorEdit: true })
 		})
+		if(this.state.file !== null) {
+			const formData = new FormData()
+			formData.append('file', this.state.file)
+			await fetch('http://localhost:8080/files', { method: 'PUT', credentials: 'include', body: formData })
+		}
+		this.props.changeView('Profile')
     }
+
+	uploadFiles = (e) => {
+		this.setState({ file: e.target.files[0] }, () => {
+			this.uploadPhoto.value = ""
+		})
+	}
 
 	render() {
 		const iconPwd = this.state.pwdVisible ? 'unhide' : 'hide'
         const typePwd = this.state.pwdVisible ? 'text' : 'password'
 		const today = new Date()
-		const maxDate = today.getDate() + '-' + (parseInt(today.getMonth(), 10) + 1) + '-' + (parseInt(today.getFullYear(), 10) - 12) // Get current date in format dd-mm-yyyy - 12 years
+		const maxDate = (parseInt(today.getFullYear(), 10) - 12) + '-' + (parseInt(today.getMonth(), 10) + 1) + '-' + today.getDate() // Get current date in format dd-mm-yyyy - 12 years
 		const errorList = []
-
+		const source = this.state.file === null ? 'http://localhost:8080/files?type=avatar&file=' + this.props.user.lowercaseUsername + ".png" : URL.createObjectURL(this.state.file)
 		return(
 			<Segment raised style={{ marginTop: '2.5vh' }}>
-				<Container fluid style={{display: 'flex', height: '90vh'}}>
-					<div>
-						<Button color='#FF5252' width={70} height={35} onClick={() => this.props.changeView('Profile')}>Cancel</Button>
+				<div style={{ display: 'flex', justifyContent: 'flex-start', width: '100%' }}>
+					<Button color='#FF5252' width={70} height={35} onClick={() => this.props.changeView('Profile')} style={{ alignSelf: 'flex-start' }}>Cancel</Button>
+					<Header as='h2' style={{ marginTop: 0, marginBottom: 0, marginLeft: '35%', color: 'black' }}>Edit Profile</Header>
+				</div>
+				<Divider />
+				<Container fluid style={{ display: 'flex', height: '90vh' }}>
+					<div style={{ width: '20%' }}>
 						<Image
-							src={require('../assets/pandagram2.png')}
-							style={{ width: 160, height: 160, borderRadius: '100%', marginTop: '2vw', marginLeft: '0.8vw' }}
+							src={source}
+							style={{ width: 160, height: 160, borderRadius: '100%', margin: '0 auto', marginTop: 10 }}
 						/>
+						<input type="file" accept="image/*" style={{ display: 'none' }} ref={(ref) => this.uploadPhoto = ref} onChange={(e) => this.uploadFiles(e)}/>
+						{this.state.file === null && <button id='editBtn' onClick={() => this.uploadPhoto.click()}>Change Avatar</button>}
+						{this.state.file && 
+						<button id='deleteBtn' onClick={() => this.setState({ file: null })} style={{ alignSelf: 'flex-end', marginRight: 10 }}>Reset Avatar</button>}
 					</div>
-					<div style={{paddingLeft: '10vw', height: 'inherit', width: '30vw'}}>
-						<Header as='h2' style={{paddingLeft: '3.2vw'}}>Edit Profile</Header>
+					<div style={{ height: 'inherit', width: '30%', paddingLeft: '5%' }}>
 						<Form size='large' autoComplete='off'>
 							<Form.Group widths='equal'>
 								<Form.Field placeholder="First name" onChange={this.handleInput} autoComplete='off' error={this.state.errorFirstname}
@@ -137,7 +157,7 @@ export default class EditProfile extends React.Component {
 							<Form.Select label='Gender' options={options} placeholder='Gender' name='gender' onChange={this.handleInput} 
 							value={this.state.gender ? 'Male' : 'Female'} error={this.state.errorGender}/>
 							<Form.Field label="Birthday" control={DateInput} value={this.state.birthday} iconPosition='left' error={this.state.errorBirthday}
-							onChange={this.handleInput} name='birthday' closable placeholder='Click to select a date' maxDate={maxDate} initialDate='2000-01-1'
+							onChange={this.handleInput} name='birthday' closable placeholder='Click to select a date' maxDate={maxDate} initialDate='2000-01-01'
 							onKeyDown={(e) => e.preventDefault()} dateFormat="YYYY-MM-DD" />
 							<Divider  style={{ marginTop: 28 }}/>
 							<Form.Field placeholder="Password" required onChange={this.handleInput} maxLength={30} error={this.state.errorPwd}
@@ -149,7 +169,8 @@ export default class EditProfile extends React.Component {
 					</div>
 					{(this.state.errorFirstname || this.state.errorLastname || this.state.errorBirthday || this.state.errorGender ||
 					this.state.errorEmail || this.state.errorPwd || !this.state.emailAvailable) && errorList.length !== 0 &&
-					<Message error list={errorList} /> }
+					// <Message error list={errorList} />
+					<div style={{ backgroundColor: 'red', width: '100%', height: '100%' }}>errores</div> }
 				</Container>
 			</Segment>
 			);

@@ -9,7 +9,6 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  transition: all 1000ms linear;
 }
 
 body > #root > div {
@@ -101,4 +100,44 @@ code {
 
 .slick-prev:before, .slick-next:before {
   color: black
+}
+
+#editBtn {
+  outline: 0;
+  border: none;
+  background-color: #00b5ad;
+  width: 80%;
+  height: 40px;
+  font-family: 'Roboto';
+  font-size: 16px; 
+  color: white; 
+  border-radius: 12px;
+  margin-left: 10%;
+  margin-top: 15px;
+}
+
+#editBtn:hover {
+  cursor: pointer;
+  background-color: #008079;
+  transition-duration: 0.4s;
+}
+
+#deleteBtn {
+  outline: 0;
+  border: none;
+  background-color: #ff5252;
+  width: 80%;
+  height: 40px;
+  font-family: 'Roboto';
+  font-size: 16px; 
+  color: white; 
+  border-radius: 12px;
+  margin-left: 10%;
+  margin-top: 15px;
+}
+
+#deleteBtn:hover {
+  cursor: pointer;
+  background-color: #ba3b3b;
+  transition-duration: 0.4s;
 }

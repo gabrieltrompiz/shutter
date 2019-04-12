@@ -122,7 +122,6 @@ public class PostsHandler {
 
     public static int getFileCount(String username, int id) {
         String baseDir = System.getenv("SystemDrive") + "/web2p1/assets/users/" + username + "/" + id + "/";
-        System.out.println(baseDir);
         int count;
         try {
             File file = new File(baseDir);
