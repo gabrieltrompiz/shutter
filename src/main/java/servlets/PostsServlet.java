@@ -12,7 +12,8 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 
-import handlers.SessionHandler;
+import handlers.PostsHandler;
+import handlers.UserHandler;
 import models.Post;
 import models.Response;
 import models.User;
@@ -25,15 +26,9 @@ public class PostsServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
 		Response<ArrayList<Post>> response = null;
-		String username = req.getParameter("user");
-		String timePost = req.getParameter("time");
+		Integer userId = Integer.parseInt(req.getParameter("user"));
+		response = PostsHandler.getUserPosts(userId);
 
-		if(timePost == null) {
-			response = SessionHandler.getUserPosts(username);
-		} else {
-			Timestamp time = Timestamp.valueOf(timePost);
-			response = SessionHandler.getUserPosts(username, time);
-		}
 		mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 		resp.getWriter().print(mapper.writeValueAsString(response));
 	}
@@ -44,9 +39,9 @@ public class PostsServlet extends HttpServlet {
         String json = req.getReader().lines().collect(Collectors.joining());
         Post post = mapper.readValue(json, Post.class);
         User user = new User();
-        user.setLowercaseUsername(req.getSession(false).getAttribute("username").toString());
+        user.setId(Integer.parseInt(req.getSession(false).getAttribute("user_id").toString()));
         post.setUser(user);
-        Response<Integer> response = SessionHandler.addPost(post);
+        Response<Integer> response = PostsHandler.addPost(post);
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         resp.getWriter().print(mapper.writeValueAsString(response));
     }

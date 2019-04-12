@@ -2,7 +2,7 @@ package servlets;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import handlers.SessionHandler;
+import handlers.UserHandler;
 import models.Response;
 import models.User;
 import utilities.Encryptor;
@@ -28,7 +28,7 @@ public class RegisterServlet extends HttpServlet {
     String json =  req.getReader().lines().collect(Collectors.joining());
     User user = mapper.readValue(json, User.class);
     user.setPassword(Encryptor.getSHA256(user.getPassword(), user.getLowercaseUsername()));
-    Response<User> response = SessionHandler.register(user);
+    Response<User> response = UserHandler.register(user);
     if(response.getStatus() == 200) {
         InputStream is = new FileInputStream(System.getenv("SystemDrive") + "/web2p1/assets/avatars/def.png");;
         OutputStream out = new FileOutputStream(System.getenv("SystemDrive") + "/web2p1/assets/avatars/" + user.getLowercaseUsername() + ".png");;
@@ -37,10 +37,11 @@ public class RegisterServlet extends HttpServlet {
         while((read = is.read(bytes)) > 0) {
             out.write(bytes, 0, read);
         }
+        HttpSession session = req.getSession(true);
+        session.setAttribute("user_id", user.getId());
+        session.setAttribute("username", user.getLowercaseUsername());
         is.close();
         out.close();
-    	HttpSession session = req.getSession();
-    	session.setAttribute("username", user.getLowercaseUsername());
 	}
     res.setStatus(response.getStatus());
     mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);

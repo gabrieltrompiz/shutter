@@ -2,9 +2,8 @@ package servlets;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import handlers.SessionHandler;
+import handlers.UserHandler;
 import models.Response;
-import models.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,7 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.stream.Collectors;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @WebServlet(urlPatterns = "/checkEmail", name = "Check Email Servlet")
@@ -23,7 +21,7 @@ public class CheckEmailServlet extends HttpServlet {
     ObjectMapper mapper = new ObjectMapper();
     String email = req.getParameter("email");
     Response<?> response = new Response<>();
-    if(SessionHandler.checkEmail(email)) {
+    if(UserHandler.checkEmail(email)) {
       response.setStatus(409);
       response.setMessage("Email already in use");
     } else {

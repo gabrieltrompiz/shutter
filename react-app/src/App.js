@@ -22,7 +22,6 @@ class App extends Component {
   }
 
   handleLoggedIn = async (loggedIn) => {
-    console.log("modyfing loggeed")
     if(!loggedIn) {
       await localStorage.clear('user')
       this.setState({ user: null })

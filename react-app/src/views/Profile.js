@@ -7,7 +7,7 @@ import Post from '../components/Post.js';
 export default class Profile extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { user: this.props.user, ownFriendList: [], posts: [], lastPost: null, otherFriendList: [] }
+		this.state = { user: this.props.user, ownFriendList: [], posts: [], lastPost: null, otherFriendList: [], postsCount: 40 }
 	}
 
 	updateProfile = async () => {
@@ -15,7 +15,7 @@ export default class Profile extends React.Component {
 		user.lowercaseUsername = this.state.user.username.toLowerCase();
 		    this.setState({ user: user });
 		if(!this.props.own) {
-			await fetch('http://localhost:8080/friends?username=' + this.state.user.username, { credentials: 'include' })
+			await fetch('http://localhost:8080/friends?user=' + this.state.user.id, { credentials: 'include' })
 			.then(response => response.json())
 			.then(response => {
 				if (response.status === 200) {
@@ -23,7 +23,8 @@ export default class Profile extends React.Component {
 				} else console.log('cry');
 			});
 		}
-		await fetch('http://localhost:8080/posts?user=' + this.state.user.lowercaseUsername, { credentials: 'include' })
+		console.log(this.state.user.id)
+		await fetch('http://localhost:8080/posts?user=' + this.state.user.id + '&posts=' + this.state.postsCount, { credentials: 'include' })
 		.then(response => response.json())
 		.then(response => {
 			if (response.status === 200) {

@@ -17,7 +17,7 @@ export default class Dashboard extends React.Component {
 	}
 
 	componentDidMount = async () => {
-		await fetch('http://localhost:8080/friends?username=' + this.props.user.username, { credentials: 'include' })
+		await fetch('http://localhost:8080/friends?user=' + this.props.user.id, { credentials: 'include' })
 		.then(response => response.json())
 		.then(response => {
 			if (response.status === 200) {
@@ -33,7 +33,7 @@ export default class Dashboard extends React.Component {
 
 	checkIfFriend = () => {
 		let isFriend = false;
-		this.state.ownFriendList.map(friend => {
+		this.state.ownFriendList.forEach(friend => {
 			if(friend.username === this.state.anotherUser.username) {
 				isFriend = true;
 			}
@@ -42,7 +42,7 @@ export default class Dashboard extends React.Component {
 	}
 
 	updateDashboard = async () => {
-		await fetch('http://localhost:8080/friends?username=' + this.props.user.username, { credentials: 'include' })
+		await fetch('http://localhost:8080/friends?user=' + this.props.user.id, { credentials: 'include' })
 		.then(response => response.json())
 		.then(response => {
 			if (response.status === 200) {

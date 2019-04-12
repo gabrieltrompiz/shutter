@@ -10,7 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 
-import handlers.SessionHandler;
+import handlers.UserHandler;
 import models.Response;
 import models.User;
 
@@ -22,15 +22,9 @@ public class SearchServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
-		String name = req.getParameter("name");
 		String search = req.getParameter("search");
-		String list = req.getParameter("list");
-		Response<ArrayList<User>> response = null;
-
-		if (list.equalsIgnoreCase("friends"))
-			response = SessionHandler.searchFriends(name, search);
-		else
-			response = SessionHandler.searchUsers(search);
+		Response<ArrayList<User>> response;
+		response = UserHandler.searchUsers(search);
 
 		mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 		resp.getWriter().print(mapper.writeValueAsString(response));

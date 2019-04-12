@@ -10,7 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 
-import handlers.SessionHandler;
+import handlers.UserHandler;
 import models.Response;
 import models.User;
 import utilities.Encryptor;
@@ -31,9 +31,10 @@ public class LoginServlet extends HttpServlet {
 
     user.setPassword(Encryptor.getSHA256(user.getPassword(), user.getLowercaseUsername()));
 
-    Response<User> response = SessionHandler.login(user);
+    Response<User> response = UserHandler.login(user);
     if(response.getStatus() == 200) {
       HttpSession session = req.getSession();
+      session.setAttribute("user_id", user.getId());
       session.setAttribute("username", user.getLowercaseUsername());
     }
     mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);

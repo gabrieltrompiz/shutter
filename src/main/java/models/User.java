@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 
 public class User {
+  private Integer id;
   private String username;
   private String lowercaseUsername;
   private String password;
@@ -17,6 +18,7 @@ public class User {
   private Boolean sex;
   private Boolean enabled;
 
+  public Integer getId() { return id; }
 
   public String getPassword() {
     return password;
@@ -109,5 +111,7 @@ public class User {
   public void setSex(Boolean sex) {
     this.sex = sex;
   }
+
+  public void setId(Integer id) { this.id = id; }
 }
 

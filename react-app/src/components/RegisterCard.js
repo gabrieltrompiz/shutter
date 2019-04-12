@@ -102,7 +102,7 @@ export default class RegisterCard extends React.Component {
             sex: this.state.gender === 'Male',
             enabled: true
         }
-        await fetch('http://localhost:8080/register', { method: 'POST', body: JSON.stringify(body) })
+        await fetch('http://localhost:8080/register', { method: 'POST', body: JSON.stringify(body), credentials: 'include' })
         .then(response => response.json())
         .then(json => {
             if(json.status === 200) {
@@ -124,7 +124,7 @@ export default class RegisterCard extends React.Component {
         const typePwd = this.state.pwdVisible ? 'text' : 'password'
         const typeConf = this.state.confVisible ? 'text' : 'password'
         const today = new Date()
-        const maxDate = today.getDate() + '-' + (parseInt(today.getMonth(), 10) + 1) + '-' + (parseInt(today.getFullYear(), 10) - 12) // Get current date in format dd-mm-yyyy - 12 years
+        const maxDate = (parseInt(today.getFullYear(), 10) - 12) + '-' + (parseInt(today.getMonth(), 10) + 1) + '-' + today.getDate()// Get current date in format dd-mm-yyyy - 12 years
         const errorList = []
         if(this.state.step === 0) {
             if(this.state.errorFirstname) { errorList.push('Enter your first name.') }
@@ -163,8 +163,8 @@ export default class RegisterCard extends React.Component {
                             </Form.Group>
                             <Form.Group widths='equal'>
                                 <Form.Field label="Birthday" control={DateInput} value={this.state.birthday} iconPosition='left' error={this.state.errorBirthday}
-                                onChange={this.handleInput} name='birthday' closable placeholder='Click to select a date' maxDate={maxDate} initialDate='01-01-2000'
-                                onKeyDown={(e) => e.preventDefault()} dateFormat="DD-MM-YYYY"/>
+                                onChange={this.handleInput} name='birthday' closable placeholder='Click to select a date' maxDate={maxDate} initialDate='2000-01-01'
+                                onKeyDown={(e) => e.preventDefault()} dateFormat="YYYY-MM-DD"/>
                                 <Form.Select label='Gender' options={options} placeholder='Gender' name='gender' onChange={this.handleInput} 
                                 value={this.state.gender} error={this.state.errorGender}/>
                             </Form.Group>

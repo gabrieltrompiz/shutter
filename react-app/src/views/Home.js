@@ -5,11 +5,11 @@ import Post from '../components/Post.js';
 export default class Home extends React.Component {
 	constructor(props) {
 		super(props)
-		this.state = { user: this.props.user, posts: [], lastPost: null }
+		this.state = { user: this.props.user, posts: [], lastPost: null, postsCount: 20 }
 	}
 
 	updateFeed = async () => {
-		await fetch('http://localhost:8080/feed', { credentials: 'include' })
+		await fetch('http://localhost:8080/feed?posts=' + this.state.postsCount, { credentials: 'include' })
 		.then(response => response.json())
 		.then(response => {
 			if(response.status === 200) {
@@ -18,21 +18,12 @@ export default class Home extends React.Component {
 		});
 	}
 
-	componentDidMount = () => {
-		this.updateFeed()
+	chargeMorePosts = () => {
+		this.setState(() => ({ postsCount: this.state.postsCount + 20 }), () => this.updateFeed())
 	}
 
-	chargeMorePosts = async () => {
-		await fetch('http://localhost:8080/feed?time=' + this.state.lastPost.creationTime, { credentials: 'include' })
-			.then(response => response.json())
-			.then(response => {
-				if(response.status === 200) {
-					if(response.data.length === 0) { this.button.style.display = 'none' }
-					let posts = [...this.state.posts]
-					posts.push(...response.data)
-					this.setState({ posts: posts, lastPost: posts[posts.length - 1] })
-				}
-			});
+	componentDidMount = () => {
+		this.updateFeed()
 	}
 
 	render() {

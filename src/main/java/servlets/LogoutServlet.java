@@ -1,19 +1,14 @@
 package servlets;
 
 import java.io.IOException;
-import java.util.stream.Collectors;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 
-import handlers.SessionHandler;
 import models.Response;
-import models.User;
-import utilities.Encryptor;
 
 @WebServlet(urlPatterns = "/logout", name = "Logout Servlet")
 public class LogoutServlet extends HttpServlet {

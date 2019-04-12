@@ -1,9 +1,8 @@
 package servlets;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import handlers.SessionHandler;
+import handlers.UserHandler;
 import models.Response;
 import models.User;
 import utilities.Encryptor;
@@ -32,7 +31,7 @@ public class EditUserServlet extends HttpServlet {
 		  user.setLowercaseUsername(user.getUsername().toLowerCase());
 		user.setPassword(Encryptor.getSHA256(user.getPassword(), user.getLowercaseUsername()));
 
-		Response<User> response = SessionHandler.modifyUser(user);
+		Response<User> response = UserHandler.modifyUser(user);
 
 		mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 		res.setStatus(response.getStatus());
