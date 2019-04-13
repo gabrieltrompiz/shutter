@@ -15,6 +15,21 @@ body > #root > div {
   height: 100vh;
 }
 
+div {
+  -webkit-transition-property: background-color, border-color;
+  -webkit-transition: 300ms linear;
+  -ms-transition-property: background-color, border-color;
+  -ms-transition: 300ms linear;
+  transition-property: background-color, border-color;
+  transition: 300ms linear;
+}
+
+p, h5, i, a, span {
+  -webkit-transition: color 200ms linear;
+  -ms-transition: color border 200ms linear;
+  transition: color border 200ms linear;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
@@ -68,28 +83,6 @@ code {
   transition-duration: 0.4s;
 }
 
-.reactionsBtns {
-  background-color: transparent;
-  color: #606770;
-  border: none; 
-  outline: 0;
-  width: 50%;
-  height: 100%;
-  font-family: 'Heebo';
-  font-weight: bold;
-  font-size: 18px;
-  margin-bottom: 10;
-  transition: 0.4s;
-  padding: 0;
-  margin: 0;
-}
-
-.reactionsBtns:hover {
-  cursor: pointer;
-  background-color: lightgray;
-  transition: 0.4s;
-}
-
 .fa-heart {
   color: #ff5252;
 }
@@ -140,4 +133,21 @@ code {
   cursor: pointer;
   background-color: #ba3b3b;
   transition-duration: 0.4s;
+}
+
+.ui.input > input {
+  background-color: inherit !important;
+  color: inherit !important;
+}
+
+.ui.form .field > label, .ui.form [class*="equal width"].fields>.field, .ui[class*="equal width"].form .fields>.field, .ui.form.field, div.text, div.item {
+  color: inherit !important;
+}
+
+div.item, .visible.menu.transition {
+  background-color: inherit !important;
+}
+
+.ui.selection.dropdown .menu>.item, .ui.selection.active.dropdown .menu {
+  border: inherit !important;
 }

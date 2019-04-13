@@ -11,15 +11,18 @@ export default class EditProfile extends React.Component {
 	}
 
 	get initialState() {
+		const date = new Date(this.props.user.birthday)
+		const birthday = (parseInt(date.getFullYear(), 10)) + '-' + (parseInt(date.getMonth(), 10) + 1) + '-' + date.getDate()
         return {
-            pwdVisible: false, confVisible: false, firstname: this.props.user.name, lastname: this.props.user.lastName, birthday: new Date(this.props.user.birthday),
+            pwdVisible: false, confVisible: false, firstname: this.props.user.name, lastname: this.props.user.lastName, birthday: birthday,
             gender: this.props.user.sex, username: this.props.user.username, email: this.props.user.email, password: '', passwordConf: '', errorFirstname: false, errorLastname: false, errorBirthday: false, errorGender: false,
             errorUsername: false, errorEmail: false,  errorPwd: false, errorPwdConf: false, usernameAvailable: true, emailAvailable: true, loading: false, errorEdit: false, file: null
         }
     }
 
-	handleClickPwd = () => {
+	handleClickPwd = (e) => {
         this.setState({ pwdVisible: !this.state.pwdVisible })
+		e.preventDefault()
     }
 
 	handleInput = (event, {name, value}) => {
@@ -110,6 +113,7 @@ export default class EditProfile extends React.Component {
 			formData.append('file', this.state.file)
 			await fetch('http://localhost:8080/files', { method: 'PUT', credentials: 'include', body: formData })
 		}
+		await Cache.delete()
 		this.props.changeView('Profile')
     }
 
@@ -126,14 +130,15 @@ export default class EditProfile extends React.Component {
 		const maxDate = (parseInt(today.getFullYear(), 10) - 12) + '-' + (parseInt(today.getMonth(), 10) + 1) + '-' + today.getDate() // Get current date in format dd-mm-yyyy - 12 years
 		const errorList = []
 		const source = this.state.file === null ? 'http://localhost:8080/files?type=avatar&file=' + this.props.user.lowercaseUsername + ".png" : URL.createObjectURL(this.state.file)
+		const dark = this.props.darkTheme
 		return(
-			<Segment raised style={{ marginTop: '2.5vh' }}>
+			<Segment raised style={{ marginTop: '2.5vh', height: '95vh', backgroundColor: dark ? '#15202B' : 'white' }}>
 				<div style={{ display: 'flex', justifyContent: 'flex-start', width: '100%' }}>
 					<Button color='#FF5252' width={70} height={35} onClick={() => this.props.changeView('Profile')} style={{ alignSelf: 'flex-start' }}>Cancel</Button>
-					<Header as='h2' style={{ marginTop: 0, marginBottom: 0, marginLeft: '35%', color: 'black' }}>Edit Profile</Header>
+					<Header as='h2' style={{ marginTop: 0, marginBottom: 0, marginLeft: '35%', color: dark ? 'white' : 'black' }}>Edit Profile</Header>
 				</div>
 				<Divider />
-				<Container fluid style={{ display: 'flex', height: '90vh' }}>
+				<Container fluid style={{ display: 'flex', height: '85vh' }}>
 					<div style={{ width: '20%' }}>
 						<Image
 							src={source}
@@ -145,23 +150,25 @@ export default class EditProfile extends React.Component {
 						<button id='deleteBtn' onClick={() => this.setState({ file: null })} style={{ alignSelf: 'flex-end', marginRight: 10 }}>Reset Avatar</button>}
 					</div>
 					<div style={{ height: 'inherit', width: '30%', paddingLeft: '5%' }}>
-						<Form size='large' autoComplete='off'>
-							<Form.Group widths='equal'>
+						<Form size='large' autoComplete='off' style={{ color: dark ? 'white' : 'black' }}>
+							<Form.Group widths='equal' style={{ color: dark ? 'white' : 'black' }}>
 								<Form.Field placeholder="First name" onChange={this.handleInput} autoComplete='off' error={this.state.errorFirstname}
-								control={Input} label="First name" name='firstname' value={this.state.firstname} maxLength={40}/>
-								<Form.Field placeholder="Last name" onChange={this.handleInput} autoComplete='off' error={this.state.errorLastname}
-								control={Input} label="Last name" name='lastname' value={this.state.lastname} maxLength={40}/>
+								control={Input} label="First name" name='firstname' value={this.state.firstname} maxLength={40} style={{ backgroundColor: dark ? '#1C2938' : 'white',
+								borderRadius: 5, color: dark ? 'white' : 'black' }} />
+								<Form.Field placeholder="Last name" onChange={this.handleInput} autoComplete='off' error={this.state.errorLastname} style={{ backgroundColor: dark ? '#1C2938' : 'white',
+								borderRadius: 5, color: dark ? 'white' : 'black' }} control={Input} label="Last name" name='lastname' value={this.state.lastname} maxLength={40}/>
 							</Form.Group>
-							<Form.Field placeholder="Email" onChange={this.handleInput} autoComplete='off' control={Input} label="Email" 
-							name='email' error={this.state.errorEmail || !this.state.emailAvailable} value={this.state.email}/>
+							<Form.Field placeholder="Email" onChange={this.handleInput} autoComplete='off' control={Input} label="Email" name='email' 
+							error={this.state.errorEmail || !this.state.emailAvailable} value={this.state.email} style={{ color: dark ? 'white' : 'black', backgroundColor: dark ? '#1C2938' : 'white' }} />
 							<Form.Select label='Gender' options={options} placeholder='Gender' name='gender' onChange={this.handleInput} 
-							value={this.state.gender ? 'Male' : 'Female'} error={this.state.errorGender}/>
-							<Form.Field label="Birthday" control={DateInput} value={this.state.birthday} iconPosition='left' error={this.state.errorBirthday}
-							onChange={this.handleInput} name='birthday' closable placeholder='Click to select a date' maxDate={maxDate} initialDate='2000-01-01'
-							onKeyDown={(e) => e.preventDefault()} dateFormat="YYYY-MM-DD" />
+							value={this.state.gender ? 'Male' : 'Female'} error={this.state.errorGender} style={{ color: dark ? 'white' : 'black', backgroundColor: dark ? '#1C2938' : 'white', border: dark ? '0.5px solid transparent' : '' }} />
+							<Form.Field label="Birthday" control={DateInput} value={this.state.birthday} iconPosition='left' error={this.state.errorBirthday} style={{ color: dark ? 'white' : 'black', borderRadius: 5,
+							backgroundColor: dark ? '#1C2938' : 'white' }} onChange={this.handleInput} name='birthday' closable placeholder='Click to select a date' maxDate={maxDate} initialDate='2000-01-01'
+							onKeyDown={(e) => e.preventDefault()} dateFormat="YYYY-MM-DD"/>
 							<Divider  style={{ marginTop: 28 }}/>
-							<Form.Field placeholder="Password" required onChange={this.handleInput} maxLength={30} error={this.state.errorPwd}
-							control={Input} label="Password" type={typePwd} action={{ icon: iconPwd, onClick: this.handleClickPwd }} name='password'/>
+							<Form.Field placeholder="Password" required onChange={this.handleInput} maxLength={30} error={this.state.errorPwd} style={{ color: dark ? 'white' : 'black',
+							backgroundColor: dark ? '#1C2938' : 'white', borderRadius: 5 }} control={Input} label="Password" type={typePwd} 
+							action={{ icon: iconPwd, onClick: this.handleClickPwd, style: { color: dark ? 'white' : '', backgroundColor: dark ? '#1C2938' : '' } }} name='password'/>
 							<div style={{ textAlign: 'center', width: 'inherit' }}>
 								<Button color='#00b300' width={120} height={42} onClick={() => this.checkInput()}>Confirm</Button>
 							</div>

@@ -14,6 +14,8 @@ export default class FriendContainer extends React.Component {
 
     render() {
         const source = 'http://localhost:8080/files?type=avatar&file=' + this.state.username + '.png'
+        const dark = this.props.darkTheme
+        const styles = this.getStyles(dark)
         return(
             <div style={styles.container} onClick={() => this.handleClick()}>
                 <Image
@@ -28,30 +30,35 @@ export default class FriendContainer extends React.Component {
             </div>
         );
     }
+
+    getStyles = (dark) => {
+        const styles = { 
+            container: { 
+                width: '97%',
+                height: 80, 
+                marginLeft: '1.5%', 
+                display: 'flex', 
+                alignItems: 'center',
+                cursor: 'pointer'
+            }, 
+            name: {
+                fontFamily: 'Heebo',
+                fontWeight: 'bolder',
+                fontSize: 18,
+                paddingLeft: 10,
+                margin: 0,
+                color: dark ? 'white' : 'black'
+            },
+            username: {
+                fontFamily: 'Roboto',
+                fontWeight: 'light',
+                color: dark ? '#8596A3' : 'grey',
+                paddingLeft: 10
+            }
+        }
+        return styles
+    }
 }
 
-const styles = { 
-    container: { 
-        width: '97%',
-        height: 80, 
-        marginLeft: '1.5%', 
-        display: 'flex', 
-        alignItems: 'center',
-        cursor: 'pointer'
-    }, 
-    name: {
-		fontFamily: 'Heebo',
-		fontWeight: 'bolder',
-		fontSize: 18,
-		paddingLeft: 10,
-        margin: 0
-	},
-	username: {
-		fontFamily: 'Roboto',
-		fontWeight: 'light',
-		color: 'grey',
-		paddingLeft: 10
-	}
-}
 
 

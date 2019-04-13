@@ -8,7 +8,7 @@ export default class Button extends React.Component {
 
     render(){
         const outlined = {
-            backgroundColor: this.state.hover ? this.props.color : 'white',
+            backgroundColor: this.state.hover ? this.props.color : 'transparent',
             borderRadius: this.props.changeRadius ? this.props.borderRadius : 5,
             borderWidth: 1.5,
             borderColor: this.props.color,

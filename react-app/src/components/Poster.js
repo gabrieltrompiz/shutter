@@ -6,11 +6,23 @@ import ReactPlayer from 'react-player';
 export default class Poster extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { typePost: 1, postText: '', files: [] }
+		this.state = { typePost: 1, postText: 'What\'s on your mind, ' + this.props.user.name + '?', files: [] }
 	}
 
 	handleInput = (event, {name, value}) => {
 		this.setState({ postText: value })
+	}
+
+	checkFocus = () => {
+		if(this.state.postText === 'What\'s on your mind, ' + this.props.user.name + '?') {
+			this.setState({ postText: '' })
+		}
+	}
+
+	checkFocusOut = () => {
+		if(this.state.postText.trim() === '') {
+			this.setState({ postText: 'What\'s on your mind, ' + this.props.user.name + '?' })
+		}
 	}
 
 	post = async () => {
@@ -51,17 +63,19 @@ export default class Poster extends React.Component {
 	render() {
 		const source = 'http://localhost:8080/files?type=avatar&file=' + this.props.user.username + '.png'
 		const disabled = this.state.postText === "" ?  this.state.files.length === 0 ? true : false : false;
+		const dark = this.props.darkTheme
+		const empty = this.state.postText === 'What\'s on your mind, ' + this.props.user.name + '?'
 		return(
-			<Container style={{ width: 'auto', maxHeight: 'auto', marginTop: '2.5vh', backgroundColor: 'white', borderColor: '#DDDFE2', 
+			<Container style={{ width: 'auto', maxHeight: 'auto', marginTop: '2.5vh', backgroundColor: dark ? '#1c2938' : 'white', borderColor: dark ? '#1c2938' : '#DDDFE2', 
 			borderRadius: 5, borderWidth: 1.5, borderStyle: 'solid', marginBottom: '1.5vh' }}>
 				<div style={{ display: 'flex' }}>
 					<Image
 						src={source}
 						style={{ width: 80, height: 80, borderRadius: '100%', marginTop: '1.5vw', marginLeft: '1.5vw' }}
 					/>
-					<TextArea placeholder={'What\'s on your mind, ' + this.props.user.name + '?'} style={{ resize: 'none', width: '100%', height: 100,
-			        marginTop: '1.5vh', marginRight: '1vw', paddingLeft: '1vw', paddingTop: '1vh', fontFamily: 'Arial', fontSize: '22px', border: 'none', outline: 0 }} 
-					onChange={this.handleInput} value={this.state.postText}/>
+					<TextArea onFocus={() => this.checkFocus()} onBlur={() => this.checkFocusOut()} style={{ resize: 'none', width: '100%', height: 100, backgroundColor: 'transparent',
+			        marginTop: '1.5vh', marginRight: '1vw', paddingLeft: '1vw', paddingTop: '1vh', fontFamily: 'Arial', fontSize: '22px', border: 'none', outline: 0,
+					color: dark ? empty ? '#8899A6' : 'white' : empty ? '#728390' : 'black' }} onChange={this.handleInput} value={this.state.postText}/>
 				</div>			
 				<Divider style={{ marginLeft: 12, marginRight: 12 }}/>
 				<div style={{ display: 'flex', width: '100%', paddingLeft: 15 }}>

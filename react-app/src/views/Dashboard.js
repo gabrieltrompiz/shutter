@@ -123,28 +123,28 @@ export default class Dashboard extends React.Component {
 			case 'Home':
 				return (
 					<div style={{ display: 'flex' }}>
-						<Home user={this.props.user} changeView={this.handleChangeView} changeUser={this.props.changeUser} handleLoggedIn={this.props.handleLoggedIn}/>
-						<Inbox />
+						<Home user={this.props.user} changeView={this.handleChangeView} changeUser={this.props.changeUser} handleLoggedIn={this.props.handleLoggedIn} darkTheme={this.props.darkTheme}/>
+						<Inbox darkTheme={this.props.darkTheme}/>
 					</div>);
 			
 			case 'Profile':
-				return <Profile user={this.props.user} changeView={this.handleChangeView} changeUser={this.changeUser} own ownFriendList={this.state.ownFriendList}/>;
+				return <Profile user={this.props.user} changeView={this.handleChangeView} changeUser={this.changeUser} own ownFriendList={this.state.ownFriendList} darkTheme={this.props.darkTheme}/>;
 			
 			case 'OtherUserProfile':
 				return <Profile user={this.state.anotherUser} changeView={this.handleChangeView} changeUser={this.changeUser} own={this.props.user.username === this.state.anotherUser.username}
-				isFriend={this.checkIfFriend()} updateDashboard={this.updateDashboard}/>;
+				isFriend={this.checkIfFriend()} updateDashboard={this.updateDashboard} darkTheme={this.props.darkTheme}/>;
 
 			case 'EditProfile':
-				return <EditProfile user={this.props.user} changeView={this.handleChangeView} changeUser={this.props.changeUser}/>;
+				return <EditProfile user={this.props.user} changeView={this.handleChangeView} changeUser={this.props.changeUser} darkTheme={this.props.darkTheme}/>;
 
 			case 'Notifications':
-				return <Notifications user={this.props.user} changeView={this.handleChangeView} />
+				return <Notifications user={this.props.user} changeView={this.handleChangeView} darkTheme={this.props.darkTheme}/>
 			
 			case 'Search':
-				return <Search user={this.props.user} changeView={this.handleChangeView} changeUser={this.changeUser} />;
+				return <Search user={this.props.user} changeView={this.handleChangeView} changeUser={this.changeUser} darkTheme={this.props.darkTheme}/>;
 			
 			case 'Settings':
-				return <Settings/>;
+				return <Settings darkTheme={this.props.darkTheme}/>;
 			
 			default:
 				throw new Error();
@@ -152,56 +152,69 @@ export default class Dashboard extends React.Component {
 	}
 
 	render() {
+		const dark = this.props.darkTheme
 		return (
 			<Container fluid style={{ height: '100vh', backgroundColor: '#FAFAFC' }}>
 				<div style={{ backgroundColor: '#f1f2f4', display: 'flex' }}>
-					<Menu vertical style={{ height: '100vh', position: 'sticky', backgroundColor: 'white', width: '17.5%' }} pointing secondary>
+					<Menu vertical style={{ height: '100vh', position: 'sticky', backgroundColor: dark ? '#1C2938' : 'white', width: '17.5%' }} pointing secondary>
 						<Menu.Item header style={{ textAlign: 'center' }}>
 							<Image
 								as="img"
 								src={require('../assets/pandagram.png')}
-								style={{ width: 70, height: 70, borderRadius: 12, margin: 'auto', marginTop: 10 }}
+								style={{ width: 70, height: 70, borderRadius: 12, margin: 'auto', marginTop: 10,
+								WebkitFilter: dark ? 'brightness(2000%)' : '' }}
 							/>
-							<p style={{ fontFamily: 'Billabong', fontSize: 40, fontWeight: '400' }}>Pandagram</p>
+							<p style={{ fontFamily: 'Billabong', fontSize: 40, fontWeight: '400', color: dark ? 'white' : 'black' }}>Pandagram</p>
 						</Menu.Item>
-						<Menu.Item active={this.state.activeItem === 'Home'} onClick={this.handleItemClick} name='Home'>
-							<Header as='h5' style={{ paddingLeft: 10, marginTop: 0.5 }}>
+						<Menu.Item active={this.state.activeItem === 'Home'} onClick={this.handleItemClick} name='Home' 
+						style={{ borderColor: dark && this.state.activeItem === 'Home' ? 'white' : '' }}>
+							<Header as='h5' style={{ paddingLeft: 10, marginTop: 0.5, color: dark ? 'white' : 'black' }}>
 								<Icon name='home' style={{ float: 'left', fontSize: 16 }}/>
 								Home
 							</Header>
 						</Menu.Item>
-						<Menu.Item active={this.state.activeItem === 'Profile'} onClick={this.handleItemClick} name='Profile'>
-							<Header as='h5' style={{ paddingLeft: 10, marginTop: 0.5 }}>
+						<Menu.Item active={this.state.activeItem === 'Profile'} onClick={this.handleItemClick} name='Profile' 
+						style={{ borderColor: dark && this.state.activeItem === 'Profile' ? 'white' : '' }}>
+							<Header as='h5' style={{ paddingLeft: 10, marginTop: 0.5, color: dark ? 'white' : 'black' }}>
 								<Icon name='user' style={{ float: 'left', fontSize: 16 }}/>
 								Profile
 							</Header>
 						</Menu.Item>
-						<Menu.Item active={this.state.activeItem === 'Notifications'} onClick={this.handleItemClick} name='Notifications'>
-							<Header as='h5' style={{ paddingLeft: 10, marginTop: 0.5 }}>
+						<Menu.Item active={this.state.activeItem === 'Notifications'} onClick={this.handleItemClick} name='Notifications' 
+						style={{ borderColor: dark && this.state.activeItem === 'Notifications' ? 'white' : '' }}>
+							<Header as='h5' style={{ paddingLeft: 10, marginTop: 0.5, color: dark ? 'white' : 'black' }}>
 								<Icon name='inbox' style={{ float: 'left', fontSize: 16 }}/>
 								Notifications
 							</Header>
 						</Menu.Item>
-						<Menu.Item active={this.state.activeItem === 'Search'} onClick={this.handleItemClick} name='Search'>
-							<Header as='h5' style={{ paddingLeft: 10, marginTop: 0.5 }}>
+						<Menu.Item active={this.state.activeItem === 'Search'} onClick={this.handleItemClick} name='Search' 
+						style={{ borderColor: dark && this.state.activeItem === 'Search' ? 'white' : '' }}>
+							<Header as='h5' style={{ paddingLeft: 10, marginTop: 0.5, color: dark ? 'white' : 'black' }}>
 								<Icon name='search' style={{ float: 'left', fontSize: 16 }}/>
 								Search
 							</Header>
 						</Menu.Item>
-						<Menu.Item active={this.state.activeItem === 'Settings'} onClick={this.handleItemClick} name='Settings'>
-							<Header as='h5' style={{ paddingLeft: 10, marginTop: 0.5 }}>
+						<Menu.Item active={this.state.activeItem === 'Settings'} onClick={this.handleItemClick} name='Settings' 
+						style={{ borderColor: dark && this.state.activeItem === 'Settings' ? 'white' : '' }}>
+							<Header as='h5' style={{ paddingLeft: 10, marginTop: 0.5, color: dark ? 'white' : 'black'  }}>
 								<Icon name='cog' style={{ float: 'left', fontSize: 16 }}/>
 								Settings
 							</Header>
 						</Menu.Item>
+						<Menu.Item  onClick={this.props.switchTheme}>
+							<Header as='h5' style={{ paddingLeft: 10, marginTop: 0.5, color: dark ? 'white' : 'black' }}>
+								<Icon name='moon' style={{ float: 'left', fontSize: 16  }}/>
+								Toggle Dark Mode
+							</Header>
+						</Menu.Item>
 						<Menu.Item active={this.state.activeItem === 'LogOut'} onClick={this.logout}>
-							<Header as='h5' style={{ paddingLeft: 10, marginTop: 0.5 }}>
+							<Header as='h5' style={{ paddingLeft: 10, marginTop: 0.5, color: dark ? 'white' : 'black' }}>
 								<Icon name='sign out' style={{ float: 'left', fontSize: 16 }}/>
 								Log out
 							</Header>
 						</Menu.Item>
 					</Menu>
-					<Container style={{ height: '100vh', width: '85%', overflowY: 'scroll' }}>
+					<Container style={{ height: '100vh', width: '85%', overflowY: 'scroll', backgroundColor: dark ? '#10171E' : '' }}>
 						<Container style={{ width: '75vw' }}>
 							{this.getView()}
 						</Container>

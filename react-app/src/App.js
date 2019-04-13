@@ -7,7 +7,7 @@ import Dashboard from './views/Dashboard'
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { loggedIn: false, user: null }
+    this.state = { loggedIn: false, user: null, darkTheme: false }
   }
 
   componentDidMount = () => {
@@ -17,8 +17,10 @@ class App extends Component {
   _retrieveState = async () => {
     const loggedIn = await localStorage.getItem('loggedIn')
     const user = await localStorage.getItem('user')
+    const dark = await localStorage.getItem('darkTheme')
      if(loggedIn !== null) { this.setState({ loggedIn: JSON.parse(loggedIn) }) }
      if(user !== null) { this.setState({ user: JSON.parse(user) })}
+     if(dark !== null) { this.setState({ darkTheme: JSON.parse(dark) })}
   }
 
   handleLoggedIn = async (loggedIn) => {
@@ -39,13 +41,18 @@ class App extends Component {
     this.setState({ user: user })
   }
 
+  switchTheme = async () => {
+    await localStorage.setItem('darkTheme', JSON.stringify(!this.state.darkTheme))
+    this.setState({ darkTheme: !this.state.darkTheme })
+  }
+
   render() {
     return (
       <div className="App" style={{ height: '100vh', overflow: 'hidden' }}>
         {!this.state.loggedIn && this.state.user === null &&
         <LoginView handleLoggedIn={this.handleLoggedIn} handleUser={this.handleUser}/>}
         {this.state.loggedIn && this.state.user !== null &&
-        <Dashboard handleLoggedIn={this.handleLoggedIn} user={this.state.user} changeUser={this.handleUser}/>}
+        <Dashboard handleLoggedIn={this.handleLoggedIn} user={this.state.user} changeUser={this.handleUser} darkTheme={this.state.darkTheme} switchTheme={this.switchTheme}/>}
       </div>
     );
   }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input, Segment, Divider } from 'semantic-ui-react';
+import { Input, Segment, Divider, Icon } from 'semantic-ui-react';
 import UserCard from '../components/UserCard.js';
 export default class Search extends React.Component {
 	constructor(props) {
@@ -65,11 +65,13 @@ export default class Search extends React.Component {
 	
 
 	render() {
+		const dark = this.props.darkTheme
+		const styles = this.getStyles(dark)
 		return(
 			<div style={{ display: 'flex' }}>
 				<div style={{ width: '57.5%', height: '100%' }}>
-					<Input placeholder='Search' style={{ width: '80%', marginLeft: '10%', height: 40, fontSize: 18, marginTop: '2.5vh' }} 
-					icon={{ name: 'search' }} onChange={this.handleInput} autoComplete='off' maxLength={50} value={this.state.search}/>
+					<Input placeholder='Search' style={{ width: '80%', marginLeft: '10%', height: 40, fontSize: 18, marginTop: '2.5vh', backgroundColor: dark ? '#15202B' : 'white', borderRadius: 5,
+					color: dark ? 'white' : 'black' }} onChange={this.handleInput} autoComplete='off' maxLength={50} value={this.state.search}/>
 					<div style={styles.container}>
 					{this.state.results.length === 0 && 
 						<div style={styles.empty}>
@@ -79,72 +81,88 @@ export default class Search extends React.Component {
 						{this.state.results.map(user => {
 							if (this.props.user.username !== user.username)
 								return <UserCard user={user} key={user.username} changeView={this.props.changeView}
-								changeUser={this.props.changeUser} />
-							return <UserCard user={user} key={user.username} />
+								changeUser={this.props.changeUser} darkTheme={dark}/>
+							return <UserCard user={user} key={user.username} darkTheme={dark} />
 						})}
 					</div>
 				</div>
 				<Segment raised style={styles.recent}>
 					<p style={styles.title}>Recent Search</p>
 					<Divider fitted style={{ marginTop: 2}} />
+					{this.state.recent.length === 0 &&
+					<div style={styles.recentEmpty}>
+						<i className="fas fa-exclamation" style={styles.icon}></i>
+						<span style={styles.text}>You don't have recents searches.</span>
+					</div>
+					}
 					{/* aqui va un .map() de los recents */}
 				</Segment>
 			</div>
 			
 		);
 	}
-}
 
-const styles = {
-	container: {
-		display: 'flex',
-		width: '100%',
-		height: '85vh',
-		marginTop: 20,
-		flexWrap: 'wrap',
-		alignContent: 'flex-start',
-	},
-	empty: {
-		display: 'flex',
-		flexDirection: 'column',
-		alignItems: 'center',
-		justifyContent: 'center',
-		height: '100%',
-		width: '100%',
-		borderStyle: 'dashed',
-		borderWidth: 2,
-		borderColor: 'grey',
-		borderRadius: 20,
-		fontFamily: 'Heebo',
-		color: 'grey',
-		opacity: 0.8,
-	},
-	recent: {
-		position: 'fixed',
-		height: '94vh',
-		width: '30%',
-		left: '67.5%',
-		marginTop: '2.5vh'
-	},
-	title: {
-		fontFamily: 'Heebo',
-		fontSize: 30,
-		fontWeight: 'bolder',
-		margin: 0
-	},
-	text: {
-		color: 'grey', 
-		opacity: 0.8,
-		fontSize: 22,
-		fontFamily: 'Heebo', 
-		fontWeight: 'bolder',
-		textAlign: 'center',
-		lineHeight: 1.1,
-		marginTop: 10
-	},
-	icon: {
-		color: 'grey',
-		fontSize: 30,
-		opacity: 0.8
+	getStyles = (dark) => {
+		const styles = {
+			container: {
+				display: 'flex',
+				width: '100%',
+				height: '85vh',
+				marginTop: 20,
+				flexWrap: 'wrap',
+				alignContent: 'flex-start',
+			},
+			empty: {
+				display: 'flex',
+				flexDirection: 'column',
+				alignItems: 'center',
+				justifyContent: 'center',
+				height: '100%',
+				width: '100%',
+				borderStyle: 'dashed',
+				borderWidth: 2,
+				borderColor: dark ? '#8899A6' : 'grey',
+				borderRadius: 20,
+				fontFamily: 'Heebo',
+				color: 'grey'
+			},
+			recent: {
+				position: 'fixed',
+				height: '94vh',
+				width: '30%',
+				left: '67.5%',
+				marginTop: '2.5vh',
+				backgroundColor: dark ? '#15202B' : 'white'
+			},
+			title: {
+				fontFamily: 'Heebo',
+				fontSize: 30,
+				fontWeight: 'bolder',
+				margin: 0,
+				color: dark ? 'white' : 'black'
+			},
+			text: {
+				color: dark ? ' #8899A6' : 'grey', 
+				fontSize: 22,
+				fontFamily: 'Heebo', 
+				fontWeight: 'bolder',
+				textAlign: 'center',
+				lineHeight: 1.1,
+				marginTop: 10
+			},
+			icon: {
+				color: dark ? '#8899A6' : 'grey',
+				fontSize: 30,
+			},
+			recentEmpty: {
+				width: '100%', 
+				height: '100%',
+				display: 'flex',
+				flexDirection: 'column',
+				alignItems: 'center',
+				justifyContent: 'center'
+			}
+		}
+		return styles
 	}
 }

@@ -8,8 +8,10 @@ export default class Inbox extends React.Component {
 	}
 
 	render() {
+		const dark = this.props.darkTheme
+		const styles = this.getStyles(dark)
 		return(
-			<Segment raised style={{ width: '23%', height: '94vh', left: '74.5%', marginTop: '2.5vh', position: 'fixed' }}>
+			<Segment raised style={{ width: '23%', height: '94vh', left: '74.5%', marginTop: '2.5vh', position: 'fixed', backgroundColor: dark ? '#1C2938' : 'white' }}>
 				<p style={styles.title}>Friends</p>
 				<Divider fitted style={{ marginTop: 2 }} />
 				{this.state.friends.length === 0 && 
@@ -20,37 +22,42 @@ export default class Inbox extends React.Component {
 			</Segment>
 		);
 	}
-}
 
-const styles = { 
-	title: {
-		fontFamily: 'Heebo',
-		fontSize: 30,
-		fontWeight: 'bolder',
-		margin: 0
-	},
-	empty: {
-		height: '92%',
-		width: '100%',
-		display: 'flex',
-		flexDirection: 'column',
-		alignItems: 'center',
-		justifyContent: 'center',
-		marginTop: 10,
-	},
-	icon: {
-		color: 'grey',
-		fontSize: 40,
-		opacity: 0.8
-	},
-	text: {
-		color: 'grey', 
-		opacity: 0.8,
-		fontSize: 22,
-		fontFamily: 'Heebo', 
-		fontWeight: 'bolder',
-		textAlign: 'center',
-		lineHeight: 1.1,
-		marginTop: 10
+	getStyles = (dark) => {
+		const styles = { 
+			title: {
+				fontFamily: 'Heebo',
+				fontSize: 30,
+				fontWeight: 'bolder',
+				margin: 0,
+				color: dark ? 'white' : 'black'
+			},
+			empty: {
+				height: '92%',
+				width: '100%',
+				display: 'flex',
+				flexDirection: 'column',
+				alignItems: 'center',
+				justifyContent: 'center',
+				marginTop: 10,
+			},
+			icon: {
+				color: dark ? '#8899A6' : 'grey',
+				fontSize: 40,
+				opacity: 0.8
+			},
+			text: {
+				color: dark ? '#8899A6' : 'grey', 
+				opacity: 0.8,
+				fontSize: 22,
+				fontFamily: 'Heebo', 
+				fontWeight: 'bolder',
+				textAlign: 'center',
+				lineHeight: 1.1,
+				marginTop: 10
+			}
+		}
+		return styles
 	}
 }
+

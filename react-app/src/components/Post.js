@@ -76,15 +76,17 @@ export default class Post extends React.Component {
 		const content = this.fillContent(baseDir)
 		const settings = {
 			dots: true,
-			infinite: true,
+			infinite: false,
 			speed: 500,
 			slidesToShow: 1,
 			slidesToScroll: 1,
 			adaptiveHeight: true,
 			arrows: true
 		};
+		const dark = this.props.darkTheme
+	 	const styles = this.getStyles(dark)
 		return(
-			<Container style={{ width: '100%', height: 'auto', marginBottom: '2.5vh', backgroundColor: 'white', borderColor: '#DDDFE2', 
+			<Container style={{ width: '100%', height: 'auto', marginBottom: '2.5vh', backgroundColor: dark ? '#1c2938' : 'white', borderColor: dark ? '#1C2938' : '#DDDFE2', 
 			borderRadius: 5, borderWidth: 1.5, borderStyle: 'solid', breakInside: 'avoid', display: 'inline-block' }}>
 				<div style={{ display: 'flex',  marginTop: 10, marginBottom: 10, marginLeft: 10 }}>
 					<Image
@@ -114,11 +116,79 @@ export default class Post extends React.Component {
 				</div>
 				<Divider fitted />
 				<div style={{ width: '100%', height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-					<button className="reactionsBtns"><i className="far fa-heart"></i>  Like</button>
-					<button className="reactionsBtns"><i className="far fa-comment"></i>  Comment</button>
+					<button style={styles.reactionsBtns} ref={(ref) => this.btn1 = ref} onMouseOver={() => this.btn1.style.cursor = 'pointer'}>
+						<i className="far fa-heart"></i>  Like
+					</button>
+					<button style={styles.reactionsBtns} ref={(ref) => this.btn2 = ref} onMouseOver={() => this.btn2.style.cursor = 'pointer'}>
+						<i className="far fa-comment"></i>  Comment
+					</button>
 				</div>
 			</Container>
 			);
+	}
+
+	getStyles = (dark) => {
+		const styles = {
+			name: {
+				fontFamily: 'Heebo',
+				fontWeight: 'bolder',
+				fontSize: 18,
+				paddingLeft: 10,
+				paddingTop: 5,
+				color: dark ? 'white' : 'black'
+			},
+			username: {
+				paddingTop: 5,
+				fontFamily: 'Roboto',
+				fontWeight: 'light',
+				color: dark ? '#8596A3' : 'grey',
+				paddingLeft: 5
+			},
+			date: {
+				fontFamily: 'Heebo',
+				fontWeight: 'light',
+				paddingLeft: 10,
+				color: dark ? '#8596A3' : 'grey'
+			},
+			text: {
+				wordWrap: 'break-word',
+				fontSize: 16,
+				fontFamily: 'Heebo',
+				fontWeight: 'light',
+				paddingLeft: 15,
+				paddingRight: 15,
+				color: dark ? 'white' : 'black'
+			},
+			stats: {
+				fontFamily: 'Heebo',
+				fontWeight: 'bolder',
+				color: dark ? 'white' : 'black',
+				fontSize: 16,
+				paddingRight: 5
+			},
+			statsText: {
+				fontFamily: 'Heebo',
+				fontWeight: 'light',
+				color: dark ? '#8596A3' : '#606770',
+				fontSize: 16,
+			},
+			reactionsBtns: {
+				backgroundColor: 'transparent',
+				color: dark ? 'white' : '#606770',
+				border: 'none', 
+				outline: 0,
+				width: '50%',
+				height: '100%',
+				fontFamily: 'Heebo',
+				fontWeight: 'bold',
+				fontSize: 18,
+				marginBottom: 10,
+				transition: '0.4s',
+				padding: 0,
+				margin: 0,
+			}
+		}
+		return styles
 	}
 }
 /*
@@ -126,46 +196,3 @@ export default class Post extends React.Component {
 <button style={{ backgroundColor: 'rgb(230, 230, 230)', border: 'none', width: '32.7%', marginLeft: '0.3%', marginRight: '0.3%', borderRadius: '15px' }}>Comment</button>
 <button style={{ backgroundColor: 'rgb(230, 230, 230)', border: 'none', width: '32.7%', marginLeft: '0.3%', marginRight: '0.3%', borderRadius: '15px' }}>Share</button>
 */
-const styles = {
-	name: {
-		fontFamily: 'Heebo',
-		fontWeight: 'bolder',
-		fontSize: 18,
-		paddingLeft: 10,
-		paddingTop: 5
-	},
-	username: {
-		paddingTop: 5,
-		fontFamily: 'Roboto',
-		fontWeight: 'light',
-		color: 'grey',
-		paddingLeft: 5
-	},
-	date: {
-		fontFamily: 'Heebo',
-		fontWeight: 'light',
-		paddingLeft: 10,
-		color: 'grey'
-	},
-	text: {
-		wordWrap: 'break-word',
-		fontSize: 16,
-		fontFamily: 'Heebo',
-		fontWeight: 'light',
-		paddingLeft: 15,
-		paddingRight: 15
-	},
-	stats: {
-		fontFamily: 'Heebo',
-		fontWeight: 'bolder',
-		color: 'black',
-		fontSize: 16,
-		paddingRight: 5
-	},
-	statsText: {
-		fontFamily: 'Heebo',
-		fontWeight: 'light',
-		color: '#606770',
-		fontSize: 16
-	}
-}
