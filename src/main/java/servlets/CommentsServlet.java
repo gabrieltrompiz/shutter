@@ -28,6 +28,7 @@ public class CommentsServlet extends HttpServlet {
 		ObjectMapper mapper = new ObjectMapper();
 		String json = req.getReader().lines().collect(Collectors.joining());
 		Comment comment = mapper.readValue(json, Comment.class);
+		comment.setUser_id(Integer.parseInt(req.getSession(false).getAttribute("user_id").toString()));
 
 		Response<?> response = UserHandler.addComment(comment);
 
@@ -39,6 +40,7 @@ public class CommentsServlet extends HttpServlet {
 		ObjectMapper mapper = new ObjectMapper();
 		String json = req.getReader().lines().collect(Collectors.joining());
 		Comment comment = mapper.readValue(json, Comment.class);
+		comment.setUser_id(Integer.parseInt(req.getSession(false).getAttribute("user_id").toString()));
 
 		Response<?> response = UserHandler.deleteComment(comment);
 

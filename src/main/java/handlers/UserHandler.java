@@ -267,16 +267,14 @@ public class UserHandler {
 		String query = prop.getValue("insertLike");
 		try {
 			PreparedStatement ps = con.prepareStatement(query);
-			ps.setInt(1, like.getPost_id());
-			ps.setInt(2, like.getUser_id());
+			ps.setInt(1, like.getType_like_id());
+			ps.setInt(2, like.getPost_id());
+			ps.setInt(3, like.getUser_id());
 
-			if (ps.execute()) {
-				response.setStatus(200);
-				response.setMessage("Post Liked");
-			} else {
-				response.setStatus(400);
-				response.setMessage("Couldn't like this post");
-			}
+			ps.execute();
+			response.setStatus(200);
+			response.setMessage("Post Liked");
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			response.setStatus(500);
@@ -292,16 +290,13 @@ public class UserHandler {
 		String query = prop.getValue("deleteLike");
 		try {
 			PreparedStatement ps = con.prepareStatement(query);
-			ps.setInt(1, like.getPost_id());
-			ps.setInt(2, like.getUser_id());
+			ps.setInt(1, like.getUser_id());
+			ps.setInt(2, like.getLike_id());
 
-			if (ps.execute()) {
-				response.setStatus(200);
-				response.setMessage("Post Disliked");
-			} else {
-				response.setStatus(400);
-				response.setMessage("Couldn't dislike this post");
-			}
+			ps.execute();
+			response.setStatus(200);
+			response.setMessage("Post Disliked");
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			response.setStatus(500);
@@ -319,16 +314,12 @@ public class UserHandler {
 		try {
 			PreparedStatement ps = con.prepareStatement(query);
 			ps.setInt(1, like.getType_like_id());
-			ps.setInt(2, like.getPost_id());
-			ps.setInt(3, like.getUser_id());
+			ps.setInt(2, like.getUser_id());
+			ps.setInt(3, like.getLike_id());
 
-			if(ps.execute()) {
-				response.setStatus(200);
-				response.setMessage("Like Updated");
-			} else {
-				response.setStatus(500);
-				response.setMessage("Couldn't Update Like");
-			}
+			ps.execute();
+			response.setStatus(200);
+			response.setMessage("Like Updated");
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -350,13 +341,9 @@ public class UserHandler {
 			ps.setInt(3, comment.getPost_id());
 			ps.setInt(4, comment.getUser_id());
 
-			if(ps.execute()) {
-				response.setStatus(200);
-				response.setMessage("Comment done");
-			} else {
-				response.setStatus(500);
-				response.setMessage("Couldn't do comment");
-			}
+			ps.execute();
+			response.setStatus(200);
+			response.setMessage("Comment Done");
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -373,16 +360,13 @@ public class UserHandler {
 
 		try {
 			PreparedStatement ps = con.prepareStatement(query);
-			ps.setInt(1, comment.getPost_id());
-			ps.setInt(2, comment.getUser_id());
+			ps.setInt(1, comment.getUser_id());
+			ps.setInt(2, comment.getComment_id());
 
-			if(ps.execute()) {
-				response.setStatus(200);
-				response.setMessage("Comment done");
-			} else {
-				response.setStatus(500);
-				response.setMessage("Couldn't do comment");
-			}
+			ps.execute();
+			response.setStatus(200);
+			response.setMessage("Comment Deleted");
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			response.setStatus(500);
