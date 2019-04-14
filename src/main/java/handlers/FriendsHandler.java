@@ -16,20 +16,20 @@ public class FriendsHandler {
     private static PoolManager poolManager = PoolManager.getPoolManager();
     private static PropertiesReader prop = PropertiesReader.getInstance();
 
-    public static Response<Boolean> addFriend(int userId, String user2) {
+    public static Response<Boolean> addFriend(int userId, int friendId) {
         Connection con = poolManager.getConn();
         Response<Boolean> response = new Response<>();
         String query = prop.getValue("addFriend");
         try {
             PreparedStatement ps = con.prepareStatement(query);
             ps.setInt(1, userId);
-            ps.setString(2, user2);
+            ps.setInt(2, friendId);
             ps.setInt(3, userId);
-            ps.setString(4, user2);
+            ps.setInt(4, friendId);
             ps.execute();
             response.setData(true);
             response.setStatus(200);
-            response.setMessage("Friend Request Sent");
+            response.setMessage("Friend Request Accepted");
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -42,20 +42,20 @@ public class FriendsHandler {
         return response;
     }
 
-    public static Response<Boolean> deleteFriend(String user1, String user2) {
+    public static Response<Boolean> deleteFriend(int userId, int friendId) {
         Connection con = poolManager.getConn();
         Response<Boolean> response = new Response<>();
         String query = prop.getValue("deleteFriend");
         try {
             PreparedStatement ps = con.prepareStatement(query);
-            ps.setString(1, user1);
-            ps.setString(2, user2);
-            ps.setString(3, user1);
-            ps.setString(4, user2);
+            ps.setInt(1, userId);
+            ps.setInt(2, friendId);
+            ps.setInt(3, userId);
+            ps.setInt(4, friendId);
             if (ps.execute()) {
                 response.setData(true);
                 response.setStatus(200);
-                response.setMessage("User Deleted");
+                response.setMessage("User Unfriended");
             } else {
                 response.setData(false);
                 response.setStatus(200);

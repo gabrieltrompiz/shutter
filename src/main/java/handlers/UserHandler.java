@@ -109,7 +109,7 @@ public class UserHandler {
 			ps.setString(3, user.getEmail());
 			ps.setDate(4, user.getBirthday());
 			ps.setBoolean(5, user.getSex());
-			ps.setString(6, user.getLowercaseUsername());
+			ps.setInt(6, user.getId());
 			ps.setString(7, user.getPassword());
 			int affectedRows = ps.executeUpdate();
 			if(affectedRows == 1) {
@@ -169,14 +169,14 @@ public class UserHandler {
 		return response;
 	}
 
-	public static Response<ArrayList<Post>> getUserPosts(String username) {
+	public static Response<ArrayList<Post>> getUserPosts(int user_id) {
 		Response<ArrayList<Post>> response = new Response<>();
 		ArrayList<Post> posts = new ArrayList<>();
 		Connection con = poolManager.getConn();
 		String query = prop.getValue("getUserPosts");
 		try {
 			PreparedStatement ps = con.prepareStatement(query);
-			ps.setString(1, username);
+			ps.setInt(1, user_id);
 			ResultSet rs = ps.executeQuery();
 
 			while (rs.next()) {
@@ -186,7 +186,7 @@ public class UserHandler {
 				post.setPostText(rs.getString(3));
 				post.setUrl(rs.getString(4));
 				post.setCreationTime(rs.getTimestamp(5));
-				post.setFileCount(PostsHandler.getFileCount(username, post.getIdPost()));
+				post.setFileCount(PostsHandler.getFileCount(String.valueOf(user_id), post.getIdPost()));
 
 				posts.add(post);
 			}
