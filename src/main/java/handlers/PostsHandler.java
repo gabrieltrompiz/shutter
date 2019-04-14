@@ -1,8 +1,6 @@
 package handlers;
 
-import models.Post;
-import models.Response;
-import models.User;
+import models.*;
 import utilities.PoolManager;
 import utilities.PropertiesReader;
 
@@ -39,6 +37,9 @@ public class PostsHandler {
                 user.setName(rs.getString(7));
                 user.setLastName(rs.getString(8));
                 user.setAvatar(rs.getString(9));
+
+                post.setLikes(getLikes(post.getIdPost(), con));
+                post.setComments(getComments(post.getIdPost(), con));
 
                 post.setUser(user);
                 posts.add(post);
@@ -103,6 +104,9 @@ public class PostsHandler {
                 post.setUrl(rs.getString(4));
                 post.setCreationTime(rs.getTimestamp(5));
 
+                post.setLikes(getLikes(post.getIdPost(), con));
+                post.setComments(getComments(post.getIdPost(), con));
+
                 posts.add(post);
             }
             response.setData(posts);
@@ -129,5 +133,54 @@ public class PostsHandler {
         }
         catch(NullPointerException e) { count = 0; }
         return count;
+    }
+
+    private static ArrayList<Like> getLikes(int post_id, Connection con) {
+        ArrayList<Like> likes = new ArrayList<>();
+        String query = prop.getValue("getLikes");
+
+        try {
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, post_id);
+
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()) {
+                Like like = new Like();
+                like.setLike_id(rs.getInt(1));
+                like.setUser_id(rs.getInt(2));
+                like.setType_like_id(rs.getInt(3));
+                likes.add(like);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return likes;
+    }
+
+    private static ArrayList<Comment> getComments(int post_id, Connection con) {
+        ArrayList<Comment> comments = new ArrayList<>();
+        String query = prop.getValue("getComments");
+
+        try {
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, post_id);
+
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()) {
+                Comment comment = new Comment();
+                comment.setComment_id(rs.getInt(1));
+                comment.setComment_text(rs.getString(2));
+                comment.setComment_url(rs.getString(3));
+                comment.setUser_id(rs.getInt(4));
+
+                comments.add(comment);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return comments;
     }
 }

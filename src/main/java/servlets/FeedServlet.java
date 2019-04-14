@@ -27,7 +27,9 @@ public class FeedServlet extends HttpServlet {
 		Integer id = Integer.parseInt(req.getSession(false).getAttribute("user_id").toString());
 		Integer posts = Integer.parseInt(req.getParameter("posts"));
 		String username = req.getSession(false).getAttribute("username").toString();
+
 		response = PostsHandler.getPosts(id, posts, username);
+
 		mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 		resp.getWriter().print(mapper.writeValueAsString(response));
 	}
