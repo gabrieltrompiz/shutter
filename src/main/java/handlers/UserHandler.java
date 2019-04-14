@@ -261,8 +261,8 @@ public class UserHandler {
 		return false;
 	}
 
-	public static Response<?> likePost(Like like) {
-		Response<?> response = new Response<>();
+	public static Response<Like> likePost(Like like) {
+		Response<Like> response = new Response<>();
 		Connection con = poolManager.getConn();
 		String query = prop.getValue("insertLike");
 		try {
@@ -270,10 +270,17 @@ public class UserHandler {
 			ps.setInt(1, like.getType_like_id());
 			ps.setInt(2, like.getPost_id());
 			ps.setInt(3, like.getUser_id());
-
 			ps.execute();
+
+			query = prop.getValue("getMyLike");
+			ps = con.prepareStatement(query);
+			ResultSet rs = ps.executeQuery();
+			rs.next();
+			like.setLike_id(rs.getInt(1));
+
 			response.setStatus(200);
 			response.setMessage("Post Liked");
+			response.setData(like);
 
 		} catch (SQLException e) {
 			e.printStackTrace();

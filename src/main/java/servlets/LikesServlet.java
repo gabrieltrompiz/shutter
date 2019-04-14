@@ -31,7 +31,7 @@ public class LikesServlet extends HttpServlet {
 		Like like = mapper.readValue(json, Like.class);
 		like.setUser_id(Integer.parseInt(req.getSession(false).getAttribute("user_id").toString()));
 
-		Response<?> response = UserHandler.likePost(like);
+		Response<Like> response = UserHandler.likePost(like);
 
 		resp.getWriter().print(mapper.writeValueAsString(response));
 	}
