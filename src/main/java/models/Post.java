@@ -14,9 +14,10 @@ public class Post {
 	private String url;
 	private Timestamp creationTime;
 	private User user;
-	private ArrayList<Comment> comments;
-	private ArrayList<Like> likes;
-	private int fileCount;
+	private ArrayList<Comment> comments = new ArrayList<>();
+	private ArrayList<Like> likes = new ArrayList<>();
+	private Integer fileCount;
+
 	//Setters
 	public void setIdPost(Integer idPost) { this.idPost = idPost; }
 
@@ -53,7 +54,7 @@ public class Post {
 
 	public User getUser() { return user; }
 
-	public int getFileCount() { return fileCount; }
+	public Integer getFileCount() { return fileCount; }
 
 	public ArrayList<Comment> getComments() {
 		return comments;

@@ -1,8 +1,6 @@
 package handlers;
 
-import models.Post;
-import models.Response;
-import models.User;
+import models.*;
 import utilities.PropertiesReader;
 import utilities.PoolManager;
 import utilities.Pool;
@@ -24,20 +22,6 @@ import java.util.Set;
 public class UserHandler {
 	private static PoolManager poolManager = PoolManager.getPoolManager();
 	private static PropertiesReader prop = PropertiesReader.getInstance();
-
-	private static Set<String> clients = Collections.synchronizedSet(new HashSet<>());
-
-	public static void addClient(String username) {
-		clients.add(username);
-	}
-
-	public static void removeClient(String username) {
-		clients.remove(username);
-	}
-
-	public static Set<String> getClients() {
-		return clients;
-	}
 
 	public static Response<User> login(User user) {
 		Connection con = poolManager.getConn();
@@ -277,5 +261,133 @@ public class UserHandler {
 		return false;
 	}
 
+	public static Response<?> likePost(Like like) {
+		Response<?> response = new Response<>();
+		Connection con = poolManager.getConn();
+		String query = prop.getValue("insertLike");
+		try {
+			PreparedStatement ps = con.prepareStatement(query);
+			ps.setInt(1, like.getPost_id());
+			ps.setInt(2, like.getUser_id());
 
+			if (ps.execute()) {
+				response.setStatus(200);
+				response.setMessage("Post Liked");
+			} else {
+				response.setStatus(400);
+				response.setMessage("Couldn't like this post");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			response.setStatus(500);
+			response.setMessage("DB Connection Error");
+		}
+
+		return response;
+	}
+
+	public static Response<?> dislikePost(Like like) {
+		Response<?> response = new Response<>();
+		Connection con = poolManager.getConn();
+		String query = prop.getValue("deleteLike");
+		try {
+			PreparedStatement ps = con.prepareStatement(query);
+			ps.setInt(1, like.getPost_id());
+			ps.setInt(2, like.getUser_id());
+
+			if (ps.execute()) {
+				response.setStatus(200);
+				response.setMessage("Post Disliked");
+			} else {
+				response.setStatus(400);
+				response.setMessage("Couldn't dislike this post");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			response.setStatus(500);
+			response.setMessage("DB Connection Error");
+		}
+
+		return response;
+	}
+
+	public static Response<?> updateLike(Like like) {
+		Response<?> response = new Response<>();
+		Connection con = poolManager.getConn();
+		String query = prop.getValue("updateLike");
+
+		try {
+			PreparedStatement ps = con.prepareStatement(query);
+			ps.setInt(1, like.getType_like_id());
+			ps.setInt(2, like.getPost_id());
+			ps.setInt(3, like.getUser_id());
+
+			if(ps.execute()) {
+				response.setStatus(200);
+				response.setMessage("Like Updated");
+			} else {
+				response.setStatus(500);
+				response.setMessage("Couldn't Update Like");
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			response.setStatus(500);
+			response.setMessage("DB Connection Error");
+		}
+		return response;
+	}
+
+	public static Response<?> addComment(Comment comment) {
+		Response<?> response = new Response<>();
+		Connection con = poolManager.getConn();
+		String query = prop.getValue("insertComment");
+
+		try {
+			PreparedStatement ps = con.prepareStatement(query);
+			ps.setString(1, comment.getComment_text());
+			ps.setString(2, comment.getComment_url());
+			ps.setInt(3, comment.getPost_id());
+			ps.setInt(4, comment.getUser_id());
+
+			if(ps.execute()) {
+				response.setStatus(200);
+				response.setMessage("Comment done");
+			} else {
+				response.setStatus(500);
+				response.setMessage("Couldn't do comment");
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			response.setStatus(500);
+			response.setMessage("DB Connection Error");
+		}
+		return response;
+	}
+
+	public static Response<?> deleteComment(Comment comment) {
+		Response<?> response = new Response<>();
+		Connection con = poolManager.getConn();
+		String query = prop.getValue("deleteComment");
+
+		try {
+			PreparedStatement ps = con.prepareStatement(query);
+			ps.setInt(1, comment.getPost_id());
+			ps.setInt(2, comment.getUser_id());
+
+			if(ps.execute()) {
+				response.setStatus(200);
+				response.setMessage("Comment done");
+			} else {
+				response.setStatus(500);
+				response.setMessage("Couldn't do comment");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			response.setStatus(500);
+			response.setMessage("DB Connection Error");
+		}
+		return response;
+	}
 }
