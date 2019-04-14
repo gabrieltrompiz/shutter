@@ -85,14 +85,15 @@ export default class Home extends React.Component {
 				height: 80,
 				marginBottom: 30,
 				outline: 0,
-				bordeCrolor: 'rgb(221, 223, 226)',
+				borderColor: dark ? '#1c2938' : 'rgb(221, 223, 226)',
 				borderRadius: 5,
 				borderWidth: 1.5,
 				borderStyle: 'solid',
-				backgroundColor: 'white',
+				backgroundColor: dark ? '#1c2938' : 'white',
 				fontFamily: 'Heebo',
 				fontWeight: 'bolder',
-				fontSize: 16
+				fontSize: 16,
+				color: dark ? 'white' : 'black'
 			}
 		}
 		return styles

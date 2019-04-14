@@ -113,7 +113,6 @@ export default class EditProfile extends React.Component {
 			formData.append('file', this.state.file)
 			await fetch('http://localhost:8080/files', { method: 'PUT', credentials: 'include', body: formData })
 		}
-		await Cache.delete()
 		this.props.changeView('Profile')
     }
 
