@@ -1,12 +1,13 @@
 import React from 'react';
-import { TextArea, Container, Image, Divider, Icon } from 'semantic-ui-react';
+import { TextArea, Container, Image, Divider, Icon, Dimmer, Loader } from 'semantic-ui-react';
 import ReactAudioPlayer from 'react-audio-player'
 import ReactPlayer from 'react-player';
+import Slider from 'react-slick'
 
 export default class Poster extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { typePost: 1, postText: 'What\'s on your mind, ' + this.props.user.name + '?', files: [] }
+		this.state = { typePost: 1, postText: 'What\'s on your mind, ' + this.props.user.name + '?', files: [], loading: false }
 	}
 
 	handleInput = (event, {name, value}) => {
@@ -26,6 +27,8 @@ export default class Poster extends React.Component {
 	}
 
 	post = async () => {
+		this.setState({ loading: true })
+		await new Promise((resolve) => setTimeout(resolve, 500)) // TODO: se quita en produccion, es solo para probar el loading
 		const body = {
 			typePost: this.state.typePost,
 			postText: this.state.postText
@@ -47,9 +50,10 @@ export default class Poster extends React.Component {
 			await fetch(url, { method: 'POST', credentials: 'include', body: body })
 			.then(response => response.json()) 
 			.then(response => {
-				this.setState({ files: [], typePost: 1, postText: '' }, () => this.props.updateFeed())		
+				this.setState({ files: [], typePost: 1, postText: 'What\'s on your mind, ' + this.props.user.name + '?' }, () => this.props.updateFeed())		
 			})
 		}	
+		this.setState({ loading: false })
 	}
 
 	uploadFiles = (e, type) => {
@@ -65,6 +69,15 @@ export default class Poster extends React.Component {
 		const disabled = this.state.postText === "" ?  this.state.files.length === 0 ? true : false : false;
 		const dark = this.props.darkTheme
 		const empty = this.state.postText === 'What\'s on your mind, ' + this.props.user.name + '?'
+		const settings = {
+			dots: true,
+			infinite: false,
+			speed: 500,
+			slidesToShow: 1,
+			slidesToScroll: 1,
+			adaptiveHeight: true,
+			arrows: true
+		};
 		return(
 			<Container style={{ width: 'auto', maxHeight: 'auto', marginTop: '2.5vh', backgroundColor: dark ? '#1c2938' : 'white', borderColor: dark ? '#1c2938' : '#DDDFE2', 
 			borderRadius: 5, borderWidth: 1.5, borderStyle: 'solid', marginBottom: '1.5vh' }}>
@@ -99,15 +112,26 @@ export default class Poster extends React.Component {
 				{this.state.files.length > 0 &&
 				<div style={{ display: 'flex', flexDirection: 'column' }}>
 					<div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', paddingBottom: 20 }}>
-						{this.state.files.map(file => {
+						{this.state.typePost !== 2 && this.state.files.map(file => {
 							const fileObj = URL.createObjectURL(file)
-							if(this.state.typePost === 2) { return <Image src={fileObj} style={{ maxWidth: 'auto', maxHeight: 100, padding: 20 }} key={file.name}/> }
-							else if(this.state.typePost === 3) { return <ReactPlayer url={fileObj} controls style={{ backgroundColor: 'black' }} key={file.name}/> }
+							if(this.state.typePost === 3) { return <ReactPlayer url={fileObj} controls style={{ backgroundColor: 'black' }} key={file.name}/> }
 							else return <ReactAudioPlayer src={fileObj} controls style={{ marginLeft: 50, marginRight: 50, marginTop: 10 }} key={file.name}/> 
 						})}
+						{this.state.typePost === 2 &&
+						<div style={{ paddingTop: 10, paddingBottom: 40, paddingLeft: 40, paddingRight: 40, maxWidth: '100%' }}>
+							<Slider {...settings}>
+								{this.state.files.map((file, i) => {
+									const fileObj = URL.createObjectURL(file)
+									return <div><Image src={fileObj} key={i} style={{ margin: '0 auto' }}></Image></div>
+								})} 
+							</Slider>
+						</div>}
 					</div>
 					<button className='posterButtons' onClick={() => this.setState({ files: [] })} style={{ alignSelf: 'flex-end', marginRight: 10 }}>Delete Files</button>
 				</div>}
+				<Loader inline='centered' active={this.state.loading} inverted={dark}>
+					<span style={{ color: dark ? 'white' : '' }}>Posting</span>
+				</Loader>
 			</Container>
 			);
 	}
