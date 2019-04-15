@@ -24,7 +24,7 @@ public class FriendServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
 		Integer userId = Integer.parseInt(req.getSession(false).getAttribute("user_id").toString());
-		Integer friendId = Integer.parseInt(req.getParameter("friend_id"));
+		Integer friendId = Integer.parseInt(req.getParameter("friendId"));
 		Response<Boolean> response = FriendsHandler.addFriend(userId, friendId);
 		mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 		resp.getWriter().print(mapper.writeValueAsString(response));

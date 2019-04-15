@@ -53,7 +53,6 @@ public class LikesServlet extends HttpServlet {
 		ObjectMapper mapper = new ObjectMapper();
 		Integer likeId = Integer.parseInt(req.getParameter("likeId"));
 		Integer userId = Integer.parseInt(req.getSession(false).getAttribute("user_id").toString());
-		System.out.println(userId);
 		Response<?> response = UserHandler.dislikePost(userId, likeId);
 
 		resp.getWriter().print(mapper.writeValueAsString(response));

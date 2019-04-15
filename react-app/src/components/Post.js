@@ -18,7 +18,7 @@ export default class Post extends React.Component {
 
 	checkLike = () => {
 		this.props.post.likes.forEach(like => {
-			if (like.userId === this.props.ownId) {
+			if (like.userId === this.props.ownUser.id) {
 				this.setState({ typeLikeId: like.typeLikeId, likeId: like.likeId, liked: true })
 			}
 		});
@@ -79,7 +79,7 @@ export default class Post extends React.Component {
 		return content;
 	}
 
-	handleLike = async typeLikeId => {  //TODO Terminar este verguero y rectificar que sirva
+	handleLike = async typeLikeId => { 
 		let body = {}
 		if(this.state.typeLikeId === -1) {
 			body = { typeLikeId: typeLikeId, postId: this.props.post.idPost }
@@ -87,7 +87,7 @@ export default class Post extends React.Component {
 				.then(response => response.json())
 				.then(response => {
 					if(response.status === 200) {
-						this.setState({ typeLikeId: typeLikeId, likeId: response.data.likeId, likesVisible: false, liked: true, coefficient: 1 })
+						this.setState(() => ({ typeLikeId: typeLikeId, likeId: response.data.likeId, likesVisible: false, liked: true, coefficient: this.state.coefficient + 1 }))
 					} else {
 						console.log(response.message);
 						this.setState({ typeLikeId: -1, likeId: -1 })
@@ -148,16 +148,22 @@ export default class Post extends React.Component {
 		return(
 			<Container style={{ width: '100%', height: 'auto', marginBottom: '2.5vh', backgroundColor: dark ? '#1c2938' : 'white', borderColor: dark ? '#1C2938' : '#DDDFE2', 
 			borderRadius: 5, borderWidth: 1.5, borderStyle: 'solid', breakInside: 'avoid', display: 'inline-block', position: 'relative' }}>
-				<div style={{ display: 'flex',  marginTop: 10, marginBottom: 10, marginLeft: 10 }}>
-					<Image
-						src={source}
-						style={{ width: 50, height: 50, borderRadius: '100%' }}
-					/>
-					<div style={{ paddingTop: 5 }}>
-						<span style={styles.name}>{this.props.post.user.name + " " + this.props.post.user.lastName}</span>
-						<span style={styles.username}>{"· @" + this.props.post.user.username}</span><br/>
-						<span style={styles.date}>{this.state.date}</span>
+				<div style={{ display: 'flex',  marginTop: 10, marginBottom: 10, marginLeft: 10, justifyContent: 'space-between' }}>
+					<div style={{ display: 'flex' }}>
+						<Image
+							src={source}
+							style={{ width: 50, height: 50, borderRadius: '100%' }}
+						/>
+						<div style={{ paddingTop: 5 }}>
+							<span style={styles.name}>{this.props.post.user.name + " " + this.props.post.user.lastName}</span>
+							<span style={styles.username}>{"· @" + this.props.post.user.username}</span><br/>
+							<span style={styles.date}>{this.state.date}</span>
+						</div>
 					</div>
+					{this.props.post.user.id === this.props.ownId && 
+					<button style={styles.threeDots}>
+						<i className="fas fa-ellipsis-h"></i>
+					</button>}
 				</div>
 				<p style={styles.text}>{this.props.post.postText}</p>
 				{this.props.post.typePost !== 1 && this.props.post.typePost !== 2 && 
@@ -280,13 +286,17 @@ export default class Post extends React.Component {
 				marginTop: 5,
 				marginBottom: 5,
 				borderRadius: 5
+			},
+			threeDots: {
+				outline: 0,
+				border: 'none',
+				backgroundColor: 'transparent',
+				color: dark ? 'white' : 'black',
+				marginRight: 5,
+				textAlign: 'center',
+				height: 'fit-content'
 			}
 		}
 		return styles
 	}
 }
-/*
-<button style={{ backgroundColor: 'rgb(230, 230, 230)', border: 'none', width: '32.7%', marginLeft: '0.3%', marginRight: '0.3%', borderRadius: '15px' }}>Likes</button>
-<button style={{ backgroundColor: 'rgb(230, 230, 230)', border: 'none', width: '32.7%', marginLeft: '0.3%', marginRight: '0.3%', borderRadius: '15px' }}>Comment</button>
-<button style={{ backgroundColor: 'rgb(230, 230, 230)', border: 'none', width: '32.7%', marginLeft: '0.3%', marginRight: '0.3%', borderRadius: '15px' }}>Share</button>
-*/
