@@ -231,9 +231,9 @@ public class UserHandler {
 		String query = prop.getValue("insertLike");
 		try {
 			PreparedStatement ps = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-			ps.setInt(1, like.getTypeLikeId());
+			ps.setInt(1, like.getUserId());
 			ps.setInt(2, like.getPostId());
-			ps.setInt(3, like.getUserId());
+			ps.setInt(3, like.getTypeLikeId());
 			ps.execute();
 
 			ResultSet rs = ps.getGeneratedKeys();
@@ -253,14 +253,14 @@ public class UserHandler {
 		return response;
 	}
 
-	public static Response<?> dislikePost(Like like) {
+	public static Response<?> dislikePost(int userId, int likeId) {
 		Response<?> response = new Response<>();
 		Connection con = poolManager.getConn();
 		String query = prop.getValue("deleteLike");
 		try {
 			PreparedStatement ps = con.prepareStatement(query);
-			ps.setInt(1, like.getUserId());
-			ps.setInt(2, like.getLikeId());
+			ps.setInt(1, userId);
+			ps.setInt(2, likeId);
 
 			ps.execute();
 			response.setStatus(200);
@@ -275,16 +275,16 @@ public class UserHandler {
 		return response;
 	}
 
-	public static Response<?> updateLike(Like like) {
+	public static Response<?> updateLike(int userId, int likeId, int typeLikeId) {
 		Response<?> response = new Response<>();
 		Connection con = poolManager.getConn();
 		String query = prop.getValue("updateLike");
 
 		try {
 			PreparedStatement ps = con.prepareStatement(query);
-			ps.setInt(1, like.getTypeLikeId());
-			ps.setInt(2, like.getUserId());
-			ps.setInt(3, like.getLikeId());
+			ps.setInt(1, typeLikeId);
+			ps.setInt(2, userId);
+			ps.setInt(3, likeId);
 
 			ps.execute();
 			response.setStatus(200);

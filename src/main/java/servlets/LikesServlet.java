@@ -39,11 +39,11 @@ public class LikesServlet extends HttpServlet {
 	@Override
 	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
-		String json = req.getReader().lines().collect(Collectors.joining());
-		Like like = mapper.readValue(json, Like.class);
-		like.setUserId(Integer.parseInt(req.getSession(false).getAttribute("user_id").toString()));
-
-		Response<?> response = UserHandler.updateLike(like);
+		Integer likeId = Integer.parseInt(req.getParameter("id"));
+		Integer typeLikeId = Integer.parseInt(req.getParameter("type"));
+		Integer userId = Integer.parseInt(req.getSession(false).getAttribute("user_id").toString());
+		System.out.println(userId);
+		Response<?> response = UserHandler.updateLike(userId, likeId, typeLikeId);
 
 		resp.getWriter().print(mapper.writeValueAsString(response));
 	}
@@ -51,11 +51,10 @@ public class LikesServlet extends HttpServlet {
 	@Override
 	protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
-		String json = req.getReader().lines().collect(Collectors.joining());
-		Like like = mapper.readValue(json, Like.class);
-		like.setUserId(Integer.parseInt(req.getSession(false).getAttribute("user_id").toString()));
-
-		Response<?> response = UserHandler.dislikePost(like);
+		Integer likeId = Integer.parseInt(req.getParameter("likeId"));
+		Integer userId = Integer.parseInt(req.getSession(false).getAttribute("user_id").toString());
+		System.out.println(userId);
+		Response<?> response = UserHandler.dislikePost(userId, likeId);
 
 		resp.getWriter().print(mapper.writeValueAsString(response));
 	}

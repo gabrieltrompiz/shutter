@@ -7,24 +7,21 @@ import Slider from "react-slick";
 export default class Post extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { typeLike: -1, likeId: -1, commentsVisible: false };
+		this.state = { typeLikeId: -1, likeId: -1, commentsVisible: false, likesVisible: false, liked: false, coefficient: 0 };
 	}
 
 	componentDidMount = () => {
 		this.setState({ date: 'loading...'})
 		setInterval(() => this.setState({ date: this.getBeautifiedDate() }), 1000)
-
-		if(this.checkLike())
-			this.setState({ liked: true })
+		this.checkLike()
 	}
 
 	checkLike = () => {
 		this.props.post.likes.forEach(like => {
-			if (like.userId === this.state.userId)
-				return true;
+			if (like.userId === this.props.ownId) {
+				this.setState({ typeLikeId: like.typeLikeId, likeId: like.likeId, liked: true })
+			}
 		});
-
-		return false;
 	}
 
 	getBeautifiedDate = () => {
@@ -82,26 +79,43 @@ export default class Post extends React.Component {
 		return content;
 	}
 
-	handleLike = async typeLike => {  //TODO Terminar este verguero y rectificar que sirva
+	handleLike = async typeLikeId => {  //TODO Terminar este verguero y rectificar que sirva
 		let body = {}
-		if(this.state.typeLike === -1) {
-			body = { typeLikeId: typeLike, postId: this.props.post.id }
-			this.setState({ typeLike: typeLike, likeId: 0 })
+		if(this.state.typeLikeId === -1) {
+			body = { typeLikeId: typeLikeId, postId: this.props.post.idPost }
 			await fetch('http://localhost:8080/likes', { method: 'POST', body: JSON.stringify(body), credentials: 'include' })
 				.then(response => response.json())
 				.then(response => {
 					if(response.status === 200) {
-						this.setState({ typeLike: response.data.typeLike, likeId: response.data.likeId })
+						this.setState({ typeLikeId: typeLikeId, likeId: response.data.likeId, likesVisible: false, liked: true, coefficient: 1 })
 					} else {
 						console.log(response.message);
-						this.setState({ typeLike: -1, likeId: -1 })
+						this.setState({ typeLikeId: -1, likeId: -1 })
 					}
 				});
 		} else {
-			if (typeLike === this.state.typeLike) {
-				// await fetch('http://localhost:8080/likes', {method: 'DELETE', body: JSON.stringify(body), credentials: 'include'})
+			if (typeLikeId === this.state.typeLikeId) {
+				await fetch('http://localhost:8080/likes?likeId=' + this.state.likeId, { method: 'DELETE', credentials: 'include' })
+				.then(response => response.json())
+				.then(response => {
+					if(response.status === 200) {
+						this.setState(() => ({ liked: false, coefficient: this.state.coefficient - 1, typeLikeId: -1, likeId: -1, likesVisible: false }))
+					} else {
+						console.log(response.message)
+					}
+				})
+
 			} else {
-				// await fetch('http://localhost:8080/likes', {method: 'PUT', body: JSON.stringify(body), credentials: 'include'})
+				body = { typeLikeId: typeLikeId, likeId: this.state.likeId }
+				await fetch('http://localhost:8080/likes?id=' + this.state.likeId + "&type=" + typeLikeId, {method: 'PUT', body: JSON.stringify(body), credentials: 'include'})
+				.then(response => response.json())
+				.then(response => {
+					if(response.status === 200) {
+						this.setState({ typeLikeId: typeLikeId, likesVisible: false })
+					} else {
+						console.log(response.message)
+					}
+				})
 			}
 			
 		}
@@ -109,6 +123,10 @@ export default class Post extends React.Component {
 
 	handleCommentButton = () => {
 
+	}
+
+	toggleLike = () => {
+		this.setState({ likesVisible: !this.state.likesVisible })
 	}
 
 	render() {
@@ -126,9 +144,10 @@ export default class Post extends React.Component {
 		};
 		const dark = this.props.darkTheme
 	 	const styles = this.getStyles(dark)
+		const liked = this.state.liked
 		return(
 			<Container style={{ width: '100%', height: 'auto', marginBottom: '2.5vh', backgroundColor: dark ? '#1c2938' : 'white', borderColor: dark ? '#1C2938' : '#DDDFE2', 
-			borderRadius: 5, borderWidth: 1.5, borderStyle: 'solid', breakInside: 'avoid', display: 'inline-block' }}>
+			borderRadius: 5, borderWidth: 1.5, borderStyle: 'solid', breakInside: 'avoid', display: 'inline-block', position: 'relative' }}>
 				<div style={{ display: 'flex',  marginTop: 10, marginBottom: 10, marginLeft: 10 }}>
 					<Image
 						src={source}
@@ -152,25 +171,47 @@ export default class Post extends React.Component {
 					</Slider>
 				</div>}
 				<div style={{ width: '96%', height: 'auto', display: 'flex', alignItems: 'center', marginLeft: '2%', marginBottom: 10 }}>
-					<span style={{ paddingRight: 20 }}><span style={styles.stats}>{this.props.post.likes.length}</span><span style={styles.statsText}>{this.props.post.likes.length === 1 ? 'Like': 'Likes'}</span></span>
+					<span style={{ paddingRight: 20 }}>
+						<span style={styles.stats}>{this.props.post.likes.length + this.state.coefficient}</span>
+						<span style={styles.statsText}>{this.props.post.likes.length + this.state.coefficient === 1 ? 'Like': 'Likes'}</span>
+					</span>
 					<span><span style={styles.stats}>{this.props.post.comments.length}</span><span style={styles.statsText}>{this.props.post.comments.length === 1 ? 'Comment': 'Comments'}</span></span>
 				</div>
 				<Divider fitted />
 				<div style={{ width: '100%', height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
 					<button style={styles.reactionsBtns} ref={(ref) => this.btn1 = ref} onMouseOver={() => this.btn1.style.cursor = 'pointer'}
-					onClick={() => this.handleLike()}>
-						<i className="far fa-heart"></i>  Like
+					onClick={() => this.toggleLike()}>
+						<i className={(liked ? "fas" : "far") + " fa-heart"}></i>  {liked ? 'Liked' : 'Like'}
 					</button>
 					<button style={styles.reactionsBtns} ref={(ref) => this.btn2 = ref} onMouseOver={() => this.btn2.style.cursor = 'pointer'}
 					onClick={() => this.handleCommentButton()}>
 						<i className="far fa-comment"></i>  Comment
 					</button>
 				</div>
+				{this.state.likesVisible && 
+				<div style={{ position: 'absolute', width: '50%', height: 60, backgroundColor: dark ? '#15202B' : 'lightgrey', borderRadius: 5, display: 'flex', justifyContent: 'space-between',
+				marginTop: -105, zIndex: 1, paddingLeft: 10, paddingRight: 10 }} onBlur={() => this.setState({ likesVisible: false })}>
+					<button style={this.getStyles(dark, 1).likeBtns} ref={(ref) => this.like1 = ref} onMouseOver={() => this.like1.style.cursor = 'pointer'} onClick={() => this.handleLike(1)}>
+						Like1
+					</button>
+					<button style={this.getStyles(dark, 2).likeBtns} ref={(ref) => this.like2 = ref} onMouseOver={() => this.like2.style.cursor = 'pointer'} onClick={() => this.handleLike(2)}>
+						Like2
+					</button>
+					<button style={this.getStyles(dark, 3).likeBtns} ref={(ref) => this.like3 = ref} onMouseOver={() => this.like3.style.cursor = 'pointer'} onClick={() => this.handleLike(3)}>
+						Like3
+					</button>
+					<button style={this.getStyles(dark, 4).likeBtns} ref={(ref) => this.like4 = ref} onMouseOver={() => this.like4.style.cursor = 'pointer'} onClick={() => this.handleLike(4)}>
+						Like4
+					</button>
+					<button style={this.getStyles(dark, 5).likeBtns} ref={(ref) => this.like5 = ref} onMouseOver={() => this.like5.style.cursor = 'pointer'} onClick={() => this.handleLike(5)}>
+						Like5
+					</button>
+				</div>}
 			</Container>
 			);
 	}
 
-	getStyles = (dark) => {
+	getStyles = (dark, button) => {
 		const styles = {
 			name: {
 				fontFamily: 'Heebo',
@@ -229,6 +270,16 @@ export default class Post extends React.Component {
 				transition: '0.4s',
 				padding: 0,
 				margin: 0,
+			},
+			likeBtns: {
+				outline: 0,
+				border: 'none',
+				backgroundColor: this.state.typeLikeId === button ? (dark ? '#1d2d3c' : '#e7e8e9') : 'transparent',
+				fontFamily: 'Roboto',
+				color: dark ? 'white' : 'black',
+				marginTop: 5,
+				marginBottom: 5,
+				borderRadius: 5
 			}
 		}
 		return styles
