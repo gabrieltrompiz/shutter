@@ -197,9 +197,10 @@ export default class Post extends React.Component {
 					<Divider fitted />
 					{this.props.post.likes.map((like, i) => {
 						let user = this.props.getUserById(like.userId)
+						const likeId = user === null ? this.state.typeLikeId : like.typeLikeId
 						if(user === null) { user = this.props.ownUser }
 						return (<div style={{ display: 'flex', padding: 5, paddingLeft: 10 }} key={i}>
-							{this.getIcon(like.typeLikeId, styles)}
+							{this.getIcon(likeId, styles)}
 							<span style={styles.likesName}>{user.name + " " + user.lastName}</span>
 							<span style={styles.likesUsername}>{"· @" + user.username}</span>
 						</div>)
