@@ -31,16 +31,6 @@ export default class Dashboard extends React.Component {
 		// this.disconnectSockets();
 	}
 
-	getUserById = id => {
-		let user = null
-		this.state.ownFriendList.forEach(friend => {
-			if(friend.id === id) {
-				user = { name: friend.name, lastName: friend.lastName, username: friend.username }
-			}
-		})
-		return user;
-	}
-
 	checkIfFriend = () => {
 		let isFriend = false;
 		this.state.ownFriendList.forEach(friend => {
@@ -133,18 +123,16 @@ export default class Dashboard extends React.Component {
 			case 'Home':
 				return (
 					<div style={{ display: 'flex' }}>
-						<Home user={this.props.user} changeView={this.handleChangeView} changeUser={this.props.changeUser} handleLoggedIn={this.props.handleLoggedIn} darkTheme={this.props.darkTheme}
-						getUserById={this.getUserById}/>
+						<Home user={this.props.user} changeView={this.handleChangeView} changeUser={this.props.changeUser} handleLoggedIn={this.props.handleLoggedIn} darkTheme={this.props.darkTheme}/>
 						<Inbox darkTheme={this.props.darkTheme}/>
 					</div>);
 			
 			case 'Profile':
-				return <Profile user={this.props.user} changeView={this.handleChangeView} changeUser={this.changeUser} own ownFriendList={this.state.ownFriendList} darkTheme={this.props.darkTheme}
-				getUserById={this.getUserById}/>;
+				return <Profile user={this.props.user} changeView={this.handleChangeView} changeUser={this.changeUser} own ownFriendList={this.state.ownFriendList} darkTheme={this.props.darkTheme}/>;
 			
 			case 'OtherUserProfile':
 				return <Profile user={this.state.anotherUser} changeView={this.handleChangeView} changeUser={this.changeUser} own={this.props.user.username === this.state.anotherUser.username}
-				isFriend={this.checkIfFriend()} updateDashboard={this.updateDashboard} darkTheme={this.props.darkTheme} ownUser={this.props.user} getUserById={this.getUserById}/>;
+				isFriend={this.checkIfFriend()} updateDashboard={this.updateDashboard} darkTheme={this.props.darkTheme} ownUser={this.props.user}/>;
 
 			case 'EditProfile':
 				return <EditProfile user={this.props.user} changeView={this.handleChangeView} changeUser={this.props.changeUser} darkTheme={this.props.darkTheme}/>;

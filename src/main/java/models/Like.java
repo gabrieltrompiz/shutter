@@ -10,6 +10,7 @@ public class Like {
 	private Integer userId;
 	private Integer postId;
 	private Integer typeLikeId;
+	private User user;
 	//Setters
 	public void setLikeId(Integer likeId) {
 		this.likeId = likeId;
@@ -27,6 +28,7 @@ public class Like {
 		this.typeLikeId = typeLikeId;
 	}
 
+	public void setUser(User user) { this.user = user; }
 	//Getters
 	public Integer getLikeId() {
 		return likeId;
@@ -43,4 +45,6 @@ public class Like {
 	public Integer getTypeLikeId() {
 		return typeLikeId;
 	}
+
+	public User getUser() { return user; }
 }
