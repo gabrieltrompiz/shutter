@@ -124,7 +124,7 @@ public class PostsHandler {
         return response;
     }
 
-    public static int getFileCount(String username, int id) {
+    private static int getFileCount(String username, int id) {
         String baseDir = System.getenv("SystemDrive") + "/web2p1/assets/users/" + username + "/" + id + "/";
         int count;
         try {
@@ -146,9 +146,9 @@ public class PostsHandler {
             ResultSet rs = ps.executeQuery();
             while(rs.next()) {
                 Like like = new Like();
-                like.setLike_id(rs.getInt(1));
-                like.setUser_id(rs.getInt(2));
-                like.setType_like_id(rs.getInt(3));
+                like.setLikeId(rs.getInt(1));
+                like.setUserId(rs.getInt(2));
+                like.setTypeLikeId(rs.getInt(3));
                 likes.add(like);
             }
         } catch (SQLException e) {
@@ -169,10 +169,10 @@ public class PostsHandler {
             ResultSet rs = ps.executeQuery();
             while(rs.next()) {
                 Comment comment = new Comment();
-                comment.setComment_id(rs.getInt(1));
-                comment.setComment_text(rs.getString(2));
-                comment.setComment_url(rs.getString(3));
-                comment.setUser_id(rs.getInt(4));
+                comment.setCommentId(rs.getInt(1));
+                comment.setCommentText(rs.getString(2));
+                comment.setCommentUrl(rs.getString(3));
+                comment.setUserId(rs.getInt(4));
 
                 comments.add(comment);
             }

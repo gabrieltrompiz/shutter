@@ -169,42 +169,6 @@ public class UserHandler {
 		return response;
 	}
 
-	public static Response<ArrayList<Post>> getUserPosts(int user_id) {
-		Response<ArrayList<Post>> response = new Response<>();
-		ArrayList<Post> posts = new ArrayList<>();
-		Connection con = poolManager.getConn();
-		String query = prop.getValue("getUserPosts");
-		try {
-			PreparedStatement ps = con.prepareStatement(query);
-			ps.setInt(1, user_id);
-			ResultSet rs = ps.executeQuery();
-
-			while (rs.next()) {
-				Post post = new Post();
-				post.setIdPost(rs.getInt(1));
-				post.setTypePost(rs.getInt(2));
-				post.setPostText(rs.getString(3));
-				post.setUrl(rs.getString(4));
-				post.setCreationTime(rs.getTimestamp(5));
-				post.setFileCount(PostsHandler.getFileCount(String.valueOf(user_id), post.getIdPost()));
-
-				posts.add(post);
-			}
-			response.setData(posts);
-			response.setMessage("User Posts Returned");
-			response.setStatus(200);
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-			response.setMessage("DB Connection Error");
-			response.setStatus(500);
-		} finally {
-			poolManager.returnConn(con);
-		}
-
-		return response;
-	}
-
 	private static void getUserData(ResultSet rs, User user) throws SQLException {
 	    user.setId(rs.getInt(1));
 		user.setUsername(rs.getString(2));
@@ -266,17 +230,15 @@ public class UserHandler {
 		Connection con = poolManager.getConn();
 		String query = prop.getValue("insertLike");
 		try {
-			PreparedStatement ps = con.prepareStatement(query);
-			ps.setInt(1, like.getType_like_id());
-			ps.setInt(2, like.getPost_id());
-			ps.setInt(3, like.getUser_id());
+			PreparedStatement ps = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+			ps.setInt(1, like.getTypeLikeId());
+			ps.setInt(2, like.getPostId());
+			ps.setInt(3, like.getUserId());
 			ps.execute();
 
-			query = prop.getValue("getMyLike");
-			ps = con.prepareStatement(query);
-			ResultSet rs = ps.executeQuery();
+			ResultSet rs = ps.getGeneratedKeys();
 			rs.next();
-			like.setLike_id(rs.getInt(1));
+			like.setLikeId(rs.getInt(1));
 
 			response.setStatus(200);
 			response.setMessage("Post Liked");
@@ -297,8 +259,8 @@ public class UserHandler {
 		String query = prop.getValue("deleteLike");
 		try {
 			PreparedStatement ps = con.prepareStatement(query);
-			ps.setInt(1, like.getUser_id());
-			ps.setInt(2, like.getLike_id());
+			ps.setInt(1, like.getUserId());
+			ps.setInt(2, like.getLikeId());
 
 			ps.execute();
 			response.setStatus(200);
@@ -320,9 +282,9 @@ public class UserHandler {
 
 		try {
 			PreparedStatement ps = con.prepareStatement(query);
-			ps.setInt(1, like.getType_like_id());
-			ps.setInt(2, like.getUser_id());
-			ps.setInt(3, like.getLike_id());
+			ps.setInt(1, like.getTypeLikeId());
+			ps.setInt(2, like.getUserId());
+			ps.setInt(3, like.getLikeId());
 
 			ps.execute();
 			response.setStatus(200);
@@ -343,10 +305,10 @@ public class UserHandler {
 
 		try {
 			PreparedStatement ps = con.prepareStatement(query);
-			ps.setString(1, comment.getComment_text());
-			ps.setString(2, comment.getComment_url());
-			ps.setInt(3, comment.getPost_id());
-			ps.setInt(4, comment.getUser_id());
+			ps.setString(1, comment.getCommentText());
+			ps.setString(2, comment.getCommentUrl());
+			ps.setInt(3, comment.getPostId());
+			ps.setInt(4, comment.getUserId());
 
 			ps.execute();
 			response.setStatus(200);
@@ -367,8 +329,8 @@ public class UserHandler {
 
 		try {
 			PreparedStatement ps = con.prepareStatement(query);
-			ps.setInt(1, comment.getUser_id());
-			ps.setInt(2, comment.getComment_id());
+			ps.setInt(1, comment.getUserId());
+			ps.setInt(2, comment.getCommentId());
 
 			ps.execute();
 			response.setStatus(200);

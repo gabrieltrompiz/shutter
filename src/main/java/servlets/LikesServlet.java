@@ -29,7 +29,7 @@ public class LikesServlet extends HttpServlet {
 		ObjectMapper mapper = new ObjectMapper();
 		String json = req.getReader().lines().collect(Collectors.joining());
 		Like like = mapper.readValue(json, Like.class);
-		like.setUser_id(Integer.parseInt(req.getSession(false).getAttribute("user_id").toString()));
+		like.setUserId(Integer.parseInt(req.getSession(false).getAttribute("user_id").toString()));
 
 		Response<Like> response = UserHandler.likePost(like);
 
@@ -41,7 +41,7 @@ public class LikesServlet extends HttpServlet {
 		ObjectMapper mapper = new ObjectMapper();
 		String json = req.getReader().lines().collect(Collectors.joining());
 		Like like = mapper.readValue(json, Like.class);
-		like.setUser_id(Integer.parseInt(req.getSession(false).getAttribute("user_id").toString()));
+		like.setUserId(Integer.parseInt(req.getSession(false).getAttribute("user_id").toString()));
 
 		Response<?> response = UserHandler.updateLike(like);
 
@@ -53,7 +53,7 @@ public class LikesServlet extends HttpServlet {
 		ObjectMapper mapper = new ObjectMapper();
 		String json = req.getReader().lines().collect(Collectors.joining());
 		Like like = mapper.readValue(json, Like.class);
-		like.setUser_id(Integer.parseInt(req.getSession(false).getAttribute("user_id").toString()));
+		like.setUserId(Integer.parseInt(req.getSession(false).getAttribute("user_id").toString()));
 
 		Response<?> response = UserHandler.dislikePost(like);
 

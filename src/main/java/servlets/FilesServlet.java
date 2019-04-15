@@ -69,7 +69,6 @@ public class FilesServlet extends HttpServlet {
                 i++;
                 fileContent = file.getInputStream();
                 fileObj = new File(baseDir + i + extension);
-                System.out.println(baseDir + i + extension);
                 fileObj.getParentFile().mkdirs();
                 out = new FileOutputStream(fileObj);
                 int read = 0;

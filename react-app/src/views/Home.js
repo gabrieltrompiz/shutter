@@ -15,7 +15,7 @@ export default class Home extends React.Component {
 			if(response.status === 200) {
 				this.setState({ posts: response.data, lastPost: response.data[response.data.length - 1] });
 			}
-		});
+		});		
 	}
 
 	chargeMorePosts = () => {
@@ -33,7 +33,7 @@ export default class Home extends React.Component {
 				<Poster user={this.state.user} updateFeed={this.updateFeed} darkTheme={this.props.darkTheme}/>
 				{this.state.posts.map(post => {
 					return(
-						<Post post={post} key={post.idPost} darkTheme={this.props.darkTheme} userId={this.props.user.id}/>
+						<Post post={post} key={post.idPost} darkTheme={this.props.darkTheme}/>
 					)
 				})}
 				{this.state.posts.length === 0 && 

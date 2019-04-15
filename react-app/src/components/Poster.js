@@ -7,22 +7,22 @@ import Slider from 'react-slick'
 export default class Poster extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { typePost: 1, postText: 'What\'s on your mind, ' + this.props.user.name + '?', files: [], loading: false }
+		this.state = { typePost: 1, postText: 'What\'s on your mind, ' + this.props.user.name + '?', files: [], loading: false, empty: true }
 	}
 
 	handleInput = (event, {name, value}) => {
-		this.setState({ postText: value })
+		this.setState({ postText: value, empty: false })
 	}
 
 	checkFocus = () => {
 		if(this.state.postText === 'What\'s on your mind, ' + this.props.user.name + '?') {
-			this.setState({ postText: '' })
+			this.setState({ postText: '', empty: true })
 		}
 	}
 
 	checkFocusOut = () => {
 		if(this.state.postText.trim() === '') {
-			this.setState({ postText: 'What\'s on your mind, ' + this.props.user.name + '?' })
+			this.setState({ postText: 'What\'s on your mind, ' + this.props.user.name + '?', empty: true  })
 		}
 	}
 
@@ -31,7 +31,7 @@ export default class Poster extends React.Component {
 		await new Promise((resolve) => setTimeout(resolve, 500)) // TODO: se quita en produccion, es solo para probar el loading
 		const body = {
 			typePost: this.state.typePost,
-			postText: this.state.postText
+			postText: !this.state.empty ? this.state.postText : ''
 		}
 		let id = -1;
 		await fetch('http://localhost:8080/posts?', { method: 'POST', credentials: 'include', body: JSON.stringify(body) })
@@ -50,7 +50,7 @@ export default class Poster extends React.Component {
 			await fetch(url, { method: 'POST', credentials: 'include', body: body })
 			.then(response => response.json()) 
 			.then(response => {
-				this.setState({ files: [], typePost: 1, postText: 'What\'s on your mind, ' + this.props.user.name + '?' }, () => this.props.updateFeed())		
+				this.setState({ files: [], typePost: 1, postText: 'What\'s on your mind, ' + this.props.user.name + '?', empty: true }, () => this.props.updateFeed())		
 			})
 		}	
 		this.setState({ loading: false })
@@ -66,9 +66,9 @@ export default class Poster extends React.Component {
 
 	render() {
 		const source = 'http://localhost:8080/files?type=avatar&file=' + this.props.user.username + '.png'
-		const disabled = this.state.postText === "" ?  this.state.files.length === 0 ? true : false : false;
+		const disabled = this.state.files.length === 0 ? true : false;
 		const dark = this.props.darkTheme
-		const empty = this.state.postText === 'What\'s on your mind, ' + this.props.user.name + '?'
+		const empty = this.state.empty
 		const settings = {
 			dots: true,
 			infinite: false,
@@ -105,7 +105,7 @@ export default class Poster extends React.Component {
 						<Icon name='file audio' style={{ color: 'white' }}/>Audio
 					</button>
 					<div style={{ width: '35%' }}></div>
-					<button id='postBtn' onClick={() => this.post()} disabled={disabled}>
+					<button id='postBtn' onClick={() => this.post()} disabled={disabled && empty}>
 						Post <Icon name='send' style={{ color: 'white' }}/>
 					</button>
 				</div>

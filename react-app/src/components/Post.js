@@ -20,7 +20,7 @@ export default class Post extends React.Component {
 
 	checkLike = () => {
 		this.props.post.likes.forEach(like => {
-			if (like.user_id === this.state.userId)
+			if (like.userId === this.state.userId)
 				return true;
 		});
 
@@ -85,13 +85,13 @@ export default class Post extends React.Component {
 	handleLike = async typeLike => {  //TODO Terminar este verguero y rectificar que sirva
 		let body = {}
 		if(this.state.typeLike === -1) {
-			body = {type_like_id: typeLike, post_id: this.props.post.id}
+			body = { typeLikeId: typeLike, postId: this.props.post.id }
 			this.setState({ typeLike: typeLike, likeId: 0 })
-			await fetch('http://localhost:8080/likes', {method: 'POST', body: JSON.stringify(body), credentials: 'include'})
+			await fetch('http://localhost:8080/likes', { method: 'POST', body: JSON.stringify(body), credentials: 'include' })
 				.then(response => response.json())
 				.then(response => {
 					if(response.status === 200) {
-						this.setState({ typeLike: response.data.type_like_id, likeId: response.data.like_id })
+						this.setState({ typeLike: response.data.typeLike, likeId: response.data.likeId })
 					} else {
 						console.log(response.message);
 						this.setState({ typeLike: -1, likeId: -1 })
@@ -137,7 +137,7 @@ export default class Post extends React.Component {
 					<div style={{ paddingTop: 5 }}>
 						<span style={styles.name}>{this.props.post.user.name + " " + this.props.post.user.lastName}</span>
 						<span style={styles.username}>{"· @" + this.props.post.user.username}</span><br/>
-						<span style={styles.date}>{this.props.post.date}</span>
+						<span style={styles.date}>{this.state.date}</span>
 					</div>
 				</div>
 				<p style={styles.text}>{this.props.post.postText}</p>

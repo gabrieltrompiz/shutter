@@ -6,41 +6,41 @@ package models;
 
 
 public class Like {
-	private Integer like_id;
-	private Integer user_id;
-	private Integer post_id;
-	private Integer type_like_id;
+	private Integer likeId;
+	private Integer userId;
+	private Integer postId;
+	private Integer typeLikeId;
 	//Setters
-	public void setLike_id(Integer like_id) {
-		this.like_id = like_id;
+	public void setLikeId(Integer likeId) {
+		this.likeId = likeId;
 	}
 
-	public void setUser_id(Integer user_id) {
-		this.user_id = user_id;
+	public void setUserId(Integer userId) {
+		this.userId = userId;
 	}
 
-	public void setPost_id(Integer post_id) {
-		this.post_id = post_id;
+	public void setPostId(Integer postId) {
+		this.postId = postId;
 	}
 
-	public void setType_like_id(Integer type_like_id) {
-		this.type_like_id = type_like_id;
+	public void setTypeLikeId(Integer typeLikeId) {
+		this.typeLikeId = typeLikeId;
 	}
 
 	//Getters
-	public Integer getLike_id() {
-		return like_id;
+	public Integer getLikeId() {
+		return likeId;
 	}
 
-	public Integer getUser_id() {
-		return user_id;
+	public Integer getUserId() {
+		return userId;
 	}
 
-	public Integer getPost_id() {
-		return post_id;
+	public Integer getPostId() {
+		return postId;
 	}
 
-	public Integer getType_like_id() {
-		return type_like_id;
+	public Integer getTypeLikeId() {
+		return typeLikeId;
 	}
 }

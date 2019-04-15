@@ -5,50 +5,50 @@ package models;
  */
 
 public class Comment {
-	private Integer comment_id;
-	private Integer user_id;
-	private Integer post_id;
-	private String comment_text;
-	private String comment_url;
+	private Integer commentId;
+	private Integer userId;
+	private Integer postId;
+	private String commentText;
+	private String commentUrl;
 	//Setters
-	public void setComment_id(Integer comment_id) {
-		this.comment_id = comment_id;
+	public void setCommentId(Integer commentId) {
+		this.commentId = commentId;
 	}
 
-	public void setUser_id(Integer user_id) {
-		this.user_id = user_id;
+	public void setUserId(Integer userId) {
+		this.userId = userId;
 	}
 
-	public void setPost_id(Integer post_id) {
-		this.post_id = post_id;
+	public void setPost_id(Integer postId) {
+		this.postId = postId;
 	}
 
-	public void setComment_text(String comment_text) {
-		this.comment_text = comment_text;
+	public void setCommentText(String commentText) {
+		this.commentText = commentText;
 	}
 
-	public void setComment_url(String comment_url) {
-		this.comment_url = comment_url;
+	public void setCommentUrl(String commentUrl) {
+		this.commentUrl = commentUrl;
 	}
 
 	//Getters
-	public Integer getComment_id() {
-		return comment_id;
+	public Integer getCommentId() {
+		return commentId;
 	}
 
-	public Integer getUser_id() {
-		return user_id;
+	public Integer getUserId() {
+		return userId;
 	}
 
-	public Integer getPost_id() {
-		return post_id;
+	public Integer getPostId() {
+		return postId;
 	}
 
-	public String getComment_text() {
-		return comment_text;
+	public String getCommentText() {
+		return commentText;
 	}
 
-	public String getComment_url() {
-		return comment_url;
+	public String getCommentUrl() {
+		return commentUrl;
 	}
 }
