@@ -249,7 +249,7 @@ public class UserHandler {
 			response.setStatus(500);
 			response.setMessage("DB Connection Error");
 		}
-
+		poolManager.returnConn(con);
 		return response;
 	}
 
@@ -271,7 +271,7 @@ public class UserHandler {
 			response.setStatus(500);
 			response.setMessage("DB Connection Error");
 		}
-
+		poolManager.returnConn(con);
 		return response;
 	}
 
@@ -295,6 +295,7 @@ public class UserHandler {
 			response.setStatus(500);
 			response.setMessage("DB Connection Error");
 		}
+		poolManager.returnConn(con);
 		return response;
 	}
 
@@ -319,6 +320,7 @@ public class UserHandler {
 			response.setStatus(500);
 			response.setMessage("DB Connection Error");
 		}
+		poolManager.returnConn(con);
 		return response;
 	}
 
@@ -341,6 +343,7 @@ public class UserHandler {
 			response.setStatus(500);
 			response.setMessage("DB Connection Error");
 		}
+		poolManager.returnConn(con);
 		return response;
 	}
 }
