@@ -132,7 +132,7 @@ export default class Dashboard extends React.Component {
 			
 			case 'OtherUserProfile':
 				return <Profile user={this.state.anotherUser} changeView={this.handleChangeView} changeUser={this.changeUser} own={this.props.user.username === this.state.anotherUser.username}
-				isFriend={this.checkIfFriend()} updateDashboard={this.updateDashboard} darkTheme={this.props.darkTheme}/>;
+				isFriend={this.checkIfFriend()} updateDashboard={this.updateDashboard} darkTheme={this.props.darkTheme} ownUser={this.props.user}/>;
 
 			case 'EditProfile':
 				return <EditProfile user={this.props.user} changeView={this.handleChangeView} changeUser={this.props.changeUser} darkTheme={this.props.darkTheme}/>;

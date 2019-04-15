@@ -201,7 +201,9 @@ public class UserHandler {
 			poolManager.returnConn(con);
 			return true;
 		}
-		poolManager.returnConn(con);
+		finally {
+			poolManager.returnConn(con);
+		}
 		return false;
 	}
 
@@ -221,7 +223,9 @@ public class UserHandler {
 			poolManager.returnConn(con);
 			return true;
 		}
-		poolManager.returnConn(con);
+		finally {
+			poolManager.returnConn(con);
+		}
 		return false;
 	}
 
@@ -249,7 +253,10 @@ public class UserHandler {
 			response.setStatus(500);
 			response.setMessage("DB Connection Error");
 		}
-		poolManager.returnConn(con);
+		finally {
+			poolManager.returnConn(con);
+		}
+
 		return response;
 	}
 
@@ -271,7 +278,9 @@ public class UserHandler {
 			response.setStatus(500);
 			response.setMessage("DB Connection Error");
 		}
-		poolManager.returnConn(con);
+		finally {
+			poolManager.returnConn(con);
+		}
 		return response;
 	}
 
@@ -295,7 +304,9 @@ public class UserHandler {
 			response.setStatus(500);
 			response.setMessage("DB Connection Error");
 		}
-		poolManager.returnConn(con);
+		finally {
+			poolManager.returnConn(con);
+		}
 		return response;
 	}
 
@@ -320,7 +331,9 @@ public class UserHandler {
 			response.setStatus(500);
 			response.setMessage("DB Connection Error");
 		}
-		poolManager.returnConn(con);
+		finally {
+			poolManager.returnConn(con);
+		}
 		return response;
 	}
 
@@ -343,7 +356,9 @@ public class UserHandler {
 			response.setStatus(500);
 			response.setMessage("DB Connection Error");
 		}
-		poolManager.returnConn(con);
+		finally {
+			poolManager.returnConn(con);
+		}
 		return response;
 	}
 }

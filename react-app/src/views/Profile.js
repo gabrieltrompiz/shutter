@@ -59,7 +59,7 @@ export default class Profile extends React.Component {
 	}
 
 	addFriend = async () => {
-		await fetch('http://localhost:8080/friends?user=' + this.state.user.lowercaseUsername, { method: 'POST', credentials: 'include'})
+		await fetch('http://localhost:8080/friends?friendId=' + this.state.user.id, { method: 'POST', credentials: 'include'})
 		.then(response => response.json())
 		.then(response => {
 			if(response.status === 200) {
@@ -78,6 +78,7 @@ export default class Profile extends React.Component {
 		const shouldShowEmpty = (this.props.own && this.state.ownFriendList.length === 0) || (!this.props.own && this.state.otherFriendList.length === 0)
 		const dark = this.props.darkTheme
 		const styles = this.getStyles(dark)
+		const user = this.props.own ? this.props.user : this.props.ownUser
 		return(	
 			<Segment raised style={{ marginTop: '2.5vh', height: '95vh', backgroundColor: dark ? '#15202B' : 'white' }}>
 				<Container fluid style={{ height: '100%' }}>
@@ -119,7 +120,7 @@ export default class Profile extends React.Component {
 							{this.state.posts.length > 0 && shouldShowPosts &&
 							<div style={{ overflowY: 'scroll', width: '100%', height: '72.5%', paddingRight: 10 }}>
 								{this.state.posts.map(post => {
-									return <Post post={post} key={post.idPost} darkTheme={dark} userId={this.props.user.id}/>
+									return <Post post={post} key={post.idPost} darkTheme={dark} userId={this.props.user.id} ownUser={user}/>
 								})}
 							</div>}
 							{this.state.posts.length === 0 && shouldShowPosts &&

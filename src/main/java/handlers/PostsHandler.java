@@ -37,6 +37,7 @@ public class PostsHandler {
                 user.setName(rs.getString(7));
                 user.setLastName(rs.getString(8));
                 user.setAvatar(rs.getString(9));
+                user.setId(rs.getInt(10));
 
                 post.setLikes(getLikes(post.getIdPost(), con));
                 post.setComments(getComments(post.getIdPost(), con));
@@ -138,7 +139,6 @@ public class PostsHandler {
     private static ArrayList<Like> getLikes(int post_id, Connection con) {
         ArrayList<Like> likes = new ArrayList<>();
         String query = prop.getValue("getLikes");
-
         try {
             PreparedStatement ps = con.prepareStatement(query);
             ps.setInt(1, post_id);
@@ -161,7 +161,6 @@ public class PostsHandler {
     private static ArrayList<Comment> getComments(int post_id, Connection con) {
         ArrayList<Comment> comments = new ArrayList<>();
         String query = prop.getValue("getComments");
-
         try {
             PreparedStatement ps = con.prepareStatement(query);
             ps.setInt(1, post_id);
@@ -179,6 +178,9 @@ public class PostsHandler {
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
+        }
+        finally {
+            poolManager.returnConn(con);
         }
 
         return comments;

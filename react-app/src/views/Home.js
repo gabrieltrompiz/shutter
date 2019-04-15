@@ -33,7 +33,7 @@ export default class Home extends React.Component {
 				<Poster user={this.state.user} updateFeed={this.updateFeed} darkTheme={this.props.darkTheme}/>
 				{this.state.posts.map(post => {
 					return(
-						<Post post={post} key={post.idPost} darkTheme={this.props.darkTheme} ownId={this.state.user.id}/>
+						<Post post={post} key={post.idPost} darkTheme={this.props.darkTheme} ownId={this.state.user.id} ownUser={this.props.user}/>
 					)
 				})}
 				{this.state.posts.length === 0 && 
