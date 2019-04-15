@@ -7,7 +7,7 @@ import Slider from "react-slick";
 export default class Post extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { typeLikeId: -1, likeId: -1, commentsVisible: false, likesVisible: false, liked: false, coefficient: 0 };
+		this.state = { typeLikeId: -1, likeId: -1, commentsVisible: false, likesVisible: false, liked: false, coefficient: 0, likeList: false };
 	}
 
 	componentDidMount = () => {
@@ -125,8 +125,15 @@ export default class Post extends React.Component {
 
 	}
 
-	toggleLike = () => {
-		this.setState({ likesVisible: !this.state.likesVisible })
+	getIcon = (likeId, styles) => {
+		switch(likeId) {
+			case 1: return <i className="fas fa-grin-squint-tears" style={styles.likeIcon}></i>
+			case 2: return <i className="fas fa-meh" style={styles.likeIcon}></i>
+			case 3: return <i className="fas fa-surprise" style={styles.likeIcon}></i>
+			case 4: return <i className="fas fa-sad-cry" style={styles.likeIcon}></i>
+			case 5: return <i className="fas fa-grin-hearts" style={styles.likeIcon}></i>
+			case 6: return <i className="fas fa-angry" style={styles.likeIcon}></i>
+		} 
 	}
 
 	render() {
@@ -177,16 +184,30 @@ export default class Post extends React.Component {
 					</Slider>
 				</div>}
 				<div style={{ width: '96%', height: 'auto', display: 'flex', alignItems: 'center', marginLeft: '2%', marginBottom: 10 }}>
-					<span style={{ paddingRight: 20 }}>
+					<span style={{ paddingRight: 20, color: dark ? 'white' : 'black' }} ref={(ref) => this.like = ref} onMouseOver={() => { this.like.style.textDecoration = 'underline'; this.like.style.cursor = 'pointer'}}
+					onMouseOut={() => this.like.style.textDecoration = 'initial'} onClick={() => this.setState({ likeList: !this.state.likeList, likesVisible: false })}>
 						<span style={styles.stats}>{this.props.post.likes.length + this.state.coefficient}</span>
 						<span style={styles.statsText}>{this.props.post.likes.length + this.state.coefficient === 1 ? 'Like': 'Likes'}</span>
 					</span>
 					<span><span style={styles.stats}>{this.props.post.comments.length}</span><span style={styles.statsText}>{this.props.post.comments.length === 1 ? 'Comment': 'Comments'}</span></span>
 				</div>
+				{this.state.likeList && 
+				<div style={{ position: 'absolute', width: 300, height: 'fit-content', backgroundColor: dark ? '#15202B' : '#e0e0e0', borderRadius: 5, zIndex: 1, marginLeft: 5 }}>
+					<p style={styles.name}>Likes</p>
+					<Divider fitted />
+					{this.props.post.likes.map((like, i) => {
+						const user = like.user
+						return (<div style={{ display: 'flex', padding: 5, paddingLeft: 10 }} key={i}>
+							{this.getIcon(like.typeLikeId, styles)}
+							<span style={styles.likesName}>{user.name + " " + user.lastName}</span>
+							<span style={styles.likesUsername}>{"· @" + user.username}</span>
+						</div>)
+					})}
+				</div>}
 				<Divider fitted />
 				<div style={{ width: '100%', height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
 					<button style={styles.reactionsBtns} ref={(ref) => this.btn1 = ref} onMouseOver={() => this.btn1.style.cursor = 'pointer'}
-					onClick={() => this.toggleLike()}>
+					onClick={() => this.setState({ likesVisible: !this.state.likesVisible, likeList: false })}>
 						<i className={(liked ? "fas" : "far") + " fa-heart"}></i>  {liked ? 'Liked' : 'Like'}
 					</button>
 					<button style={styles.reactionsBtns} ref={(ref) => this.btn2 = ref} onMouseOver={() => this.btn2.style.cursor = 'pointer'}
@@ -195,22 +216,31 @@ export default class Post extends React.Component {
 					</button>
 				</div>
 				{this.state.likesVisible && 
-				<div style={{ position: 'absolute', width: '50%', height: 60, backgroundColor: dark ? '#15202B' : 'lightgrey', borderRadius: 5, display: 'flex', justifyContent: 'space-between',
-				marginTop: -105, zIndex: 1, paddingLeft: 10, paddingRight: 10 }} onBlur={() => this.setState({ likesVisible: false })}>
+				<div style={{ position: 'absolute', width: '50%', height: 60, backgroundColor: dark ? '#15202B' : '#e0e0e0', borderRadius: 5, display: 'flex', justifyContent: 'space-between',
+				marginTop: -105, zIndex: 1, paddingLeft: 10, paddingRight: 10, marginLeft: 5 }}>
 					<button style={this.getStyles(dark, 1).likeBtns} ref={(ref) => this.like1 = ref} onMouseOver={() => this.like1.style.cursor = 'pointer'} onClick={() => this.handleLike(1)}>
-						Like1
+						{this.getIcon(1, styles)}<br/>
+						Haha
 					</button>
 					<button style={this.getStyles(dark, 2).likeBtns} ref={(ref) => this.like2 = ref} onMouseOver={() => this.like2.style.cursor = 'pointer'} onClick={() => this.handleLike(2)}>
-						Like2
+						{this.getIcon(2, styles)}<br/>
+						Meh
 					</button>
 					<button style={this.getStyles(dark, 3).likeBtns} ref={(ref) => this.like3 = ref} onMouseOver={() => this.like3.style.cursor = 'pointer'} onClick={() => this.handleLike(3)}>
-						Like3
+						{this.getIcon(3, styles)}<br/>
+						Wow
 					</button>
 					<button style={this.getStyles(dark, 4).likeBtns} ref={(ref) => this.like4 = ref} onMouseOver={() => this.like4.style.cursor = 'pointer'} onClick={() => this.handleLike(4)}>
-						Like4
+						{this.getIcon(4, styles)}<br/>
+						Cry
 					</button>
 					<button style={this.getStyles(dark, 5).likeBtns} ref={(ref) => this.like5 = ref} onMouseOver={() => this.like5.style.cursor = 'pointer'} onClick={() => this.handleLike(5)}>
-						Like5
+						{this.getIcon(5, styles)}<br/>
+						Love
+					</button>
+					<button style={this.getStyles(dark, 6).likeBtns} ref={(ref) => this.like6 = ref} onMouseOver={() => this.like6.style.cursor = 'pointer'} onClick={() => this.handleLike(6)}>
+						{this.getIcon(6, styles)}<br/>
+						Angry
 					</button>
 				</div>}
 			</Container>
@@ -225,7 +255,8 @@ export default class Post extends React.Component {
 				fontSize: 18,
 				paddingLeft: 10,
 				paddingTop: 5,
-				color: dark ? 'white' : 'black'
+				color: dark ? 'white' : 'black',
+				marginBottom: 0
 			},
 			username: {
 				paddingTop: 5,
@@ -280,7 +311,7 @@ export default class Post extends React.Component {
 			likeBtns: {
 				outline: 0,
 				border: 'none',
-				backgroundColor: this.state.typeLikeId === button ? (dark ? '#1d2d3c' : '#e7e8e9') : 'transparent',
+				backgroundColor: this.state.typeLikeId === button ? (dark ? '#1d2d3c' : '#f1f1f1') : 'transparent',
 				fontFamily: 'Roboto',
 				color: dark ? 'white' : 'black',
 				marginTop: 5,
@@ -295,6 +326,28 @@ export default class Post extends React.Component {
 				marginRight: 5,
 				textAlign: 'center',
 				height: 'fit-content'
+			},
+			likesName: {
+				fontFamily: 'Heebo',
+				fontWeight: 'bolder',
+				fontSize: 14,
+				paddingLeft: 10,
+				paddingTop: 5,
+				color: dark ? 'white' : 'black',
+				marginBottom: 0
+			}, 
+			likesUsername: {
+				paddingTop: 5,
+				fontFamily: 'Roboto',
+				fontWeight: 'light',
+				color: dark ? '#8596A3' : 'grey',
+				paddingLeft: 5
+			}, 
+			likeIcon: { 
+				fontSize: 24, 
+				color: dark ? 'white' : 'black', 
+				marginBottom: 5, 
+				marginTop: 5 
 			}
 		}
 		return styles

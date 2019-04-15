@@ -145,10 +145,16 @@ public class PostsHandler {
 
             ResultSet rs = ps.executeQuery();
             while(rs.next()) {
+                User user = new User();
                 Like like = new Like();
                 like.setLikeId(rs.getInt(1));
                 like.setUserId(rs.getInt(2));
                 like.setTypeLikeId(rs.getInt(3));
+                user.setId(like.getUserId());
+                user.setUsername(rs.getString(4));
+                user.setName(rs.getString(5));
+                user.setLastName(rs.getString(6));
+                like.setUser(user);
                 likes.add(like);
             }
         } catch (SQLException e) {
