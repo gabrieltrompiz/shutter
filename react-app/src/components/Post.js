@@ -192,17 +192,26 @@ export default class Post extends React.Component {
 					<span><span style={styles.stats}>{this.props.post.comments.length}</span><span style={styles.statsText}>{this.props.post.comments.length === 1 ? 'Comment': 'Comments'}</span></span>
 				</div>
 				{this.state.likeList && 
-				<div style={{ position: 'absolute', width: 300, height: 'fit-content', backgroundColor: dark ? '#15202B' : '#e0e0e0', borderRadius: 5, zIndex: 1, marginLeft: 5 }}>
+				<div style={{ position: 'absolute', width: 300, height: 'fit-content', backgroundColor: dark ? '#15202B' : '#e0e0e0', borderRadius: 5, zIndex: 1, marginLeft: 5}}>
 					<p style={styles.name}>Likes</p>
 					<Divider fitted />
+					<div style={{ maxHeight: 300, height: 'fit-content', overflowY: 'scroll'}}>
 					{this.props.post.likes.map((like, i) => {
 						const user = like.user
+						const typeLike = this.props.ownUser.id === like.user.id ? this.state.typeLikeId : like.typeLikeId
 						return (<div style={{ display: 'flex', padding: 5, paddingLeft: 10 }} key={i}>
-							{this.getIcon(like.typeLikeId, styles)}
+							{this.getIcon(typeLike, styles)}
 							<span style={styles.likesName}>{user.name + " " + user.lastName}</span>
 							<span style={styles.likesUsername}>{"· @" + user.username}</span>
 						</div>)
 					})}
+					{this.props.post.likes.length === 0 && this.state.liked && 
+						<div style={{ display: 'flex', padding: 5, paddingLeft: 10 }}>
+							{this.getIcon(this.state.typeLikeId, styles)}
+							<span style={styles.likesName}>{this.props.ownUser.name + " " + this.props.ownUser.lastName}</span>
+							<span style={styles.likesUsername}>{"· @" + this.props.ownUser.username}</span>
+						</div>}
+					</div>
 				</div>}
 				<Divider fitted />
 				<div style={{ width: '100%', height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
