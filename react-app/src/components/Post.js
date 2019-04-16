@@ -127,6 +127,10 @@ export default class Post extends React.Component {
 		this.setState({ commentsVisible: true });
 	}
 
+	userCommented = comment => {
+		
+	}
+
 	getIcon = (likeId, styles) => {
 		switch(likeId) {
 			case 1: return <i className="fas fa-grin-squint-tears" style={styles.likeIcon}></i>
@@ -257,10 +261,11 @@ export default class Post extends React.Component {
 				{this.state.commentsVisible &&
 				(
 					this.props.post.comments.map((comment, i) => {
-						return <Comment key={i}/>
+						return <Comment key={i} comment={comment} />
 					})
 				)}
-				{this.state.commentsVisible && <Commenter user={this.props.ownUser} darkTheme={this.props.darkTheme} />}
+				{this.state.commentsVisible && <Commenter user={this.props.ownUser} darkTheme={this.props.darkTheme} 
+				postId={this.props.post.idPost} comment={this.userCommented} />}
 			</Container>
 			);
 	}

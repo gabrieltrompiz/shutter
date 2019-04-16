@@ -174,10 +174,15 @@ public class PostsHandler {
             ResultSet rs = ps.executeQuery();
             while(rs.next()) {
                 Comment comment = new Comment();
+                User user = new User();
                 comment.setCommentId(rs.getInt(1));
                 comment.setCommentText(rs.getString(2));
                 comment.setCommentUrl(rs.getString(3));
                 comment.setUserId(rs.getInt(4));
+                user.setUsername(rs.getString(5));
+                user.setName(rs.getString(6));
+                user.setLastName(rs.getString(7));
+                comment.setUser(user);
 
                 comments.add(comment);
             }

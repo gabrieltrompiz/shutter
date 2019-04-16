@@ -10,6 +10,7 @@ public class Comment {
 	private Integer postId;
 	private String commentText;
 	private String commentUrl;
+	private User user;
 	//Setters
 	public void setCommentId(Integer commentId) {
 		this.commentId = commentId;
@@ -31,6 +32,10 @@ public class Comment {
 		this.commentUrl = commentUrl;
 	}
 
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 	//Getters
 	public Integer getCommentId() {
 		return commentId;
@@ -50,5 +55,9 @@ public class Comment {
 
 	public String getCommentUrl() {
 		return commentUrl;
+	}
+
+	public User getUser() {
+		return user;
 	}
 }
