@@ -1,5 +1,7 @@
 import React from 'react';
 import { Container, Image, Divider } from 'semantic-ui-react';
+import Comment from './Comment.js';
+import Commenter from './Commenter.js';
 import ReactPlayer from 'react-player';
 import ReactAudioPlayer from 'react-audio-player'
 import Slider from "react-slick";
@@ -122,7 +124,7 @@ export default class Post extends React.Component {
 	}
 
 	handleCommentButton = () => {
-
+		this.setState({ commentsVisible: true });
 	}
 
 	getIcon = (likeId, styles) => {
@@ -252,6 +254,13 @@ export default class Post extends React.Component {
 						Angry
 					</button>
 				</div>}
+				{this.state.commentsVisible &&
+				(
+					this.props.post.comments.map((comment, i) => {
+						return <Comment key={i}/>
+					})
+				)}
+				{this.state.commentsVisible && <Commenter user={this.props.ownUser} darkTheme={this.props.darkTheme} />}
 			</Container>
 			);
 	}
