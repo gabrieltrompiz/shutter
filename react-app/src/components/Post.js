@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Image, Divider } from 'semantic-ui-react';
+import { Container, Image, Divider, Transition } from 'semantic-ui-react';
 import Comment from './Comment.js';
 import Commenter from './Commenter.js';
 import ReactPlayer from 'react-player';
@@ -9,7 +9,7 @@ import Slider from "react-slick";
 export default class Post extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { typeLikeId: -1, likeId: -1, commentsVisible: false, likesVisible: false, liked: false, coefficient: 0, likeList: false };
+		this.state = { typeLikeId: -1, likeId: -1, commentsVisible: false, likesVisible: false, liked: false, constantLikes: 0, likeList: false, constantComments: 0, comments: this.props.post.comments };
 	}
 
 	componentDidMount = () => {
@@ -89,7 +89,7 @@ export default class Post extends React.Component {
 				.then(response => response.json())
 				.then(response => {
 					if(response.status === 200) {
-						this.setState(() => ({ typeLikeId: typeLikeId, likeId: response.data.likeId, likesVisible: false, liked: true, coefficient: this.state.coefficient + 1 }))
+						this.setState(() => ({ typeLikeId: typeLikeId, likeId: response.data.likeId, likesVisible: false, liked: true, constantLikes: this.state.constantLikes + 1 }))
 					} else {
 						console.log(response.message);
 						this.setState({ typeLikeId: -1, likeId: -1 })
@@ -101,7 +101,7 @@ export default class Post extends React.Component {
 				.then(response => response.json())
 				.then(response => {
 					if(response.status === 200) {
-						this.setState(() => ({ liked: false, coefficient: this.state.coefficient - 1, typeLikeId: -1, likeId: -1, likesVisible: false }))
+						this.setState(() => ({ liked: false, constantLikes: this.state.constantLikes - 1, typeLikeId: -1, likeId: -1, likesVisible: false }))
 					} else {
 						console.log(response.message)
 					}
@@ -123,12 +123,11 @@ export default class Post extends React.Component {
 		}
 	}
 
-	handleCommentButton = () => {
-		this.setState({ commentsVisible: true });
-	}
-
 	userCommented = comment => {
-		
+		let commentsState = [...this.state.comments]
+		comment.user = this.props.ownUser
+		commentsState.push(comment)
+		this.setState({ comments: commentsState })
 	}
 
 	getIcon = (likeId, styles) => {
@@ -192,33 +191,37 @@ export default class Post extends React.Component {
 				<div style={{ width: '96%', height: 'auto', display: 'flex', alignItems: 'center', marginLeft: '2%', marginBottom: 10 }}>
 					<span style={{ paddingRight: 20, color: dark ? 'white' : 'black' }} ref={(ref) => this.like = ref} onMouseOver={() => { this.like.style.textDecoration = 'underline'; this.like.style.cursor = 'pointer'}}
 					onMouseOut={() => this.like.style.textDecoration = 'initial'} onClick={() => this.setState({ likeList: !this.state.likeList, likesVisible: false })}>
-						<span style={styles.stats}>{this.props.post.likes.length + this.state.coefficient}</span>
-						<span style={styles.statsText}>{this.props.post.likes.length + this.state.coefficient === 1 ? 'Like': 'Likes'}</span>
+						<span style={styles.stats}>{this.props.post.likes.length + this.state.constantLikes}</span>
+						<span style={styles.statsText}>{this.props.post.likes.length + this.state.constantLikes === 1 ? 'Like': 'Likes'}</span>
 					</span>
-					<span><span style={styles.stats}>{this.props.post.comments.length}</span><span style={styles.statsText}>{this.props.post.comments.length === 1 ? 'Comment': 'Comments'}</span></span>
+					<span>
+						<span style={styles.stats}>{this.props.post.comments.length + this.state.constantComments}</span>
+						<span style={styles.statsText}>{this.props.post.comments.length === 1 ? 'Comment': 'Comments'}</span>
+					</span>
 				</div>
-				{this.state.likeList && 
-				<div style={{ position: 'absolute', width: 300, height: 'fit-content', backgroundColor: dark ? '#15202B' : '#e0e0e0', borderRadius: 5, zIndex: 1, marginLeft: 5}}>
-					<p style={styles.name}>Likes</p>
-					<Divider fitted />
-					<div style={{ maxHeight: 300, height: 'fit-content', overflowY: 'scroll'}}>
-					{this.props.post.likes.map((like, i) => {
-						const user = like.user
-						const typeLike = this.props.ownUser.id === like.user.id ? this.state.typeLikeId : like.typeLikeId
-						return (<div style={{ display: 'flex', padding: 5, paddingLeft: 10 }} key={i}>
-							{this.getIcon(typeLike, styles)}
-							<span style={styles.likesName}>{user.name + " " + user.lastName}</span>
-							<span style={styles.likesUsername}>{"· @" + user.username}</span>
-						</div>)
-					})}
-					{this.props.post.likes.length === 0 && this.state.liked && 
-						<div style={{ display: 'flex', padding: 5, paddingLeft: 10 }}>
-							{this.getIcon(this.state.typeLikeId, styles)}
-							<span style={styles.likesName}>{this.props.ownUser.name + " " + this.props.ownUser.lastName}</span>
-							<span style={styles.likesUsername}>{"· @" + this.props.ownUser.username}</span>
-						</div>}
+				<Transition visible={this.state.likeList} animation='fade up' duration={250}>
+					<div style={{ position: 'absolute', width: 300, height: 'fit-content', backgroundColor: dark ? '#15202B' : '#e0e0e0', borderRadius: 5, zIndex: 1, marginLeft: 5}}>
+						<p style={styles.name}>Likes</p>
+						<Divider fitted />
+						<div style={{ maxHeight: 300, height: 'fit-content', overflowY: 'scroll'}}>
+						{this.props.post.likes.map((like, i) => {
+							const user = like.user
+							const typeLike = this.props.ownUser.id === like.user.id ? this.state.typeLikeId : like.typeLikeId
+							return (<div style={{ display: 'flex', padding: 5, paddingLeft: 10 }} key={i}>
+								{this.getIcon(typeLike, styles)}
+								<span style={styles.likesName}>{user.name + " " + user.lastName}</span>
+								<span style={styles.likesUsername}>{"· @" + user.username}</span>
+							</div>)
+						})}
+						{this.props.post.likes.length === 0 && this.state.liked && 
+							<div style={{ display: 'flex', padding: 5, paddingLeft: 10 }}>
+								{this.getIcon(this.state.typeLikeId, styles)}
+								<span style={styles.likesName}>{this.props.ownUser.name + " " + this.props.ownUser.lastName}</span>
+								<span style={styles.likesUsername}>{"· @" + this.props.ownUser.username}</span>
+							</div>}
+						</div>
 					</div>
-				</div>}
+				</Transition>
 				<Divider fitted />
 				<div style={{ width: '100%', height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
 					<button style={styles.reactionsBtns} ref={(ref) => this.btn1 = ref} onMouseOver={() => this.btn1.style.cursor = 'pointer'}
@@ -226,7 +229,7 @@ export default class Post extends React.Component {
 						<i className={(liked ? "fas" : "far") + " fa-heart"}></i>  {liked ? 'Liked' : 'Like'}
 					</button>
 					<button style={styles.reactionsBtns} ref={(ref) => this.btn2 = ref} onMouseOver={() => this.btn2.style.cursor = 'pointer'}
-					onClick={() => this.handleCommentButton()}>
+					onClick={() => this.setState({ commentsVisible: !this.state.commentsVisible })}>
 						<i className="far fa-comment"></i>  Comment
 					</button>
 				</div>
@@ -258,13 +261,12 @@ export default class Post extends React.Component {
 						Angry
 					</button>
 				</div>}
-				{this.state.commentsVisible &&
-				(
-					this.props.post.comments.map((comment, i) => {
-						return <Comment key={i} comment={comment} />
-					})
-				)}
-				{this.state.commentsVisible && <Commenter user={this.props.ownUser} darkTheme={this.props.darkTheme} 
+				{this.state.commentsVisible && <Divider fitted />}
+				{this.state.commentsVisible &&		
+					this.state.comments.map((comment, i) => {
+						return <Comment key={i} comment={comment} darkTheme={dark}/>
+					})}
+				{this.state.commentsVisible && <Commenter user={this.props.ownUser} darkTheme={dark} addToConstant={() => this.setState(() => ({ constantComments: this.state.constantComments + 1}))}
 				postId={this.props.post.idPost} comment={this.userCommented} />}
 			</Container>
 			);

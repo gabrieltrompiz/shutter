@@ -15,7 +15,7 @@ body > #root > div {
   height: 100vh;
 }
 
-div, form, input, button {
+div, form, input, button, textarea {
   -webkit-transition-property: background-color, border-color;
   -webkit-transition: 300ms linear;
   -ms-transition-property: background-color, border-color;
