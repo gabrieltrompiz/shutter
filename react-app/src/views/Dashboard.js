@@ -221,15 +221,6 @@ export default class Dashboard extends React.Component {
 					</Container>
 				</div>
 			</Container>
-			
-			// <Container>
-			// 	{/* <Home/>
-			// 	<Notifications/>
-			// 	<Profile/>
-			// 	<Search/>
-			// 	<Settings/> */}
-			// </Container>
-				
 		);
 	}
 }

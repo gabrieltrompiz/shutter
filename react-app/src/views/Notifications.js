@@ -1,10 +1,28 @@
-import React from 'react'
+import React from 'react';
 import { Segment, Divider } from 'semantic-ui-react';
+import Not from '../components/Not.js';
 
 export default class Notifications extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = { notifications: [] }
+	}
+
+	componentDidMount = () => {
+		this.getNotifications();
+	}
+
+	getNotifications = async () => {
+		fetch('http://localhost:8080/notifications?notifications=20', {credentials: 'include'})
+			.then(response => response.json())
+			.then(response => {
+				if (response.status === 200) {
+					console.log(response);
+					this.setState({ notifications: response.data });
+				} else {
+					console.log('cry');
+				}
+			})
 	}
 
 	render() {
@@ -19,6 +37,10 @@ export default class Notifications extends React.Component {
 					<i className="fas fa-inbox" style={styles.icon}></i>
 					<p style={styles.text}>You don't have any <br /> notifications.</p>
 				</div>}
+				{this.state.notifications.lenght !== 0 &&
+				this.state.notifications.map((notification, i) => {
+					return <Not notification={notification} key={i} />
+				})}
 			</Segment>
 		);
 	}
