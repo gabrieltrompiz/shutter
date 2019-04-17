@@ -125,6 +125,35 @@ public class PostsHandler {
         return response;
     }
 
+    public static Response<String> deletePost(int userId, int postId) {
+        Response<String> response = new Response<>();
+        Connection con = poolManager.getConn();
+        String query = prop.getValue("deletePost");
+        try {
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, postId);
+            ps.setInt(2, postId);
+            ps.setInt(3, userId);
+            ps.setInt(4, postId);
+            int affectedRows = ps.executeUpdate();
+            if(affectedRows == 0) {
+                response.setMessage("Could not delete post");
+                response.setStatus(500);
+            } else {
+                response.setMessage("Post deleted successfully");
+                response.setStatus(200);
+            }
+        } catch(SQLException e) {
+            e.printStackTrace();
+            response.setMessage("DB Connection Error");
+            response.setStatus(500);
+        }
+        finally {
+            poolManager.returnConn(con);
+        }
+        return response;
+    }
+
     private static int getFileCount(String username, int id) {
         String baseDir = System.getenv("SystemDrive") + "/web2p1/assets/users/" + username + "/" + id + "/";
         int count;

@@ -58,6 +58,17 @@ export default class Profile extends React.Component {
 			});
 	}
 
+	deletePost = (postToDelete) => {
+		let postsState = [...this.state.posts]
+		postsState.some((post, i) => {
+			if(post.idPost === postToDelete.idPost) { 
+				postsState = postsState.slice(0, i).concat(postsState.slice(i + 1, postsState.length));
+				return true
+			}
+		})
+		this.setState({ posts: postsState })
+	}
+
 	addFriend = async () => {
 		await fetch('http://localhost:8080/friends?friendId=' + this.state.user.id, { method: 'POST', credentials: 'include'})
 		.then(response => response.json())
@@ -120,7 +131,7 @@ export default class Profile extends React.Component {
 							{this.state.posts.length > 0 && shouldShowPosts &&
 							<div style={{ overflowY: 'scroll', width: '100%', height: '72.5%', paddingRight: 10 }}>
 								{this.state.posts.map(post => {
-									return <Post post={post} key={post.idPost} darkTheme={dark} userId={this.props.user.id} ownUser={user}/>
+									return <Post post={post} key={post.idPost} darkTheme={dark} userId={this.props.user.id} ownUser={user} deletePost={this.deletePost}/>
 								})}
 							</div>}
 							{this.state.posts.length === 0 && shouldShowPosts &&

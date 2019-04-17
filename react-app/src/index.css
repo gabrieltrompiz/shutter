@@ -151,3 +151,7 @@ div.item, .visible.menu.transition {
 .ui.selection.dropdown .menu>.item, .ui.selection.active.dropdown .menu {
   border: inherit !important;
 }
+
+#nonblock {
+  display: flex !important;
+}

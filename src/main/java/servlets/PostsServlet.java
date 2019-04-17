@@ -25,13 +25,21 @@ public class PostsServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
-		Response<ArrayList<Post>> response = null;
 		Integer userId = Integer.parseInt(req.getParameter("user"));
-		response = PostsHandler.getUserPosts(userId);
-
+		Response<ArrayList<Post>> response = PostsHandler.getUserPosts(userId);
 		mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 		resp.getWriter().print(mapper.writeValueAsString(response));
 	}
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	    ObjectMapper mapper = new ObjectMapper();
+        Integer userId = Integer.parseInt(req.getSession(false).getAttribute("user_id").toString());
+        Integer postId = Integer.parseInt(req.getParameter("id"));
+        Response<String> response = PostsHandler.deletePost(userId, postId);
+        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        resp.getWriter().print(mapper.writeValueAsString(response));
+    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

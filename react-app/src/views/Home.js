@@ -26,6 +26,17 @@ export default class Home extends React.Component {
 		this.updateFeed()
 	}
 
+	deletePost = (postToDelete) => {
+		let postsState = [...this.state.posts]
+		postsState.some((post, i) => {
+			if(post.idPost === postToDelete.idPost) { 
+				postsState = postsState.slice(0, i).concat(postsState.slice(i + 1, postsState.length));
+				return true
+			}
+		})
+		this.setState({ posts: postsState })
+	}
+
 	render() {
 		const styles = this.getStyles(this.props.darkTheme)
 		return(
@@ -33,7 +44,7 @@ export default class Home extends React.Component {
 				<Poster user={this.state.user} updateFeed={this.updateFeed} darkTheme={this.props.darkTheme}/>
 				{this.state.posts.map(post => {
 					return(
-						<Post post={post} key={post.idPost} darkTheme={this.props.darkTheme} ownId={this.state.user.id} ownUser={this.props.user}/>
+						<Post post={post} key={post.idPost} darkTheme={this.props.darkTheme} ownUser={this.props.user} deletePost={this.deletePost}/>
 					)
 				})}
 				{this.state.posts.length === 0 && 

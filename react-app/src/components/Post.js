@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Image, Divider, Transition } from 'semantic-ui-react';
+import { Container, Image, Divider, Transition, List } from 'semantic-ui-react';
 import Comment from './Comment.js';
 import Commenter from './Commenter.js';
 import ReactPlayer from 'react-player';
@@ -9,7 +9,8 @@ import Slider from "react-slick";
 export default class Post extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { typeLikeId: -1, likeId: -1, commentsVisible: false, likesVisible: false, liked: false, constantLikes: 0, likeList: false, constantComments: 0, comments: this.props.post.comments };
+		this.state = { typeLikeId: -1, likeId: -1, commentsVisible: false, likesVisible: false, liked: false, constantLikes: 0, likeList: false, constantComments: 0, 
+		comments: this.props.post.comments, showMenu: false };
 	}
 
 	componentDidMount = () => {
@@ -130,6 +131,15 @@ export default class Post extends React.Component {
 		this.setState({ comments: commentsState })
 	}
 
+	deletePost = async () => {
+		await fetch('http://localhost:8080/posts?id=' + this.props.post.idPost, { credentials: 'include', method: 'DELETE' })
+		.then(response => {
+			if(response.status === 200) {
+				this.props.deletePost(this.props.post)
+			} 
+		})
+	}
+
 	getIcon = (likeId, styles) => {
 		switch(likeId) {
 			case 1: return <i className="fas fa-grin-squint-tears" style={styles.likeIcon}></i>
@@ -172,10 +182,17 @@ export default class Post extends React.Component {
 							<span style={styles.date}>{this.state.date}</span>
 						</div>
 					</div>
-					{this.props.post.user.id === this.props.ownId && 
-					<button style={styles.threeDots}>
+					{this.props.post.user.id === this.props.ownUser.id && 
+					<button style={styles.threeDots} onClick={() => this.setState({ showMenu: !this.state.showMenu })}>
 						<i className="fas fa-ellipsis-h"></i>
 					</button>}
+					<Transition visible={this.state.showMenu} animation='fade left' duration={250} unmountOnHide>
+						<div style={styles.menu}>
+							<button style={styles.menuBtn} onClick={() => this.deletePost()}>
+								Delete Post
+							</button>
+						</div>
+					</Transition>
 				</div>
 				<p style={styles.text}>{this.props.post.postText}</p>
 				{this.props.post.typePost !== 1 && this.props.post.typePost !== 2 && 
@@ -199,7 +216,7 @@ export default class Post extends React.Component {
 						<span style={styles.statsText}>{this.props.post.comments.length === 1 ? 'Comment': 'Comments'}</span>
 					</span>
 				</div>
-				<Transition visible={this.state.likeList} animation='fade up' duration={250}>
+				<Transition visible={this.state.likeList} animation='fade up' duration={250} unmountOnHide>
 					<div style={{ position: 'absolute', width: 300, height: 'fit-content', backgroundColor: dark ? '#15202B' : '#e0e0e0', borderRadius: 5, zIndex: 1, marginLeft: 5}}>
 						<p style={styles.name}>Likes</p>
 						<Divider fitted />
@@ -233,39 +250,42 @@ export default class Post extends React.Component {
 						<i className="far fa-comment"></i>  Comment
 					</button>
 				</div>
-				{this.state.likesVisible && 
-				<div style={{ position: 'absolute', width: '50%', height: 60, backgroundColor: dark ? '#15202B' : '#e0e0e0', borderRadius: 5, display: 'flex', justifyContent: 'space-between',
-				marginTop: -105, zIndex: 1, paddingLeft: 10, paddingRight: 10, marginLeft: 5 }}>
-					<button style={this.getStyles(dark, 1).likeBtns} ref={(ref) => this.like1 = ref} onMouseOver={() => this.like1.style.cursor = 'pointer'} onClick={() => this.handleLike(1)}>
-						{this.getIcon(1, styles)}<br/>
-						Haha
-					</button>
-					<button style={this.getStyles(dark, 2).likeBtns} ref={(ref) => this.like2 = ref} onMouseOver={() => this.like2.style.cursor = 'pointer'} onClick={() => this.handleLike(2)}>
-						{this.getIcon(2, styles)}<br/>
-						Meh
-					</button>
-					<button style={this.getStyles(dark, 3).likeBtns} ref={(ref) => this.like3 = ref} onMouseOver={() => this.like3.style.cursor = 'pointer'} onClick={() => this.handleLike(3)}>
-						{this.getIcon(3, styles)}<br/>
-						Wow
-					</button>
-					<button style={this.getStyles(dark, 4).likeBtns} ref={(ref) => this.like4 = ref} onMouseOver={() => this.like4.style.cursor = 'pointer'} onClick={() => this.handleLike(4)}>
-						{this.getIcon(4, styles)}<br/>
-						Cry
-					</button>
-					<button style={this.getStyles(dark, 5).likeBtns} ref={(ref) => this.like5 = ref} onMouseOver={() => this.like5.style.cursor = 'pointer'} onClick={() => this.handleLike(5)}>
-						{this.getIcon(5, styles)}<br/>
-						Love
-					</button>
-					<button style={this.getStyles(dark, 6).likeBtns} ref={(ref) => this.like6 = ref} onMouseOver={() => this.like6.style.cursor = 'pointer'} onClick={() => this.handleLike(6)}>
-						{this.getIcon(6, styles)}<br/>
-						Angry
-					</button>
-				</div>}
+				<Transition visible={this.state.likesVisible} animation="fade down" duration={250} unmountOnHide>
+					<div style={{ position: 'absolute', width: '50%', height: 60, backgroundColor: dark ? '#15202B' : '#e0e0e0', borderRadius: 5, justifyContent: 'space-between',
+					marginTop: -105, zIndex: 1, paddingLeft: 10, paddingRight: 10, marginLeft: 5 }} id="nonblock">
+						<button style={this.getStyles(dark, 1).likeBtns} ref={(ref) => this.like1 = ref} onMouseOver={() => this.like1.style.cursor = 'pointer'} onClick={() => this.handleLike(1)}>
+							{this.getIcon(1, styles)}<br/>
+							Haha
+						</button>
+						<button style={this.getStyles(dark, 2).likeBtns} ref={(ref) => this.like2 = ref} onMouseOver={() => this.like2.style.cursor = 'pointer'} onClick={() => this.handleLike(2)}>
+							{this.getIcon(2, styles)}<br/>
+							Meh
+						</button>
+						<button style={this.getStyles(dark, 3).likeBtns} ref={(ref) => this.like3 = ref} onMouseOver={() => this.like3.style.cursor = 'pointer'} onClick={() => this.handleLike(3)}>
+							{this.getIcon(3, styles)}<br/>
+							Wow
+						</button>
+						<button style={this.getStyles(dark, 4).likeBtns} ref={(ref) => this.like4 = ref} onMouseOver={() => this.like4.style.cursor = 'pointer'} onClick={() => this.handleLike(4)}>
+							{this.getIcon(4, styles)}<br/>
+							Cry
+						</button>
+						<button style={this.getStyles(dark, 5).likeBtns} ref={(ref) => this.like5 = ref} onMouseOver={() => this.like5.style.cursor = 'pointer'} onClick={() => this.handleLike(5)}>
+							{this.getIcon(5, styles)}<br/>
+							Love
+						</button>
+						<button style={this.getStyles(dark, 6).likeBtns} ref={(ref) => this.like6 = ref} onMouseOver={() => this.like6.style.cursor = 'pointer'} onClick={() => this.handleLike(6)}>
+							{this.getIcon(6, styles)}<br/>
+							Angry
+						</button>
+					</div>
+				</Transition>
 				{this.state.commentsVisible && <Divider fitted />}
-				{this.state.commentsVisible &&		
-					this.state.comments.map((comment, i) => {
-						return <Comment key={i} comment={comment} darkTheme={dark}/>
+				{this.state.commentsVisible &&
+				<Transition.Group as={List}>		
+					{this.state.comments.map((comment, i) => {
+						return (<List.Item key={i} style={{ padding: 0, margin: 0}}><Comment comment={comment} darkTheme={dark}/></List.Item>)
 					})}
+				</Transition.Group>}
 				{this.state.commentsVisible && <Commenter user={this.props.ownUser} darkTheme={dark} addToConstant={() => this.setState(() => ({ constantComments: this.state.constantComments + 1}))}
 				postId={this.props.post.idPost} comment={this.userCommented} />}
 			</Container>
@@ -350,7 +370,8 @@ export default class Post extends React.Component {
 				color: dark ? 'white' : 'black',
 				marginRight: 5,
 				textAlign: 'center',
-				height: 'fit-content'
+				height: 'fit-content',
+				cursor: 'pointer'
 			},
 			likesName: {
 				fontFamily: 'Heebo',
@@ -373,6 +394,26 @@ export default class Post extends React.Component {
 				color: dark ? 'white' : 'black', 
 				marginBottom: 5, 
 				marginTop: 5 
+			},
+			menu: {
+				position: 'absolute',
+				right: 0,
+				top: 30,
+				backgroundColor: dark ? '#1f2f3f' : '#e3e3e3',
+				zIndex: 2, 
+				width: 150,
+				padding: 15,
+				borderRadius: 5
+			},
+			menuBtn: {
+				backgroundColor: 'transparent',
+				cursor: 'pointer',
+				color: dark ? 'white' : 'black',
+				textAlign: 'center', 
+				outline: 0,
+				border: 'none',
+				width: '100%',
+				fontFamily: 'Roboto'
 			}
 		}
 		return styles
