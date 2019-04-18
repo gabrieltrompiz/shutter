@@ -11,7 +11,7 @@ import Inbox from './/Inbox.js';
 export default class Dashboard extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { activeItem : 'Home', notifications: 10, anotherUser: {}, ownFriendList: [] } //TODO: revisar xq se expira si pongo otra inicial
+		this.state = { activeItem : 'Home', notifications: 10, anotherUser: {}, ownFriendList: [], onlineUsers: [] } //TODO: revisar xq se expira si pongo otra inicial
 		this.notificationSocket = null;
 		this.userSocket = null;
 	}
@@ -24,11 +24,42 @@ export default class Dashboard extends React.Component {
 				this.setState({ ownFriendList: response.data });
 			} else console.log('cry');
 		});
-		// this.connectSockets();
-	}
-
-	componentWillDismount = () => {
-		// this.disconnectSockets();
+		this.userSocket = new WebSocket("ws://localhost:8080/users")
+		this.userSocket.onmessage = event => {
+			if(event.data.startsWith("Connected:")) {
+				const username = event.data.split(":")[1]
+				let friendObject = {}
+				this.state.ownFriendList.forEach(friend => {
+					if(friend.username.toLowerCase() === username) {
+						friendObject = friend;
+					}
+				})
+				const onlineUsers = [...this.state.onlineUsers]
+				onlineUsers.push(friendObject)
+				this.setState({ onlineUsers: onlineUsers })
+			}
+			else if(event.data.startsWith("Disconnected:")) {
+				const username = event.data.split(":")[1]
+				let onlineUsers = [...this.state.onlineUsers]
+				onlineUsers.forEach((user, i) => {
+					if(user.username.toLowerCase() === username) {
+						onlineUsers = onlineUsers.slice(0, i).concat(onlineUsers.slice(i + 1, onlineUsers.length))
+					}
+				})
+				this.setState({ onlineUsers: onlineUsers })
+			}
+			else {
+				let onlineFriends = [];
+				JSON.parse(event.data).forEach(username => {
+					this.state.ownFriendList.forEach(friend => {
+						if(friend.username.toLowerCase() === username) {
+							onlineFriends.push(friend)
+						}
+					})
+				})
+				this.setState({ onlineUsers: onlineFriends })
+			}
+		}
 	}
 
 	checkIfFriend = () => {
@@ -49,6 +80,10 @@ export default class Dashboard extends React.Component {
 				this.setState({ ownFriendList: response.data });
 			} else console.log('cry');
 		});
+	}
+
+	componentWillUnmount = async () => {
+		this.userSocket.close()
 	}
 
 	// connectSockets = async () => {
@@ -124,7 +159,7 @@ export default class Dashboard extends React.Component {
 				return (
 					<div style={{ display: 'flex' }}>
 						<Home user={this.props.user} changeView={this.handleChangeView} changeUser={this.props.changeUser} handleLoggedIn={this.props.handleLoggedIn} darkTheme={this.props.darkTheme}/>
-						<Inbox darkTheme={this.props.darkTheme}/>
+						<Inbox darkTheme={this.props.darkTheme} friends={this.state.onlineUsers} changeUser={this.changeUser} changeView={this.handleChangeView}/>
 					</div>);
 			
 			case 'Profile':
@@ -138,7 +173,7 @@ export default class Dashboard extends React.Component {
 				return <EditProfile user={this.props.user} changeView={this.handleChangeView} changeUser={this.props.changeUser} darkTheme={this.props.darkTheme}/>;
 
 			case 'Notifications':
-				return <Notifications user={this.props.user} changeView={this.handleChangeView} darkTheme={this.props.darkTheme}/>
+				return <Notifications user={this.props.user} changeView={this.handleChangeView} darkTheme={this.props.darkTheme} />
 			
 			case 'Search':
 				return <Search user={this.props.user} changeView={this.handleChangeView} changeUser={this.changeUser} darkTheme={this.props.darkTheme}/>;
