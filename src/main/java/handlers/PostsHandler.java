@@ -32,7 +32,6 @@ public class PostsHandler {
                 post.setPostText(rs.getString(3));
                 post.setUrl(rs.getString(4));
                 post.setCreationTime(rs.getTimestamp(5));
-                post.setFileCount(getFileCount(username, post.getIdPost()));
                 user.setUsername(rs.getString(6));
                 user.setName(rs.getString(7));
                 user.setLastName(rs.getString(8));
@@ -41,6 +40,7 @@ public class PostsHandler {
 
                 post.setLikes(getLikes(post.getIdPost(), con));
                 post.setComments(getComments(post.getIdPost(), con));
+                post.setFileCount(getFileCount(user.getUsername().toLowerCase(), post.getIdPost()));
 
                 post.setUser(user);
                 posts.add(post);

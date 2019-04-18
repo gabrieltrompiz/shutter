@@ -66,6 +66,7 @@ export default class Post extends React.Component {
 		let content = []
 		if(this.props.post.typePost === 2) {
 			[...Array(this.props.post.fileCount)].forEach((e, i) => {
+				console.log(baseDir + (i+1) + ".png")
 				content.push(<Image src={baseDir + (i + 1) + ".png"} key={i} style={{ margin: '0 auto' }}/>)
 			})
 		}
@@ -153,7 +154,8 @@ export default class Post extends React.Component {
 
 	render() {
 		const source = 'http://localhost:8080/files?type=avatar&file=' + this.props.post.user.username + '.png'
-		const baseDir = 'http://localhost:8080/files?type=post&typePost=' + this.props.post.typePost + '&id=' + this.props.post.idPost + "&file="
+		const baseDir = 'http://localhost:8080/files?type=post&typePost=' + this.props.post.typePost + '&id=' + this.props.post.idPost + "&username=" + this.props.post.user.username.toLowerCase()
+		+ "&file="
 		const content = this.fillContent(baseDir)
 		const settings = {
 			dots: true,

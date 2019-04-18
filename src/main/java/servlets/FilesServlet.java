@@ -30,8 +30,11 @@ public class FilesServlet extends HttpServlet {
         String target = System.getenv("SystemDrive");
         if(req.getParameter("type").equalsIgnoreCase("avatar"))
             target += "/web2p1/assets/avatars/";
-        else if(req.getParameter("type").equalsIgnoreCase("post"))
+        else if(req.getParameter("type").equalsIgnoreCase("post") && req.getParameter("username") != null)
+            target += "/web2p1/assets/users/" + req.getParameter("username") + "/" + req.getParameter("id") + "/";
+        else {
             target += "/web2p1/assets/users/" + req.getSession(false).getAttribute("username") + "/" + req.getParameter("id") + "/";
+        }
         FileInputStream fileObj = null;
         OutputStream out = resp.getOutputStream();
         try {

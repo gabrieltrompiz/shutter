@@ -9,7 +9,7 @@ export default class Inbox extends React.Component {
 		const styles = this.getStyles(dark)
 		return(
 			<Segment raised style={{ width: '23%', height: '94vh', left: '74.5%', marginTop: '2.5vh', position: 'fixed', backgroundColor: dark ? '#1C2938' : 'white' }}>
-				<p style={styles.title}>Friends</p>
+				<p style={styles.title}>Online Friends</p>
 				<Divider fitted style={{ marginTop: 2 }} />
 				{this.props.friends.length === 0 && 
 				<div style={styles.empty}>
