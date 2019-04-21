@@ -5,11 +5,15 @@ import Post from '../components/Post.js';
 export default class Home extends React.Component {
 	constructor(props) {
 		super(props)
-		this.state = { user: this.props.user, posts: [], lastPost: null, postsCount: 20 }
+		this.state = { user: this.props.user, posts: [], lastPost: {} }
+	}
+
+	componentWillReceiveProps = (nextProps) => {
+		if(nextProps.reload !== this.props.reload) { this.updateFeed() }
 	}
 
 	updateFeed = async () => {
-		await fetch('http://localhost:8080/feed?posts=' + this.state.postsCount, { credentials: 'include' })
+		await fetch('http://localhost:8080/feed', { credentials: 'include' })
 		.then(response => response.json())
 		.then(response => {
 			if(response.status === 200) {
@@ -18,8 +22,16 @@ export default class Home extends React.Component {
 		});		
 	}
 
-	chargeMorePosts = () => {
-		this.setState(() => ({ postsCount: this.state.postsCount + 20 }), () => this.updateFeed())
+	chargeMorePosts = async () => {
+		await fetch('http://localhost:8080/feed?from=' + this.state.lastPost.idPost, { credentials: 'include' })
+		.then(response => response.json())
+		.then(response => {
+			if(response.status === 200) {
+				let copy = [...this.state.posts]
+				copy.push(...response.data)
+				this.setState({ posts: copy })
+			}
+		})
 	}
 
 	componentDidMount = () => {
@@ -33,6 +45,7 @@ export default class Home extends React.Component {
 				postsState = postsState.slice(0, i).concat(postsState.slice(i + 1, postsState.length));
 				return true
 			}
+			return true
 		})
 		this.setState({ posts: postsState })
 	}
@@ -44,7 +57,7 @@ export default class Home extends React.Component {
 				<Poster user={this.state.user} updateFeed={this.updateFeed} darkTheme={this.props.darkTheme}/>
 				{this.state.posts.map(post => {
 					return(
-						<Post post={post} key={post.idPost} darkTheme={this.props.darkTheme} ownUser={this.props.user} deletePost={this.deletePost}/>
+						<Post post={post} key={post.idPost} darkTheme={this.props.darkTheme} ownUser={this.props.user} deletePost={this.deletePost} notificationSocket={this.props.notificationSocket}/>
 					)
 				})}
 				{this.state.posts.length === 0 && 

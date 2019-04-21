@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Image, Header, Form, Input, Divider, Message, Segment } from 'semantic-ui-react';
+import { Container, Image, Header, Form, Input, Divider, Segment } from 'semantic-ui-react';
 import { DateInput } from 'semantic-ui-calendar-react'
 import Button from '../components/Button';
 

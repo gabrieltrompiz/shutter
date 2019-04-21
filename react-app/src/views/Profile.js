@@ -7,7 +7,7 @@ import Post from '../components/Post.js';
 export default class Profile extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { user: this.props.user, ownFriendList: [], posts: [], lastPost: null, otherFriendList: [] }
+		this.state = { user: this.props.user, ownFriendList: [], posts: [], lastPost: null, otherFriendList: [], frPending: false }
 	}
 
 	updateProfile = async () => {
@@ -38,6 +38,9 @@ export default class Profile extends React.Component {
 	}
 
 	componentWillReceiveProps = (nextProps) => {
+		if(nextProps.isFriend !== this.props.isFriend) {
+			this.setState({ frPending: !nextProps.isFriend })
+		}
 		if(nextProps.user.username !== this.props.user.username) {
 			this.setState({ user: nextProps.user }, () => this.updateProfile())
 		}
@@ -46,6 +49,15 @@ export default class Profile extends React.Component {
 	componentDidMount = async () => {
 		if(this.props.ownFriendList !== undefined) { this.setState({ ownFriendList: this.props.ownFriendList }) }
 		this.updateProfile()
+		if(!this.props.own && !this.props.isFriend) {
+			await fetch('http://localhost:8080/checkFriendRequest?id=' + this.props.user.id, { credentials: 'include' })
+			.then(response => response.json())
+			.then(response => {
+				if(response.status === 200) {
+					this.setState({ frPending: response.data })
+				}
+			})
+		} 
 	}
 
 	chargeMorePosts = async () => {
@@ -65,19 +77,21 @@ export default class Profile extends React.Component {
 				postsState = postsState.slice(0, i).concat(postsState.slice(i + 1, postsState.length));
 				return true
 			}
+			return true;
 		})
 		this.setState({ posts: postsState })
 	}
 
 	addFriend = async () => {
-		await fetch('http://localhost:8080/friends?friendId=' + this.state.user.id, { method: 'POST', credentials: 'include'})
-		.then(response => response.json())
-		.then(response => {
-			if(response.status === 200) {
-				this.updateProfile()
-				this.props.updateDashboard()
-			}
-		})
+		const notification = {
+			notificationSender: this.props.ownUser.id,
+			notificationReceiver: this.props.user.id,
+			typeNotificationId: 1,
+			user: this.props.ownUser,
+			notificationDate: Date.now()
+		}
+		this.props.notificationSocket.send(JSON.stringify(notification))
+		this.setState({ frPending: true })
 	}
 	
 	render() {
@@ -97,8 +111,10 @@ export default class Profile extends React.Component {
 						<Header as='h2' textAlign='center' style={{ marginTop: 0, marginBottom: 0, marginLeft: '40%', color: dark ? 'white' : 'black' }}>{this.state.user.username}</Header>
 						{this.props.own && 
 						<Button outlined color='#FF5252' height={30} width={100} onClick={() => this.props.changeView('EditProfile')}>Edit Profile</Button>}
-						{!this.props.own && !this.props.isFriend &&
+						{!this.props.own && !this.props.isFriend && !this.state.frPending &&
 						<Button outlined color='green' height={30} width={100} onClick={() => this.addFriend()}>Add Friend</Button>}
+						{this.state.frPending &&
+						<span style={{ color: 'green', fontFamily: 'Roboto', fontSize: 18, alignSelf: 'center' }}>Friend Request Pending</span>}
 					</div>
 					
 					<Divider />
@@ -131,7 +147,7 @@ export default class Profile extends React.Component {
 							{this.state.posts.length > 0 && shouldShowPosts &&
 							<div style={{ overflowY: 'scroll', width: '100%', height: '72.5%', paddingRight: 10 }}>
 								{this.state.posts.map(post => {
-									return <Post post={post} key={post.idPost} darkTheme={dark} userId={this.props.user.id} ownUser={user} deletePost={this.deletePost}/>
+									return <Post post={post} key={post.idPost} darkTheme={dark} userId={this.props.user.id} ownUser={user} deletePost={this.deletePost} notificationSocket={this.props.notificationSocket}/>
 								})}
 							</div>}
 							{this.state.posts.length === 0 && shouldShowPosts &&

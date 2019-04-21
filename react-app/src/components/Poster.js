@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextArea, Container, Image, Divider, Icon, Dimmer, Loader } from 'semantic-ui-react';
+import { TextArea, Container, Image, Divider, Icon, Loader } from 'semantic-ui-react';
 import ReactAudioPlayer from 'react-audio-player'
 import ReactPlayer from 'react-player';
 import Slider from 'react-slick'

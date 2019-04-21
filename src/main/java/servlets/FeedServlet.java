@@ -25,11 +25,12 @@ public class FeedServlet extends HttpServlet {
 		ObjectMapper mapper = new ObjectMapper();
 		Response<ArrayList<Post>> response;
 		Integer id = Integer.parseInt(req.getSession(false).getAttribute("user_id").toString());
-		Integer posts = Integer.parseInt(req.getParameter("posts"));
-		String username = req.getSession(false).getAttribute("username").toString();
-
-		response = PostsHandler.getPosts(id, posts, username);
-
+		try {
+			Integer from = Integer.parseInt(req.getParameter("from"));
+			response = PostsHandler.getPosts(id, from);
+		} catch(NumberFormatException e) {
+			response = PostsHandler.getPosts(id, 0);
+		}
 		mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 		resp.getWriter().print(mapper.writeValueAsString(response));
 	}

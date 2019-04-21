@@ -13,7 +13,11 @@ public class Notification {
 	private Integer notificationReceiver;
 	private Timestamp notificationDate;
 	private Integer typeNotificationId;
+	private Boolean notificationAccepted;
 	private User user;
+	private Post post;
+	private Comment comment;
+	private Like like;
 
 	//Getters
 	public Integer getNotificationId() {
@@ -35,6 +39,8 @@ public class Notification {
 	public Integer getTypeNotificationId() {
 		return typeNotificationId;
 	}
+
+	public Boolean getNotificationAccepted() { return notificationAccepted; }
 
 	public User getUser() {
 		return user;
@@ -60,6 +66,8 @@ public class Notification {
 	public void setTypeNotificationId(Integer typeNotificationId) {
 		this.typeNotificationId = typeNotificationId;
 	}
+
+	public void setNotificationAccepted(Boolean notificationAccepted) { this.notificationAccepted = notificationAccepted; }
 
 	public void setUser(User user) {
 		this.user = user;

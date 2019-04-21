@@ -228,9 +228,11 @@ INSERT INTO type_user VALUES (1, 'user');
 INSERT INTO type_user VALUES (2, 'admin');
 
 INSERT INTO type_notification VALUES(1, 'friend_request');
-INSERT INTO type_notification VALUES(2, 'tag');
-INSERT INTO type_notification VALUES(3, 'comment');
-INSERT INTO type_notification VALUES(4, 'like');
+INSERT INTO type_notification VALUES(2, 'comment');
+INSERT INTO type_notification VALUES(3, 'like');
+INSERT INTO type_notification VALUES(4, 'friend accept');
+INSERT INTO type_notification VALUES(4, 'friend reject');
+
 
 INSERT INTO type_like VALUES(1, 'like');
 INSERT INTO type_like VALUES(2, 'love');

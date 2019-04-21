@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input, Segment, Divider, Icon } from 'semantic-ui-react';
+import { Input, Segment, Divider } from 'semantic-ui-react';
 import UserCard from '../components/UserCard.js';
 export default class Search extends React.Component {
 	constructor(props) {

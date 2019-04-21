@@ -4,7 +4,6 @@ import FriendContainer from '../components/FriendContainer';
 
 export default class Inbox extends React.Component {
 	render() {
-		console.log(this.props.friends)
 		const dark = this.props.darkTheme
 		const styles = this.getStyles(dark)
 		return(

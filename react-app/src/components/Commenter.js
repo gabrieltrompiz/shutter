@@ -1,7 +1,7 @@
 import React from 'react';
-import { Image, TextArea, Icon } from 'semantic-ui-react';
+import { Image, TextArea } from 'semantic-ui-react';
 
-export default class Comment extends React.Component {
+export default class Commenter extends React.Component {
 	constructor(props) {
         super(props);
         this.state = { commentText: 'Add a comment...', empty: true }
@@ -29,16 +29,25 @@ export default class Comment extends React.Component {
             };
 
             await fetch('http://localhost:8080/comments', {method: 'POST', body: JSON.stringify(body), credentials: 'include' })
-                .then(response => response.json())
-                .then(response => {
-                    if(response.status === 200) {
-                        this.setState({ commentText: 'Add a comment...', empty: true });
-                        this.props.addToConstant()
-                        this.props.comment(body);
-                    } else {
-                        console.log('cry');
-                    }
-                });
+            .then(response => response.json())
+            .then(response => {
+                if(response.status === 200) {
+                    this.setState({ commentText: 'Add a comment...', empty: true });
+                    this.props.addToConstant()
+                    this.props.comment(body);
+                } else {
+                    console.log('cry');
+                }
+            });
+            if(this.props.user.id !== this.props.post.user.id) {
+                let notification = {}
+                notification.user = this.props.user
+                notification.typeNotificationId = 2
+                notification.notificationSender = this.props.user.id
+                notification.notificationReceiver = this.props.post.user.id
+                notification.notificationDate = Date.now()
+                this.props.notificationSocket.send(JSON.stringify(notification))
+            }
         }
     }
 
@@ -77,7 +86,6 @@ export default class Comment extends React.Component {
                 height: 35,
                 width: 35,
                 backgroundColor: dark ? '#1f2f3f' : '#f0f0f0',
-                outline: 0,
                 cursor: 'pointer',
                 padding: 0,
                 justifySelf: 'center',

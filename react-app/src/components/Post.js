@@ -14,8 +14,8 @@ export default class Post extends React.Component {
 	}
 
 	componentDidMount = () => {
-		this.setState({ date: 'loading...'})
-		setInterval(() => this.setState({ date: this.getBeautifiedDate() }), 1000)
+		this.setState({ date: this.getBeautifiedDate() })
+		setInterval(() => this.setState({ date: this.getBeautifiedDate() }), 60000)
 		this.checkLike()
 	}
 
@@ -66,7 +66,6 @@ export default class Post extends React.Component {
 		let content = []
 		if(this.props.post.typePost === 2) {
 			[...Array(this.props.post.fileCount)].forEach((e, i) => {
-				console.log(baseDir + (i+1) + ".png")
 				content.push(<Image src={baseDir + (i + 1) + ".png"} key={i} style={{ margin: '0 auto' }}/>)
 			})
 		}
@@ -92,6 +91,15 @@ export default class Post extends React.Component {
 				.then(response => {
 					if(response.status === 200) {
 						this.setState(() => ({ typeLikeId: typeLikeId, likeId: response.data.likeId, likesVisible: false, liked: true, constantLikes: this.state.constantLikes + 1 }))
+						let notification = {}
+						notification.typeNotificationId = 3
+						notification.notificationSender = this.props.ownUser.id
+						notification.notificationReceiver = this.props.post.user.id
+						notification.notificationDate = Date.now()
+						notification.user = this.props.ownUser
+						if(this.props.ownUser.id !== this.props.post.user.id) {
+							this.props.notificationSocket.send(JSON.stringify(notification))
+						}
 					} else {
 						console.log(response.message);
 						this.setState({ typeLikeId: -1, likeId: -1 })
@@ -149,6 +157,7 @@ export default class Post extends React.Component {
 			case 4: return <i className="fas fa-sad-cry" style={styles.likeIcon}></i>
 			case 5: return <i className="fas fa-grin-hearts" style={styles.likeIcon}></i>
 			case 6: return <i className="fas fa-angry" style={styles.likeIcon}></i>
+			default: break;
 		} 
 	}
 
@@ -289,7 +298,7 @@ export default class Post extends React.Component {
 					})}
 				</Transition.Group>}
 				{this.state.commentsVisible && <Commenter user={this.props.ownUser} darkTheme={dark} addToConstant={() => this.setState(() => ({ constantComments: this.state.constantComments + 1}))}
-				postId={this.props.post.idPost} comment={this.userCommented} />}
+				postId={this.props.post.idPost} comment={this.userCommented} post={this.props.post} notificationSocket={this.props.notificationSocket}/>}
 			</Container>
 			);
 	}

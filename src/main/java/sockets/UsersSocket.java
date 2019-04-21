@@ -34,8 +34,8 @@ public class UsersSocket {
         session.getBasicRemote().sendText(mapper.writeValueAsString(users));
         this.httpSession = (HttpSession) config.getUserProperties().get(HttpSession.class.getName());
         this.username = httpSession.getAttribute("username").toString();
-        users.add(this.username);
-        wsSessions.put(this.username, session);
+        users.add(username);
+        wsSessions.put(username, session);
         Response<ArrayList<User>> response = FriendsHandler.getFriendList(Integer.parseInt(httpSession.getAttribute("user_id").toString()));
         this.friendList = (ArrayList<User>) response.getData();
         for (User user : friendList) {
@@ -47,8 +47,15 @@ public class UsersSocket {
 
     @OnMessage
     public void onMessage(String message, Session session) throws IOException {
-        System.out.println("User connected!");
-
+        ObjectMapper mapper = new ObjectMapper();
+        session.getBasicRemote().sendText(mapper.writeValueAsString(users));
+        Response<ArrayList<User>> response = FriendsHandler.getFriendList(Integer.parseInt(httpSession.getAttribute("user_id").toString()));
+        this.friendList = (ArrayList<User>) response.getData();
+        for (User user : friendList) {
+            if(wsSessions.containsKey(user.getUsername().toLowerCase())) {
+                wsSessions.get(user.getUsername().toLowerCase()).getBasicRemote().sendText("Connected:" + this.username);
+            }
+        }
     }
 
     @OnClose
@@ -63,7 +70,5 @@ public class UsersSocket {
     }
 
     @OnError
-    public void onError(Session session, Throwable throwable) {
-        System.err.println(throwable.getStackTrace());
-    }
+    public void onError(Session session, Throwable throwable) { throwable.printStackTrace(); }
 }

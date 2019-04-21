@@ -12,16 +12,16 @@ public class PostsHandler {
     private static PoolManager poolManager = PoolManager.getPoolManager();
     private static PropertiesReader prop = PropertiesReader.getInstance();
 
-    public static Response<ArrayList<Post>> getPosts(int id, int postsCount, String username) {
+    public static Response<ArrayList<Post>> getPosts(int id, int from) {
         Response<ArrayList<Post>> response = new Response<>();
         ArrayList<Post> posts = new ArrayList<>();
         Connection con = poolManager.getConn();
-        String query = prop.getValue("getPosts");
+        String query = from != 0 ? prop.getValue("getPosts") : prop.getValue("getPostsWithoutLimit");
         try {
             PreparedStatement ps = con.prepareStatement(query);
             ps.setInt(1, id);
             ps.setInt(2, id);
-            ps.setInt(3, postsCount);
+            ps.setInt(3, from);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {

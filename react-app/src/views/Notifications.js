@@ -5,29 +5,18 @@ import Not from '../components/Not.js';
 export default class Notifications extends React.Component {
 	constructor(props) {
 		super(props)
-		this.state = { notifications: [] }
+		this.state = { notifications: this.props.notifications }
 	}
 
-	componentDidMount = () => {
-		this.getNotifications();
-	}
-
-	getNotifications = async () => {
-		fetch('http://localhost:8080/notifications?notifications=20', {credentials: 'include'})
-			.then(response => response.json())
-			.then(response => {
-				if (response.status === 200) {
-					console.log(response);
-					this.setState({ notifications: response.data });
-				} else {
-					console.log('cry');
-				}
-			})
+	componentWillReceiveProps = (nextProps) => {
+		this.setState({ notifications: nextProps.notifications })
 	}
 
 	render() {
 		const dark = this.props.darkTheme
 		const styles = this.getStyles(dark)
+		console.log("nots")
+		console.log(this.state.notifications)
 		return(
 			<Segment raised style={{ width: '75%', height: '94vh', left: '20.5%', marginTop: '2.5vh', position: 'fixed', backgroundColor: dark ? '#15202B' : 'white' }}>
 				<p style={styles.title}>Notifications</p>
@@ -39,7 +28,7 @@ export default class Notifications extends React.Component {
 				</div>}
 				{this.state.notifications.lenght !== 0 &&
 				this.state.notifications.map((notification, i) => {
-					return <Not notification={notification} key={i} />
+					return <Not notification={notification} key={i} darkTheme={dark} notificationSocket={this.props.notificationSocket} updateDashboard={this.props.updateDashboard} ownUser={this.props.user}/>
 				})}
 			</Segment>
 		);

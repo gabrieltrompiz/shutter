@@ -104,4 +104,26 @@ public class FriendsHandler {
         }
         return response;
     }
+
+    public static Response<Boolean> checkFriendRequest(int userId, int friendId) {
+        Response<Boolean> response = new Response<>();
+        Connection con = poolManager.getConn();
+        String query = prop.getValue("checkFR");
+        try {
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, userId);
+            ps.setInt(2, friendId);
+            ResultSet rs = ps.executeQuery();
+            response.setStatus(200);
+            response.setData(rs.next());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            response.setData(false);
+            response.setMessage("DB Connection Error");
+            response.setStatus(500);
+        } finally {
+          poolManager.returnConn(con);
+        }
+        return response;
+    }
 }
