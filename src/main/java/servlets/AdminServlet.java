@@ -34,7 +34,9 @@ public class AdminServlet extends HttpServlet {
             case "usersByGenre":
                 response = AdminHandler.usersByGenre();
                 break;
-            case "usersByPosts": break;
+            case "usersByPosts":
+                response = AdminHandler.usersByPosts();
+                break;
             case "usersByFriends": break;
             case "usersByAge": break;
         }

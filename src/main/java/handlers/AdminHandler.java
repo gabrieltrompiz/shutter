@@ -8,8 +8,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.*;
+import static java.util.Map.Entry.*;
 
 public class AdminHandler {
     private static PoolManager poolManager = PoolManager.getPoolManager();
@@ -104,5 +107,60 @@ public class AdminHandler {
         return response;
     }
 
+    public static Response<LinkedHashMap<String, ArrayList<Post>>> usersByPosts() {
+        Response<LinkedHashMap<String, ArrayList<Post>>> response = new Response<>();
+        HashMap<String, ArrayList<Post>> map = new HashMap<>();
+        HashMap<String, Integer> quantity = new HashMap<>();
+        LinkedHashMap<String, ArrayList<Post>> data = new LinkedHashMap<>();
+        Connection con = poolManager.getConn();
+        String query = prop.getValue("getAllPosts");
+        try {
+            PreparedStatement ps = con.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()) {
+                Post post = new Post();
+                User user = new User();
+                post.setIdPost(rs.getInt(1));
+                post.setTypePost(rs.getInt(2));
+                post.setPostText(rs.getString(3));
+                post.setCreationTime(rs.getTimestamp(4));
+                user.setUsername(rs.getString(5));
+                user.setName(rs.getString(6));
+                user.setLastName(rs.getString(7));
+                user.setId(rs.getInt(8));
+                post.setLikes(null);
+                post.setComments(null);
+                post.setUser(user);
+                if(map.containsKey(user.getUsername())) {
+                    map.get(user.getUsername()).add(post);
+                    quantity.put(user.getUsername(), quantity.get(user.getUsername()) + 1);
+                }
+                else {
+                    ArrayList<Post> posts = new ArrayList<>();
+                    posts.add(post);
+                    map.put(user.getUsername(), posts);
+                    quantity.put(user.getUsername(), 1);
+                }
+            }
+            HashMap<String, Integer> sorted = quantity
+                    .entrySet()
+                    .stream()
+                    .sorted(Collections.reverseOrder(comparingByValue()))
+                    .limit(10)
+                    .collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2, LinkedHashMap::new));
+            for(Map.Entry me : sorted.entrySet()) {
+                String key = me.getKey().toString();
+                data.put(key, map.get(key));
+            }
+            response.setStatus(200);
+            response.setMessage("Stats Returned");
+            response.setData(data);
+
+        } catch(SQLException e) {
+            response.setStatus(500);
+            response.setMessage("DB Connection Error");
+        }
+        return response;
+    }
 
 }
