@@ -87,7 +87,6 @@ public class AdminHandler {
                 user.setBirthday(rs.getDate(5));
                 user.setCreationTime(rs.getTimestamp(6));
                 user.setSex(rs.getBoolean(7));
-                user.setEnabled(rs.getBoolean(8));
                 if(user.getSex()) { male.add(user); }
                 else { female.add(user); }
             }
@@ -159,6 +158,64 @@ public class AdminHandler {
         } catch(SQLException e) {
             response.setStatus(500);
             response.setMessage("DB Connection Error");
+        } finally {
+            poolManager.returnConn(con);
+        }
+        return response;
+    }
+
+    public static Response<LinkedHashMap<String, ArrayList<User>>> usersByFriends() {
+        Response<LinkedHashMap<String, ArrayList<User>>> response = new Response<>();
+        HashMap<String, ArrayList<User>> map = new HashMap<>();
+        HashMap<String, Integer> quantity = new HashMap<>();
+        LinkedHashMap<String, ArrayList<User>> data = new LinkedHashMap<>();
+        Connection con = poolManager.getConn();
+        String query = prop.getValue("getAllFriends");
+        try {
+            PreparedStatement ps = con.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()) {
+                User user = new User();
+                User friend = new User();
+                user.setId(rs.getInt(1));
+                friend.setId(rs.getInt(2));
+                user.setUsername(rs.getString(3));
+                friend.setUsername(rs.getString(4));
+                friend.setName(rs.getString(5));
+                friend.setLastName(rs.getString(6));
+                friend.setBirthday(rs.getDate(7));
+                friend.setCreationTime(rs.getTimestamp(8));
+                friend.setSex(rs.getBoolean(9));
+                if(map.containsKey(user.getUsername())) {
+                    map.get(user.getUsername()).add(friend);
+                    quantity.put(user.getUsername(), quantity.get(user.getUsername()) + 1);
+                }
+                else {
+                    ArrayList<User> users = new ArrayList<>();
+                    users.add(friend);
+                    map.put(user.getUsername(), users);
+                    quantity.put(user.getUsername(), 1);
+                }
+            }
+            HashMap<String, Integer> sorted = quantity
+                    .entrySet()
+                    .stream()
+                    .sorted(Collections.reverseOrder(comparingByValue()))
+                    .limit(10)
+                    .collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2, LinkedHashMap::new));
+            for(Map.Entry me : sorted.entrySet()) {
+                String key = me.getKey().toString();
+                data.put(key, map.get(key));
+            }
+            response.setStatus(200);
+            response.setMessage("Stats Returned");
+            response.setData(data);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            response.setStatus(500);
+            response.setMessage("DB Connection Error");
+        } finally {
+            poolManager.returnConn(con);
         }
         return response;
     }
