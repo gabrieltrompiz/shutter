@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import handlers.AdminHandler;
 import models.Response;
-import models.TypePost;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

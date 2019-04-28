@@ -1,30 +1,28 @@
 package handlers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import models.*;
 import utilities.PoolManager;
 import utilities.PropertiesReader;
 
-import java.lang.reflect.Type;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class AdminHandler {
     private static PoolManager poolManager = PoolManager.getPoolManager();
     private static PropertiesReader prop = PropertiesReader.getInstance();
 
 
-    public static Response<TypePost> postsByType() {
-        Response<TypePost> response = new Response<>();
+    public static Response<HashMap<String, ArrayList<Post>>> postsByType() {
+        Response<HashMap<String, ArrayList<Post>>> response = new Response<>();
         ArrayList<Post> audioPosts = new ArrayList<>();
         ArrayList<Post> textPosts = new ArrayList<>();
         ArrayList<Post> videoPosts = new ArrayList<>();
         ArrayList<Post> imagePosts = new ArrayList<>();
-        TypePost tp = new TypePost();
+        HashMap<String, ArrayList<Post>> tp = new HashMap<>();
         Connection con = poolManager.getConn();
         String query = prop.getValue("getAllPosts");
         try {
@@ -50,10 +48,10 @@ public class AdminHandler {
                 if(post.getTypePost() == 4) { audioPosts.add(post); }
             }
             response.setStatus(200);
-            tp.setAudioPosts(audioPosts);
-            tp.setImagePosts(imagePosts);
-            tp.setTextPosts(textPosts);
-            tp.setVideoPosts(videoPosts);
+            tp.put("text", textPosts);
+            tp.put("audio", audioPosts);
+            tp.put("video", videoPosts);
+            tp.put("image", imagePosts);
             response.setMessage("Stats returned.");
             response.setData(tp);
 
@@ -67,11 +65,11 @@ public class AdminHandler {
         return response;
     }
 
-    public static Response<UserGenre> usersByGenre() {
-        Response<UserGenre> response = new Response<>();
+    public static Response<HashMap<String, ArrayList<User>>> usersByGenre() {
+        Response<HashMap<String, ArrayList<User>>> response = new Response<>();
         ArrayList<User> male = new ArrayList<>();
         ArrayList<User> female = new ArrayList<>();
-        UserGenre ug = new UserGenre();
+        HashMap<String, ArrayList<User>> ug = new HashMap<>();
         Connection con = poolManager.getConn();
         String query = prop.getValue("getAllUsers");
         try {
@@ -92,8 +90,8 @@ public class AdminHandler {
             }
             response.setStatus(200);
             response.setMessage("Stats returned.");
-            ug.setFemale(female);
-            ug.setMale(male);
+            ug.put("male", male);
+            ug.put("female", female);
             response.setData(ug);
         } catch(SQLException e) {
             e.printStackTrace();
@@ -105,4 +103,6 @@ public class AdminHandler {
         }
         return response;
     }
+
+
 }
