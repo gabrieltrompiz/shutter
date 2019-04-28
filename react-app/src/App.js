@@ -3,6 +3,7 @@ import 'semantic-ui-css/semantic.min.css'
 // import Header from './components/Header';
 import LoginView from './views/LoginView'
 import Dashboard from './views/Dashboard'
+import AdminDashboard from './views/AdminDashboard';
 
 class App extends Component {
   constructor(props) {
@@ -51,8 +52,10 @@ class App extends Component {
       <div className="App" style={{ height: '100vh', overflow: 'hidden' }}>
         {!this.state.loggedIn && this.state.user === null &&
         <LoginView handleLoggedIn={this.handleLoggedIn} handleUser={this.handleUser}/>}
-        {this.state.loggedIn && this.state.user !== null &&
+        {this.state.loggedIn && this.state.user !== null && this.state.user.typeId === 1 &&
         <Dashboard handleLoggedIn={this.handleLoggedIn} user={this.state.user} changeUser={this.handleUser} darkTheme={this.state.darkTheme} switchTheme={this.switchTheme}/>}
+        {this.state.loggedIn && this.state.user !== null && this.state.user.typeId === 2 &&
+        <AdminDashboard handleLoggedIn={this.handleLoggedIn} user={this.state.user} changeUser={this.handleUser} darkTheme={this.state.darkTheme} switchTheme={this.switchTheme}/>}
       </div>
     );
   }

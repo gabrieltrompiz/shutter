@@ -11,7 +11,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebFilter(urlPatterns = {"/logout", "/edit", "/friends", "/feed", "/posts", "/files", "/comments", "/likes", "/users", "/notifications",
-        "/checkFriendRequest"}, filterName = "Session Filter")
+        "/checkFriendRequest", "/admin"}, filterName = "Session Filter")
 public class SessionFilter implements Filter {
     @Override
     public void destroy() {}

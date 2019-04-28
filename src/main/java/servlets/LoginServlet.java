@@ -36,6 +36,7 @@ public class LoginServlet extends HttpServlet {
       HttpSession session = req.getSession();
       session.setAttribute("user_id", user.getId());
       session.setAttribute("username", user.getLowercaseUsername());
+      session.setAttribute("type", user.getTypeId());
     }
     mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
     resp.setStatus(response.getStatus());
