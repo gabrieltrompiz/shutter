@@ -15,8 +15,6 @@ export default class Notifications extends React.Component {
 	render() {
 		const dark = this.props.darkTheme
 		const styles = this.getStyles(dark)
-		console.log("nots")
-		console.log(this.state.notifications)
 		return(
 			<Segment raised style={{ width: '75%', height: '94vh', left: '20.5%', marginTop: '2.5vh', position: 'fixed', backgroundColor: dark ? '#15202B' : 'white' }}>
 				<p style={styles.title}>Notifications</p>
