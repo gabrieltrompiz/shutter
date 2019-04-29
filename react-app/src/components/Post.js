@@ -9,7 +9,7 @@ import Slider from "react-slick";
 export default class Post extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { typeLikeId: -1, likeId: -1, commentsVisible: false, likesVisible: false, liked: false, constantLikes: 0, likeList: false, constantComments: 0, 
+		this.state = { typeLikeId: -1, likeId: -1, commentsVisible: false, likesVisible: false, liked: false, constantLikes: 0, likeList: false, constantComments: 0,
 		comments: this.props.post.comments, showMenu: false };
 	}
 
@@ -25,6 +25,18 @@ export default class Post extends React.Component {
 				this.setState({ typeLikeId: like.typeLikeId, likeId: like.likeId, liked: true })
 			}
 		});
+	}
+
+	deleteComment = (commentToDelete) => {
+		let commentsState = [...this.state.comments];
+		commentsState.some((comment, i) => {
+			if(comment.commentId === commentToDelete.commentId) {
+				commentsState = commentsState.slice(0, i).concat(commentsState.slice(i + 1, commentsState.length));
+				return true
+			}
+			return true
+		})
+		this.setState({ comments: commentsState });
 	}
 
 	getBeautifiedDate = () => {
@@ -153,7 +165,7 @@ export default class Post extends React.Component {
 		await fetch('http://localhost:8080/reportPost?id=' + this.props.post.idPost, { credentials: 'include', method: 'POST' })
 			.then(response => {
 				if(response.status === 200) {
-					this.props.deletePost(this.props.post)
+					/*POST REPORTED*/
 				}
 			})
 	}
@@ -309,7 +321,8 @@ export default class Post extends React.Component {
 				{this.state.commentsVisible &&
 				<Transition.Group as={List}>		
 					{this.state.comments.map((comment, i) => {
-						return (<List.Item key={i} style={{ padding: 0, margin: 0}}><Comment comment={comment} darkTheme={dark}/></List.Item>)
+						return (<List.Item key={i} style={{ padding: 0, margin: 0}}><Comment comment={comment}
+							 ownUser={this.props.ownUser} darkTheme={dark} deleteComment={this.deleteComment}/></List.Item>)
 					})}
 				</Transition.Group>}
 				{this.state.commentsVisible && <Commenter user={this.props.ownUser} darkTheme={dark} addToConstant={() => this.setState(() => ({ constantComments: this.state.constantComments + 1}))}
