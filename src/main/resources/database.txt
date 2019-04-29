@@ -247,3 +247,47 @@ INSERT INTO type_post VALUES(1, 'plain_text');
 INSERT INTO type_post VALUES(2, 'picture');
 INSERT INTO type_post VALUES(3, 'video');
 INSERT INTO type_post VALUES(4, 'audio');
+
+CREATE SEQUENCE type_report_type_report_id_seq;
+
+CREATE TABLE type_report (
+                type_report_id INTEGER NOT NULL DEFAULT nextval('type_report_type_report_id_seq'),
+                type_report_description VARCHAR(25) NOT NULL,
+                CONSTRAINT type_report_pk PRIMARY KEY (type_report_id)
+);
+
+
+ALTER SEQUENCE type_report_type_report_id_seq OWNED BY type_report.type_report_id;
+
+
+CREATE SEQUENCE reports_report_id_seq;
+
+CREATE TABLE reports (
+                report_id INTEGER NOT NULL DEFAULT nextval('reports_report_id_seq'),
+                report_sender INTEGER NOT NULL,
+                report_target INTEGER NOT NULL,
+                type_report_id INTEGER NOT NULL,
+                report_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                report_message VARCHAR(500),
+                CONSTRAINT report_pk PRIMARY KEY (report_id)
+);
+
+
+ALTER SEQUENCE reports_report_id_seq OWNED BY reports.report_id;
+
+ALTER TABLE reports ADD CONSTRAINT type_report_reports_fk
+FOREIGN KEY (type_report_id)
+REFERENCES type_report (type_report_id)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE reports ADD CONSTRAINT users_reports_fk
+FOREIGN KEY (report_sender)
+REFERENCES users (user_id)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+INSERT INTO type_report(type_report_description) VALUES ('post_report');
+INSERT INTO type_report(type_report_description) VALUES ('comment_report');

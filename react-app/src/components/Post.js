@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Image, Divider, Transition, List } from 'semantic-ui-react';
+import { Container, Image, Divider, Transition, List, Icon } from 'semantic-ui-react';
 import Comment from './Comment.js';
 import Commenter from './Commenter.js';
 import ReactPlayer from 'react-player';
@@ -149,6 +149,15 @@ export default class Post extends React.Component {
 		})
 	}
 
+	reportPost = async () => {
+		await fetch('http://localhost:8080/reportPost?id=' + this.props.post.idPost, { credentials: 'include', method: 'POST' })
+			.then(response => {
+				if(response.status === 200) {
+					this.props.deletePost(this.props.post)
+				}
+			})
+	}
+
 	getIcon = (likeId, styles) => {
 		switch(likeId) {
 			case 1: return <i className="fas fa-grin-squint-tears" style={styles.likeIcon}></i>
@@ -193,15 +202,21 @@ export default class Post extends React.Component {
 							<span style={styles.date}>{this.state.date}</span>
 						</div>
 					</div>
-					{this.props.post.user.id === this.props.ownUser.id && 
 					<button style={styles.threeDots} onClick={() => this.setState({ showMenu: !this.state.showMenu })}>
-						<i className="fas fa-ellipsis-h"></i>
-					</button>}
+						{/*{<i className="fas fa-ellipsis-h"></i>}*/}
+						<Icon name={"ellipsis horizontal"}></Icon>
+					</button>
 					<Transition visible={this.state.showMenu} animation='fade left' duration={250} unmountOnHide>
 						<div style={styles.menu}>
+							{this.props.post.user.id === this.props.ownUser.id &&
 							<button style={styles.menuBtn} onClick={() => this.deletePost()}>
 								Delete Post
-							</button>
+							</button>}
+
+							{this.props.post.user.id !== this.props.ownUser.id &&
+							<button style={styles.menuBtn} onClick={() => this.reportPost()}>
+								Report Post
+							</button>}
 						</div>
 					</Transition>
 				</div>
