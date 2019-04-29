@@ -40,7 +40,9 @@ public class AdminServlet extends HttpServlet {
             case "usersByFriends":
                 response = AdminHandler.usersByFriends();
                 break;
-            case "usersByAge": break;
+            case "usersByAge":
+                response = AdminHandler.usersByAge();
+                break;
         }
         resp.setStatus(response.getStatus());
         resp.getWriter().print(mapper.writeValueAsString(response));

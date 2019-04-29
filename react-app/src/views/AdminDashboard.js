@@ -66,6 +66,13 @@ export default class AdminDashboard extends React.Component {
 								Search
 							</Header>
 						</Menu.Item>
+                        <Menu.Item active={this.state.activeItem === 'Reports'} onClick={this.handleItemClick} name='Reports' 
+						style={{ borderColor: dark && this.state.activeItem === 'Reports' ? 'white' : '' }}>
+							<Header as='h5' style={{ paddingLeft: 10, marginTop: 0.5, color: dark ? 'white' : 'black' }}>
+								<Icon name='warning circle' style={{ float: 'left', fontSize: 16 }}/>
+								Reports
+							</Header>
+						</Menu.Item>
 						<Menu.Item  onClick={this.props.switchTheme}>
 							<Header as='h5' style={{ paddingLeft: 10, marginTop: 0.5, color: dark ? 'white' : 'black' }}>
 								<Icon name='moon' style={{ float: 'left', fontSize: 16  }}/>

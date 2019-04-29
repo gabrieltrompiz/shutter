@@ -8,6 +8,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -215,6 +217,46 @@ public class AdminHandler {
             response.setStatus(500);
             response.setMessage("DB Connection Error");
         } finally {
+            poolManager.returnConn(con);
+        }
+        return response;
+    }
+
+    public static Response<LinkedHashMap<Integer, ArrayList<User>>> usersByAge() {
+        Response<LinkedHashMap<Integer, ArrayList<User>>> response = new Response<>();
+        LinkedHashMap<Integer, ArrayList<User>> data = new LinkedHashMap<>();
+        Connection con = poolManager.getConn();
+        String query = prop.getValue("getUsersByAge");
+        try {
+            PreparedStatement ps = con.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()) {
+                User user = new User();
+                user.setId(rs.getInt(1));
+                user.setUsername(rs.getString(2));
+                user.setName(rs.getString(3));
+                user.setLastName(rs.getString(4));
+                user.setBirthday(rs.getDate(5));
+                user.setCreationTime(rs.getTimestamp(6));
+                user.setSex(rs.getBoolean(7));
+                int age = Period.between(user.getBirthday().toLocalDate(), LocalDate.now()).getYears();
+                if(data.containsKey(age)) {
+                    data.get(age).add(user);
+                }
+                else {
+                    ArrayList<User> users = new ArrayList<>();
+                    users.add(user);
+                    data.put(age, users);
+                }
+            }
+            response.setStatus(200);
+            response.setMessage("Stats Returned");
+            response.setData(data);
+        } catch(SQLException e) {
+            response.setStatus(500);
+            response.setMessage("DB Connection Error");
+        }
+        finally {
             poolManager.returnConn(con);
         }
         return response;
