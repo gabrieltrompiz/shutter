@@ -2,6 +2,7 @@ import React from 'react'
 import { Segment, Divider, Form, Icon, Dimmer, Loader } from 'semantic-ui-react';
 import { LineChart, Tooltip, XAxis, YAxis, Legend, Line, CartesianGrid, ResponsiveContainer, PieChart, Pie, BarChart, Bar } from 'recharts'
 import PostShowcase from '../components/PostShowcase';
+import FriendContainer from '../components/FriendContainer';
 
 export default class Stats extends React.Component {
     constructor(props) {
@@ -146,17 +147,17 @@ export default class Stats extends React.Component {
                         Refresh
                     </button>
                 </div>
-                <Divider fitted />
+                <Divider fitted style={{ marginBottom: 10 }} />
                 <Dimmer active={this.state.fetching} style={{ opacity: 0.5 }}>
                     <Loader inverted active={this.state.fetching} style={{ opacity: '1 !important' }}>Fetching...</Loader>
                 </Dimmer>
                 <p style={styles.subtitle}>
                     {this.state.filter.charAt(0).toUpperCase() + this.state.filter.slice(1, this.state.filter.length) + " " 
                     + this.state.order.slice(0, 2).toLowerCase() + " " + this.state.order.slice(2, this.state.order.length)}
-                    </p>
+                </p>
                 {stat === 'postsByType' && 
                 <ResponsiveContainer width='95%' height='60%'>
-                    <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                    <LineChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
                         <CartesianGrid strokeDasharray="3 3" stroke={dark ? '#8899A6' : 'grey'}/>
                         <XAxis dataKey="name" stroke={dark ? '#8899A6' : 'grey'} />
                         <YAxis stroke={dark ? '#8899A6' : 'grey'}/>
@@ -167,7 +168,7 @@ export default class Stats extends React.Component {
                 </ResponsiveContainer>}
                 {stat === 'postsByLikes' &&
                 <ResponsiveContainer width='95%' height='60%'>
-                    <BarChart data={data} margin={{ right: 0 }}>
+                    <BarChart data={data} margin={{ right: 0, top: 20 }}>
                         <CartesianGrid stroke={dark ? '#8899A6' : 'grey'}/>
                         <XAxis dataKey="name" stroke={dark ? '#8899A6' : 'grey'} />
                         <YAxis stroke={dark ? '#8899A6' : 'grey'}/>
@@ -179,7 +180,7 @@ export default class Stats extends React.Component {
                 </ResponsiveContainer>}
                 {stat === 'postsByComments' &&
                 <ResponsiveContainer width='95%' height='60%'>
-                    <BarChart data={data} margin={{ right: 0 }}>
+                    <BarChart data={data} margin={{ right: 0, top: 20 }}>
                         <CartesianGrid stroke={dark ? '#8899A6' : 'grey'}/>
                         <XAxis dataKey="name" stroke={dark ? '#8899A6' : 'grey'} />
                         <YAxis stroke={dark ? '#8899A6' : 'grey'}/>
@@ -190,15 +191,33 @@ export default class Stats extends React.Component {
                     </BarChart>
                 </ResponsiveContainer>}        
                 {stat === 'usersByGenre' &&
-                <div>
-                    <ResponsiveContainer width='40%' height='60%'>
-                        <PieChart>
+                <div style={{ display: 'flex', width: '100%', height: '60%', justifyContent: 'space-between', paddingRight: 40 }}>
+                    <ResponsiveContainer width='30%' height='100%'>
+                        <PieChart margin={{ top: 20 }}>
                             <Pie data={data} dataKey="quantity" nameKey="genre" cx="50%" cy="50%" outerRadius="120" legendType='circle' strokeWidth={2} stroke='transparent' animationDuration={1000}/>
                             <Tooltip contentStyle={{ backgroundColor: dark ? '#1c2938' : '#f0f0f0', borderColor: 'transparent' }} 
                             itemStyle={{ color: dark ? 'white' : 'black' }} />
                             <Legend wrapperStyle={{ color: dark ? '#8899A6' : 'grey' }} />
                         </PieChart>
                     </ResponsiveContainer>
+                    <div style={{ width: '30%', height: '110%', borderRadius: 5, backgroundColor: dark ? '#1c2938' : '#f0f0f0' }}>
+                        <p style={styles.subtitle}>Male</p>
+                        <Divider fitted />
+                        <div style={{ overflowY: 'scroll', height: '90%', paddingLeft: 10 }}>
+                        {typeof this.state.stats.female !== 'undefined' && this.state.stats.male.map(user => {
+                            return <FriendContainer friend={user} darkTheme={dark} showcase />
+                        })}
+                        </div>
+                    </div>
+                    <div style={{ width: '30%', height: '110%', borderRadius: 5, backgroundColor: dark ? '#1c2938' : '#f0f0f0' }}>
+                        <p style={styles.subtitle}>Female</p>
+                        <Divider fitted />
+                        <div style={{ overflowY: 'scroll', height: '90%', paddingLeft: 10 }}>
+                        {typeof this.state.stats.female !== 'undefined' && this.state.stats.female.map(user => {
+                            return <FriendContainer friend={user} darkTheme={dark} showcase />
+                        })}
+                        </div>
+                    </div>
                 </div>}
                 {stat === 'usersByPosts' &&
                 <ResponsiveContainer width='95%' height='60%'>
@@ -281,7 +300,9 @@ export default class Stats extends React.Component {
                 fontSize: 22,
                 fontFamily: 'Heebo',
                 fontWeight: 'bold',
-                margin: 10
+                margin: 10,
+                marginBottom: 0,
+                marginTop: 5
             }
         }
         return styles

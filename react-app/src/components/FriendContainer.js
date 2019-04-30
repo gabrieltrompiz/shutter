@@ -8,8 +8,10 @@ export default class FriendContainer extends React.Component {
     }
 
     handleClick = async () => {
-        await this.props.changeUser(this.state);
-        await this.props.changeView('OtherUserProfile');
+        if(!this.props.showcase) {
+            await this.props.changeUser(this.state);
+            await this.props.changeView('OtherUserProfile');
+        }
     }
 
     render() {
