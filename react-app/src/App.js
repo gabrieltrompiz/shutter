@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import 'semantic-ui-css/semantic.min.css'
-// import Header from './components/Header';
 import LoginView from './views/LoginView'
 import Dashboard from './views/Dashboard'
 import AdminDashboard from './views/AdminDashboard';
 
-class App extends Component {
+export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = { loggedIn: false, user: null, darkTheme: false }
@@ -27,7 +26,7 @@ class App extends Component {
   handleLoggedIn = async (loggedIn) => {
     if(!loggedIn) {
       await localStorage.clear('user')
-      this.setState({ user: null })
+      this.setState({ user: null, loggedIn: false })
     }
     await localStorage.setItem('loggedIn', JSON.stringify(loggedIn))
     this.setState({ loggedIn: loggedIn })
@@ -60,6 +59,3 @@ class App extends Component {
     );
   }
 }
-
-export default App;
-//<LoginView loggedIn={this.state.loggedIn}/>
