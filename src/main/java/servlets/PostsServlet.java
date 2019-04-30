@@ -36,7 +36,7 @@ public class PostsServlet extends HttpServlet {
 	    ObjectMapper mapper = new ObjectMapper();
         Integer userId = Integer.parseInt(req.getSession(false).getAttribute("user_id").toString());
         Integer postId = Integer.parseInt(req.getParameter("id"));
-        Response<String> response = PostsHandler.deletePost(userId, postId);
+        Response<?> response = PostsHandler.deletePost(userId, postId);
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         resp.getWriter().print(mapper.writeValueAsString(response));
     }

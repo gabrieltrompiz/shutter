@@ -450,15 +450,15 @@ public class AdminHandler {
     }
 
     public static Response<User> searchUser(String search) {
-
+        return null;
     }
 
     public static Response<Post> searchPosts(String search) {
-
+        return null;
     }
 
     public static Response<Comment> searchComments(String search) {
-
+        return null;
     }
 
     public static Response<?> deletePost(Post post) {

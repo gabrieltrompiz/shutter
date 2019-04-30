@@ -89,8 +89,8 @@ export default class Stats extends React.Component {
         }
         else if((this.state.filter + this.state.order) === 'usersByGenre') {
             data = [
-                { genre: "Male", quantity: this.state.stats.male.length, fill: 'blue' },
-                { genre: "Female", quantity: this.state.stats.female.length, fill: 'pink' }
+                { genre: "Male", quantity: this.state.stats.male.length, fill: '#0080C6' },
+                { genre: "Female", quantity: this.state.stats.female.length, fill: '#EB58BA' }
             ]
         }
         else if((this.state.filter + this.state.order) === 'usersByPosts') {
@@ -190,14 +190,16 @@ export default class Stats extends React.Component {
                     </BarChart>
                 </ResponsiveContainer>}        
                 {stat === 'usersByGenre' &&
-                <ResponsiveContainer width='95%' height='60%'>
-                    <PieChart>
-                        <Pie data={data} dataKey="quantity" nameKey="genre" cx="50%" cy="50%" outerRadius="100" legendType='circle' strokeWidth={2} stroke='transparent' animationDuration={1000}/>
-                        <Tooltip contentStyle={{ backgroundColor: dark ? '#1c2938' : '#f0f0f0', borderColor: 'transparent' }} 
-                        itemStyle={{ color: dark ? 'white' : 'black' }} />
-                        <Legend wrapperStyle={{ color: dark ? '#8899A6' : 'grey' }} />
-                    </PieChart>
-                </ResponsiveContainer>}
+                <div>
+                    <ResponsiveContainer width='40%' height='60%'>
+                        <PieChart>
+                            <Pie data={data} dataKey="quantity" nameKey="genre" cx="50%" cy="50%" outerRadius="120" legendType='circle' strokeWidth={2} stroke='transparent' animationDuration={1000}/>
+                            <Tooltip contentStyle={{ backgroundColor: dark ? '#1c2938' : '#f0f0f0', borderColor: 'transparent' }} 
+                            itemStyle={{ color: dark ? 'white' : 'black' }} />
+                            <Legend wrapperStyle={{ color: dark ? '#8899A6' : 'grey' }} />
+                        </PieChart>
+                    </ResponsiveContainer>
+                </div>}
                 {stat === 'usersByPosts' &&
                 <ResponsiveContainer width='95%' height='60%'>
                     <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
@@ -221,7 +223,7 @@ export default class Stats extends React.Component {
                     </LineChart>
                 </ResponsiveContainer>}
                 {stat === 'usersByAge' &&
-                <ResponsiveContainer width='60%' height={250}>
+                <ResponsiveContainer width='95%' height='60%'>
                     <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
                         <CartesianGrid strokeDasharray="3 3" stroke={dark ? '#8899A6' : 'grey'}/>
                         <XAxis dataKey="name" stroke={dark ? '#8899A6' : 'grey'} />

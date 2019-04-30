@@ -92,10 +92,9 @@ export default class Comment extends React.Component {
                 wordWrap: 'break-word',
             },
             menu: {
-                position: 'relative',
-                right: 0,
-                top: 30,
-                backgroundColor: dark ? '#1f2f3f' : '#e3e3e3',
+                position: 'absolute',
+                right: 25,
+                backgroundColor: dark ? '#1C2938' : '#e3e3e3',
                 zIndex: 2,
                 width: 150,
                 padding: 15,
