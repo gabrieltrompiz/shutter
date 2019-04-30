@@ -18,7 +18,7 @@ export default class AdminDashboard extends React.Component {
 
     getView = () => {
 		switch(this.state.activeItem) {
-            case 'Stats': return <Stats darkTheme={this.props.darkTheme} />
+            case 'Stats': return <Stats darkTheme={this.props.darkTheme} logout={this.logout}/>
             case 'Mail': return <Mail darkTheme={this.props.darkTheme} />
             case 'Search': return <AdminSearch darkTheme={this.props.darkTheme} />
             default: break;

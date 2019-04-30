@@ -31,6 +31,12 @@ public class AdminServlet extends HttpServlet {
             case "postsByType":
                 response = AdminHandler.postsByType();
                 break;
+            case "postsByLikes":
+                response = AdminHandler.postsByLikes();
+                break;
+            case "postsByComments":
+                response = AdminHandler.postsByComments();
+                break;
             case "usersByGenre":
                 response = AdminHandler.usersByGenre();
                 break;
@@ -42,6 +48,10 @@ public class AdminServlet extends HttpServlet {
                 break;
             case "usersByAge":
                 response = AdminHandler.usersByAge();
+                break;
+            default:
+                response.setStatus(404);
+                response.setMessage("Bad request. Stat non-existent");
                 break;
         }
         resp.setStatus(response.getStatus());
