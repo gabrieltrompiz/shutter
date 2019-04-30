@@ -278,16 +278,17 @@ export default class Post extends React.Component {
 					</div>
 				</Transition>
 				<Divider fitted />
-				<div style={{ width: '100%', height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-					<button style={styles.reactionsBtns} ref={(ref) => this.btn1 = ref} onMouseOver={() => this.btn1.style.cursor = 'pointer'}
-					onClick={() => this.setState({ likesVisible: !this.state.likesVisible, likeList: false })}>
-						<i className={(liked ? "fas" : "far") + " fa-heart"}></i>  {liked ? 'Liked' : 'Like'}
-					</button>
-					<button style={styles.reactionsBtns} ref={(ref) => this.btn2 = ref} onMouseOver={() => this.btn2.style.cursor = 'pointer'}
-					onClick={() => this.setState({ commentsVisible: !this.state.commentsVisible })}>
-						<i className="far fa-comment"></i>  Comment
-					</button>
-				</div>
+                {!this.props.admin &&
+                <div style={{ width: '100%', height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <button style={styles.reactionsBtns} ref={(ref) => this.btn1 = ref} onMouseOver={() => this.btn1.style.cursor = 'pointer'}
+                            onClick={() => this.setState({ likesVisible: !this.state.likesVisible, likeList: false })}>
+                        <i className={(liked ? "fas" : "far") + " fa-heart"}></i>  {liked ? 'Liked' : 'Like'}
+                    </button>
+                    <button style={styles.reactionsBtns} ref={(ref) => this.btn2 = ref} onMouseOver={() => this.btn2.style.cursor = 'pointer'}
+                            onClick={() => this.setState({ commentsVisible: !this.state.commentsVisible })}>
+                        <i className="far fa-comment"></i>  Comment
+                    </button>
+                </div>}
 				<Transition visible={this.state.likesVisible} animation="fade down" duration={250} unmountOnHide>
 					<div style={{ position: 'absolute', width: '50%', height: 60, backgroundColor: dark ? '#15202B' : '#e0e0e0', borderRadius: 5, justifyContent: 'space-between',
 					marginTop: -105, zIndex: 1, paddingLeft: 10, paddingRight: 10, marginLeft: 5 }} id="nonblock">
@@ -317,6 +318,7 @@ export default class Post extends React.Component {
 						</button>
 					</div>
 				</Transition>
+                {/*No sé si aquí haga falta poner lo del admin porque aja si no tiene el botón no se puede mostrar xd*/}
 				{this.state.commentsVisible && <Divider fitted />}
 				{this.state.commentsVisible &&
 				<Transition.Group as={List}>		

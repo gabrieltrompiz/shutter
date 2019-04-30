@@ -125,8 +125,8 @@ public class PostsHandler {
         return response;
     }
 
-    public static Response<String> deletePost(int userId, int postId) {
-        Response<String> response = new Response<>();
+    public static Response<?> deletePost(int userId, int postId) {
+        Response<?> response = new Response<>();
         Connection con = poolManager.getConn();
         String query = prop.getValue("deletePost");
         try {

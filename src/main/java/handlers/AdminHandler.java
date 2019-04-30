@@ -262,4 +262,97 @@ public class AdminHandler {
         return response;
     }
 
+    public static Response<?> changeUserState(User user, boolean state) {
+        Response<?> response = new Response<>();
+        Connection con = poolManager.getConn();
+        String query = prop.getValue("changeUserState");
+
+        try {
+            PreparedStatement ps = con.prepareStatement(query);
+
+            ps.setInt(1, user.getId());
+            ps.setBoolean(2, state);
+
+            if(ps.executeUpdate() == 1) {
+                response.setMessage("User Updated");
+            } else {
+                response.setMessage("Couldn't update user");
+            }
+            response.setStatus(200);
+
+        } catch(SQLException e) {
+            e.printStackTrace();
+            response.setStatus(500);
+            response.setMessage("DB Connection Error");
+        }
+
+        return null;
+    }
+
+    public static Response<User> searchUser(String search) {
+
+    }
+
+    public static Response<Post> searchPosts(String search) {
+
+    }
+
+    public static Response<Comment> searchComments(String search) {
+
+    }
+
+    public static Response<?> deletePost(Post post) {
+        Response<?> response = new Response<>();
+        Connection con = poolManager.getConn();
+        String query = prop.getValue("deletePost");
+        try {
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, post.getIdPost());
+            ps.setInt(2, post.getIdPost());
+            ps.setInt(3, post.getUser().getId());
+            ps.setInt(4, post.getIdPost());
+            int affectedRows = ps.executeUpdate();
+            if(affectedRows == 0) {
+                response.setMessage("Could not delete post");
+                response.setStatus(200);
+            } else {
+                response.setMessage("Post deleted successfully");
+                response.setStatus(200);
+            }
+        } catch(SQLException e) {
+            e.printStackTrace();
+            response.setMessage("DB Connection Error");
+            response.setStatus(500);
+        }
+        finally {
+            poolManager.returnConn(con);
+        }
+        return response;
+    }
+
+    public static Response<?> deleteComment(Comment comment) {
+        Response<?> response = new Response<>();
+        Connection con = poolManager.getConn();
+        String query = prop.getValue("deleteComment");
+
+        try {
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, comment.getUserId());
+            ps.setInt(2, comment.getCommentId());
+
+            ps.execute();
+            response.setStatus(200);
+            response.setMessage("Comment Deleted");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            response.setStatus(500);
+            response.setMessage("DB Connection Error");
+        }
+        finally {
+            poolManager.returnConn(con);
+        }
+        return response;
+    }
+
 }
