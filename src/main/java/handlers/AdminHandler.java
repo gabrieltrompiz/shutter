@@ -449,16 +449,130 @@ public class AdminHandler {
         return null;
     }
 
-    public static Response<User> searchUser(String search) {
-        return null;
+    public static Response<User> searchUsers(String search) {
+        Response<ArrayList<User>> response = new Response<>();
+        ArrayList<User> users = new ArrayList<>();
+        Connection con = poolManager.getConn();
+        String query = prop.getValue("searchUsersAdmin");
+        try {
+            PreparedStatement ps = con.prepareStatement(query);
+            
+            //Acomodar parámetros
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                //Acomodar parámetros
+
+                User user = new User();
+                user.setId(rs.getInt(1));
+                user.setUsername(rs.getString(2));
+                user.setName(rs.getString(3));
+                user.setLastName(rs.getString(4));
+                user.setAvatar(rs.getString(5));
+                user.setBirthday(rs.getDate(6));
+                users.add(user);
+            }
+
+            response.setData(users);
+            response.setMessage("List Returned");
+            response.setStatus(200);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            response.setMessage("DB Connection Error");
+            response.setStatus(500);
+        } finally {
+            poolManager.returnConn(con);
+        }
+
+        return response;
     }
 
-    public static Response<Post> searchPosts(String search) {
-        return null;
+    public static Response<ArrayList<Post>> searchPosts(String search) {
+        Response<ArrayList<Post>> response = new Response<>();
+        ArrayList<Post> posts = new ArrayList<>();
+        Connection con = poolManager.getConn();
+        String query = prop.getValue("getPostsByContent");
+        try {
+            PreparedStatement ps = con.prepareStatement(query);
+            
+            //Acomodar parámetros
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                //Acomodar parámetros
+
+                Post post = new Post();
+                User user = new User();
+                post.setIdPost(rs.getInt(1));
+                post.setTypePost(rs.getInt(2));
+                post.setPostText(rs.getString(3));
+                post.setUrl(rs.getString(4));
+                post.setCreationTime(rs.getTimestamp(5));
+                user.setUsername(rs.getString(6));
+                user.setName(rs.getString(7));
+                user.setLastName(rs.getString(8));
+                user.setAvatar(rs.getString(9));
+                user.setId(rs.getInt(10));
+
+                post.setLikes(getLikes(post.getIdPost(), con));
+                post.setComments(getComments(post.getIdPost(), con));
+                post.setFileCount(getFileCount(user.getUsername().toLowerCase(), post.getIdPost()));
+
+                post.setUser(user);
+                posts.add(post);
+            }
+            response.setData(posts);
+            response.setMessage("Posts Returned");
+            response.setStatus(200);
+        } catch(SQLException e) {
+            e.printStackTrace();
+            response.setMessage("DB Connection Error");
+            response.setStatus(500);
+        } finally {
+            poolManager.returnConn(con);
+        }
+
+        return response;
     }
 
     public static Response<Comment> searchComments(String search) {
-        return null;
+        Response<ArrayList<Comments>> response = new Response<>();
+        ArrayList<Comment> comments = new ArrayList<>();
+        Connection con = poolManager.getConn();
+        String query = prop.getValue("getCommentsByContent");
+        try {
+            PreparedStatement ps = con.prepareStatement(query);
+
+            //Acomodar parámetros
+
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()) {
+                //Acomodar parámetros
+                
+                Comment comment = new Comment();
+                User user = new User();
+                comment.setCommentId(rs.getInt(1));
+                comment.setCommentText(rs.getString(2));
+                comment.setCommentUrl(rs.getString(3));
+                comment.setUserId(rs.getInt(4));
+                user.setUsername(rs.getString(5));
+                user.setName(rs.getString(6));
+                user.setLastName(rs.getString(7));
+                comment.setUser(user);
+
+                comments.add(comment);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            response.setStatus(500);
+            response.setMessage("DB Connection Error");
+        } finally {
+            poolManager.returnConn(con);
+        }
+
+        return response;
     }
 
     public static Response<?> deletePost(Post post) {

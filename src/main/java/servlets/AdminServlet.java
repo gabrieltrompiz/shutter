@@ -21,11 +21,7 @@ public class AdminServlet extends HttpServlet {
         ObjectMapper mapper = new ObjectMapper();
         Response<?> response = new Response<>();
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        if(Integer.parseInt(req.getSession(false).getAttribute("type").toString()) != 2) {
-            response.setStatus(403);
-            response.setMessage("Forbidden. Only admins allowed.");
-            resp.getWriter().print(mapper.writeValueAsString(response));
-        }
+        
         String choice = req.getParameter("stat");
         switch(choice) {
             case "postsByType":
