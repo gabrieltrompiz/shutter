@@ -135,6 +135,7 @@ public class PostsHandler {
             ps.setInt(2, postId);
             ps.setInt(3, userId);
             ps.setInt(4, postId);
+            ps.setInt(5, postId);
             int affectedRows = ps.executeUpdate();
             if(affectedRows == 0) {
                 response.setMessage("Could not delete post");

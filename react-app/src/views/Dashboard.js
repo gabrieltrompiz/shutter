@@ -14,6 +14,7 @@ export default class Dashboard extends React.Component {
 		this.state = { activeItem : 'Home', anotherUser: {}, ownFriendList: [], onlineUsers: [], notifications: [], notifCounter: 0, reloadFeed: false }
 		this.notificationSocket = null;
 		this.userSocket = null;
+		this.reportsSocket = null;
 		this.connectSockets()
 	}
 
@@ -50,6 +51,7 @@ export default class Dashboard extends React.Component {
 	componentWillUnmount = async () => {
 		this.userSocket.close()
 		this.notificationSocket.close()
+		this.reportsSocket.close()
 	}
 
 	connectSockets = async () => {
@@ -103,10 +105,10 @@ export default class Dashboard extends React.Component {
 				const newNot = JSON.parse(event.data)
 				const notState = [...this.state.notifications]
 				notState.unshift(newNot)
-				console.log(notState)
 				this.setState(() => ({ notifications: notState, notifCounter: this.state.notifCounter + 1 }))
 			}
 		}
+		this.reportsSocket = new WebSocket('ws://localhost:8080/reports')
 	}
 	
 	handleItemClick = (evt, {name}) => {
@@ -134,17 +136,18 @@ export default class Dashboard extends React.Component {
 				return (
 					<div style={{ display: 'flex' }}>
 						<Home user={this.props.user} changeView={this.handleChangeView} changeUser={this.props.changeUser} handleLoggedIn={this.props.handleLoggedIn} darkTheme={this.props.darkTheme} reload={this.state.reloadFeed}
-						notificationSocket={this.notificationSocket}/>
+						notificationSocket={this.notificationSocket} reportsSocket={this.reportsSocket}/>
 						<Inbox darkTheme={this.props.darkTheme} friends={this.state.onlineUsers} changeUser={this.changeUser} changeView={this.handleChangeView}/>
 					</div>);
 			
 			case 'Profile':
 				return <Profile user={this.props.user} changeView={this.handleChangeView} changeUser={this.changeUser} own ownFriendList={this.state.ownFriendList} darkTheme={this.props.darkTheme}
-				notificationSocket={this.notificationSocket}/>;
+				notificationSocket={this.notificationSocket} reportsSocket={this.reportsSocket}/>;
 			
 			case 'OtherUserProfile':
 				return <Profile user={this.state.anotherUser} changeView={this.handleChangeView} changeUser={this.changeUser} own={this.props.user.username === this.state.anotherUser.username}
-				isFriend={this.checkIfFriend()} updateDashboard={this.updateDashboard} darkTheme={this.props.darkTheme} ownUser={this.props.user} notificationSocket={this.notificationSocket}/>;
+				isFriend={this.checkIfFriend()} updateDashboard={this.updateDashboard} darkTheme={this.props.darkTheme} ownUser={this.props.user} notificationSocket={this.notificationSocket}
+				reportsSocket={this.reportsSocket}/>;
 
 			case 'EditProfile':
 				return <EditProfile user={this.props.user} changeView={this.handleChangeView} changeUser={this.props.changeUser} darkTheme={this.props.darkTheme}/>;

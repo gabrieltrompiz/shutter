@@ -60,64 +60,66 @@ export default class Stats extends React.Component {
     serializeData = () => {
         this.setState({ data: [] })
         let data = []
-        if((this.state.filter + this.state.order) === 'postsByType') {
-            data = [
-                { name: "Text Posts", quantity: this.state.stats.textPosts.length },
-                { name: "Audio Posts", quantity: this.state.stats.audioPosts.length }, 
-                { name: "Video Posts", quantity: this.state.stats.videoPosts.length },
-                { name: "Image Posts", quantity: this.state.stats.imagePosts.length }
-            ]
-        }
-        else if((this.state.filter + this.state.order) === 'postsByLikes') {
-            this.state.stats.forEach(post => {
-                data.push({
-                    name: "Post " + post.idPost,
-                    likes: post.likes.length,
-                    post: post,
-                    dark: this.props.darkTheme
+        try {
+            if((this.state.filter + this.state.order) === 'postsByType') {
+                data = [
+                    { name: "Text Posts", quantity: this.state.stats.textPosts.length },
+                    { name: "Audio Posts", quantity: this.state.stats.audioPosts.length }, 
+                    { name: "Video Posts", quantity: this.state.stats.videoPosts.length },
+                    { name: "Image Posts", quantity: this.state.stats.imagePosts.length }
+                ]
+            }
+            else if((this.state.filter + this.state.order) === 'postsByLikes') {
+                this.state.stats.forEach(post => {
+                    data.push({
+                        name: "Post " + post.idPost,
+                        likes: post.likes.length,
+                        post: post,
+                        dark: this.props.darkTheme
+                    })
                 })
-            })
-        }
-        else if((this.state.filter + this.state.order) === 'postsByComments') {
-            this.state.stats.forEach(post => {
-                data.push({
-                    name: "Post " + post.idPost,
-                    comments: post.comments.length,
-                    post: post,
-                    dark: this.props.darkTheme
+            }
+            else if((this.state.filter + this.state.order) === 'postsByComments') {
+                this.state.stats.forEach(post => {
+                    data.push({
+                        name: "Post " + post.idPost,
+                        comments: post.comments.length,
+                        post: post,
+                        dark: this.props.darkTheme
+                    })
                 })
-            })
-        }
-        else if((this.state.filter + this.state.order) === 'usersByGenre') {
-            data = [
-                { genre: "Male", quantity: this.state.stats.male.length, fill: '#0080C6' },
-                { genre: "Female", quantity: this.state.stats.female.length, fill: '#EB58BA' }
-            ]
-        }
-        else if((this.state.filter + this.state.order) === 'usersByPosts') {
-            Object.keys(this.state.stats).forEach(key => {
-                data.push({
-                    name: key,
-                    posts: this.state.stats[key].length
+            }
+            else if((this.state.filter + this.state.order) === 'usersByGenre') {
+                data = [
+                    { genre: "Male", quantity: this.state.stats.male.length, fill: '#0080C6' },
+                    { genre: "Female", quantity: this.state.stats.female.length, fill: '#EB58BA' }
+                ]
+            }
+            else if((this.state.filter + this.state.order) === 'usersByPosts') {
+                Object.keys(this.state.stats).forEach(key => {
+                    data.push({
+                        name: key,
+                        posts: this.state.stats[key].length
+                    })
                 })
-            })
-        }
-        else if((this.state.filter + this.state.order) === 'usersByFriends') {
-            Object.keys(this.state.stats).forEach(key => {
-                data.push({
-                    name: key,
-                    friends: this.state.stats[key].length
+            }
+            else if((this.state.filter + this.state.order) === 'usersByFriends') {
+                Object.keys(this.state.stats).forEach(key => {
+                    data.push({
+                        name: key,
+                        friends: this.state.stats[key].length
+                    })
                 })
-            })
-        }
-        else if((this.state.filter + this.state.order) === 'usersByAge') {
-            Object.keys(this.state.stats).forEach(key => {
-                data.push({
-                    name: key,
-                    users: this.state.stats[key].length
+            }
+            else if((this.state.filter + this.state.order) === 'usersByAge') {
+                Object.keys(this.state.stats).forEach(key => {
+                    data.push({
+                        name: key,
+                        users: this.state.stats[key].length
+                    })
                 })
-            })
-        }
+            }
+        } catch {}
         this.setState({ data: data })
     }
 
@@ -213,8 +215,8 @@ export default class Stats extends React.Component {
                         <p style={styles.subtitle}>Female</p>
                         <Divider fitted />
                         <div style={{ overflowY: 'scroll', height: '90%', paddingLeft: 10 }}>
-                        {typeof this.state.stats.female !== 'undefined' && this.state.stats.female.map(user => {
-                            return <FriendContainer friend={user} darkTheme={dark} showcase />
+                        {typeof this.state.stats.female !== 'undefined' && this.state.stats.female.map((user, i) => {
+                            return <FriendContainer friend={user} darkTheme={dark} showcase key={i}/>
                         })}
                         </div>
                     </div>

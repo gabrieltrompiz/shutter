@@ -269,6 +269,7 @@ CREATE TABLE reports (
                 type_report_id INTEGER NOT NULL,
                 report_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                 report_message VARCHAR(500),
+                report_resolved BOOLEAN NOT NULL,
                 CONSTRAINT report_pk PRIMARY KEY (report_id)
 );
 

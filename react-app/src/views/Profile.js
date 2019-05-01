@@ -147,7 +147,8 @@ export default class Profile extends React.Component {
 							{this.state.posts.length > 0 && shouldShowPosts &&
 							<div style={{ overflowY: 'scroll', width: '100%', height: '72.5%', paddingRight: 10 }}>
 								{this.state.posts.map(post => {
-									return <Post post={post} key={post.idPost} darkTheme={dark} userId={this.props.user.id} ownUser={user} deletePost={this.deletePost} notificationSocket={this.props.notificationSocket}/>
+									return <Post post={post} key={post.idPost} darkTheme={dark} userId={this.props.user.id} ownUser={user} deletePost={this.deletePost} notificationSocket={this.props.notificationSocket}
+									reportsSocket={this.props.reportsSocket}/>
 								})}
 							</div>}
 							{this.state.posts.length === 0 && shouldShowPosts &&

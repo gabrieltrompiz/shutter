@@ -35,8 +35,6 @@ export default class Commenter extends React.Component {
                     this.setState({ commentText: 'Add a comment...', empty: true });
                     this.props.addToConstant()
                     this.props.comment(body);
-                } else {
-                    console.log('cry');
                 }
             });
             if(this.props.user.id !== this.props.post.user.id) {
