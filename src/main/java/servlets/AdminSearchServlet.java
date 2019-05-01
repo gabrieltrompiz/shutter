@@ -12,6 +12,8 @@ import javax.servlet.http.*;
 
 import handlers.UserHandler;
 import handlers.AdminHandler;
+import models.Comment;
+import models.Post;
 import models.Response;
 import models.User;
 
@@ -23,28 +25,35 @@ public class AdminSearchServlet extends HttpServlet {
    @Override
    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
        ObjectMapper mapper = new ObjectMapper();
-       Response<ArrayList<User>> response;
        String search = req.getParameter("search");
 
        switch(req.getParameter("filter")) {
            case "users":
-               response = AdminHandler.searchUsers(search);
+               Response<ArrayList<User>> response1 = AdminHandler.searchUsers(search);
+               this.respond(response1, resp, mapper);
                break;
 
            case "posts":
-               response = AdminHandler.searchPosts(search);
+               Response<ArrayList<Post>> response2 = AdminHandler.searchPosts(search);
+               this.respond(response2, resp, mapper);
                break;
 
            case "comments":
-               response = AdminHandler.searchComments(search);
+               Response<ArrayList<Comment>> response3 = AdminHandler.searchComments(search);
+               this.respond(response3, resp, mapper);
                break;
 
            default:
-           		response.setStatus(404);
-           		response.setMessage("The resource specified doesn't exist");
+               Response<?> response4 = new Response<>();
+           		response4.setStatus(404);
+           		response4.setMessage("The resource specified doesn't exist");
+               this.respond(response4, resp, mapper);
        }
 
        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+   }
+
+   private void respond(Response response, HttpServletResponse resp, ObjectMapper mapper) throws IOException {
        resp.getWriter().print(mapper.writeValueAsString(response));
    }
 }

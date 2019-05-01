@@ -449,20 +449,22 @@ public class AdminHandler {
         return null;
     }
 
-    public static Response<User> searchUsers(String search) {
+    public static Response<ArrayList<User>> searchUsers(String search) {
         Response<ArrayList<User>> response = new Response<>();
         ArrayList<User> users = new ArrayList<>();
         Connection con = poolManager.getConn();
         String query = prop.getValue("searchUsersAdmin");
         try {
             PreparedStatement ps = con.prepareStatement(query);
-            
-            //Acomodar parámetros
+
+            ps.setString(1, "%" + search + "%");
+            ps.setString(2, "%" + search + "%");
+            ps.setString(3, "%" + search + "%");
+            ps.setString(4, "%" + search + "%");
 
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                //Acomodar parámetros
 
                 User user = new User();
                 user.setId(rs.getInt(1));
@@ -471,6 +473,7 @@ public class AdminHandler {
                 user.setLastName(rs.getString(4));
                 user.setAvatar(rs.getString(5));
                 user.setBirthday(rs.getDate(6));
+                user.setEnabled(rs.getBoolean(7));
                 users.add(user);
             }
 
@@ -495,30 +498,25 @@ public class AdminHandler {
         String query = prop.getValue("getPostsByContent");
         try {
             PreparedStatement ps = con.prepareStatement(query);
-            
-            //Acomodar parámetros
+
+            ps.setString(1, "%" + search + "%");
 
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                //Acomodar parámetros
 
                 Post post = new Post();
                 User user = new User();
                 post.setIdPost(rs.getInt(1));
-                post.setTypePost(rs.getInt(2));
-                post.setPostText(rs.getString(3));
-                post.setUrl(rs.getString(4));
-                post.setCreationTime(rs.getTimestamp(5));
-                user.setUsername(rs.getString(6));
-                user.setName(rs.getString(7));
-                user.setLastName(rs.getString(8));
-                user.setAvatar(rs.getString(9));
-                user.setId(rs.getInt(10));
-
-                post.setLikes(getLikes(post.getIdPost(), con));
-                post.setComments(getComments(post.getIdPost(), con));
-                post.setFileCount(getFileCount(user.getUsername().toLowerCase(), post.getIdPost()));
+                user.setId(rs.getInt(2));
+                post.setTypePost(rs.getInt(3));
+                post.setPostText(rs.getString(4));
+                post.setUrl(rs.getString(5));
+                post.setCreationTime(rs.getTimestamp(6));
+                user.setUsername(rs.getString(7));
+                user.setName(rs.getString(8));
+                user.setLastName(rs.getString(9));
+                user.setAvatar(rs.getString(10));
 
                 post.setUser(user);
                 posts.add(post);
@@ -537,20 +535,19 @@ public class AdminHandler {
         return response;
     }
 
-    public static Response<Comment> searchComments(String search) {
-        Response<ArrayList<Comments>> response = new Response<>();
+    public static Response<ArrayList<Comment>> searchComments(String search) {
+        Response<ArrayList<Comment>> response = new Response<>();
         ArrayList<Comment> comments = new ArrayList<>();
         Connection con = poolManager.getConn();
         String query = prop.getValue("getCommentsByContent");
         try {
             PreparedStatement ps = con.prepareStatement(query);
 
-            //Acomodar parámetros
+            ps.setString(1, "%" + search + "%");
 
             ResultSet rs = ps.executeQuery();
             while(rs.next()) {
-                //Acomodar parámetros
-                
+
                 Comment comment = new Comment();
                 User user = new User();
                 comment.setCommentId(rs.getInt(1));
@@ -564,6 +561,10 @@ public class AdminHandler {
 
                 comments.add(comment);
             }
+            response.setStatus(200);
+            response.setMessage("Comments Returned");
+            response.setData(comments);
+
         } catch (SQLException e) {
             e.printStackTrace();
             response.setStatus(500);
