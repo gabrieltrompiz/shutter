@@ -422,7 +422,7 @@ public class AdminHandler {
         return comments;
     }
 
-    public static Response<?> changeUserState(User user, boolean state) {
+    public static Response<?> changeUserState(int id, boolean state) {
         Response<?> response = new Response<>();
         Connection con = poolManager.getConn();
         String query = prop.getValue("changeUserState");
@@ -430,8 +430,8 @@ public class AdminHandler {
         try {
             PreparedStatement ps = con.prepareStatement(query);
 
-            ps.setInt(1, user.getId());
-            ps.setBoolean(2, state);
+            ps.setBoolean(1, state);
+            ps.setInt(2, id);
 
             if(ps.executeUpdate() == 1) {
                 response.setMessage("User Updated");
@@ -444,9 +444,11 @@ public class AdminHandler {
             e.printStackTrace();
             response.setStatus(500);
             response.setMessage("DB Connection Error");
+        } finally {
+            poolManager.returnConn(con);
         }
 
-        return null;
+        return response;
     }
 
     public static Response<ArrayList<User>> searchUsers(String search) {
@@ -576,16 +578,15 @@ public class AdminHandler {
         return response;
     }
 
-    public static Response<?> deletePost(Post post) {
+    public static Response<?> deletePost(int id) {
         Response<?> response = new Response<>();
         Connection con = poolManager.getConn();
-        String query = prop.getValue("deletePost");
+        String query = prop.getValue("deletePostAdmin");
         try {
             PreparedStatement ps = con.prepareStatement(query);
-            ps.setInt(1, post.getIdPost());
-            ps.setInt(2, post.getIdPost());
-            ps.setInt(3, post.getUser().getId());
-            ps.setInt(4, post.getIdPost());
+            ps.setInt(1, id);
+            ps.setInt(2, id);
+            ps.setInt(3, id);
             int affectedRows = ps.executeUpdate();
             if(affectedRows == 0) {
                 response.setMessage("Could not delete post");
@@ -605,15 +606,14 @@ public class AdminHandler {
         return response;
     }
 
-    public static Response<?> deleteComment(Comment comment) {
+    public static Response<?> deleteComment(int id) {
         Response<?> response = new Response<>();
         Connection con = poolManager.getConn();
-        String query = prop.getValue("deleteComment");
+        String query = prop.getValue("deleteCommentAdmin");
 
         try {
             PreparedStatement ps = con.prepareStatement(query);
-            ps.setInt(1, comment.getUserId());
-            ps.setInt(2, comment.getCommentId());
+            ps.setInt(1, id);
 
             ps.execute();
             response.setStatus(200);

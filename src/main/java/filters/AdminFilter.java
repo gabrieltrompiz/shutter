@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebFilter(urlPatterns = {"/adminSearch", "/admin"}, filterName = "Session Filter")
+@WebFilter(urlPatterns = {"/adminSearch", "/admin", "/bans"}, filterName = "Session Filter")
 public class AdminFilter implements Filter {
     @Override
     public void destroy() {}

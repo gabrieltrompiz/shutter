@@ -1,5 +1,6 @@
 import React from 'react';
 import {Icon, Image, Transition} from 'semantic-ui-react';
+import Button from './Button.js';
 
 export default class Comment extends React.Component {
     constructor(props) {
@@ -43,6 +44,7 @@ export default class Comment extends React.Component {
                         </span>
                         <p style={styles.text}>{this.props.comment.commentText}</p>
                     </div>
+                    {!this.props.admin &&
                     <button style={styles.threeDots}
                             onClick={() => this.setState({ showMenu: !this.state.showMenu })}>
                         <Icon name={"ellipsis horizontal"}></Icon>
@@ -60,7 +62,10 @@ export default class Comment extends React.Component {
                                 </button>}
                             </div>
                         </Transition>
-                    </button>
+                    </button>}
+
+                    {this.props.admin &&
+                    <Button/>}
                 </div>
             </div>
         )

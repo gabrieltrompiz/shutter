@@ -1,7 +1,7 @@
 import React from 'react';
 import { Segment, Divider, Form, Icon, Input } from 'semantic-ui-react';
-import UserCard from '../components/UserCard.js';
-import Post from '../components/Post.js';
+import UserShowcase from '../components/UserShowcase.js';
+import PostShowcase from '../components/PostShowcase.js';
 import Comment from '../components/Comment.js';
 
 export default class AdminSearch extends React.Component {
@@ -17,37 +17,18 @@ export default class AdminSearch extends React.Component {
     handleInput = async (event, {name, value}) => {
         this.setState({ search: value });
 
-        await fetch('http://localhost:8080/search?adminSearch=' + name + '&filter=' + this.state.filter)
-            .then(response => response.json())
-            .then(response => {
-                if(response.status === 200) {
-                    this.setState({ results: response.data })
-                }
-            });
-    };
+        console.log(value.length);
 
-    showResults = () => {
-        switch(this.state.filter) {
-            case 'users':
-                this.state.results.map((user, key) => {
-                    return <UserCard user={user} key={key} />
+        if(value.length >= 3) {
+            await fetch('http://localhost:8080/adminSearch?search='
+                + value + '&&filter=' + this.state.filter, {credentials: 'include'})
+                .then(response => response.json())
+                .then(response => {
+                    if(response.status === 200) {
+                        this.setState({ results: response.data })
+                        console.log(response);
+                    }
                 });
-                break;
-
-            case 'posts':
-                this.state.results.map((post, key) => {
-                    return <Post post={post} key={key} />
-                });
-                break;
-
-            case 'comments':
-                this.state.results.map((comment, key) => {
-                    return <Comment comment={comment} key={key} />
-                });
-                break;
-
-            default:
-                return null;
         }
     };
 
@@ -74,7 +55,20 @@ export default class AdminSearch extends React.Component {
                 <Divider fitted />
 
                 <div>
-                    {this.showResults()}
+                    {this.state.filter === 'users' &&
+                    this.state.results.map((user, key) => {
+                        return <UserShowcase user={user} key={key} darkTheme={this.props.darkTheme} />
+                    })}
+
+                    {this.state.filter === 'posts' &&
+                    this.state.results.map((post, key) => {
+                        return <PostShowcase post={post} key={key} darkTheme={this.props.darkTheme} />
+                    })}
+
+                    {this.state.filter === 'comments' &&
+                    this.state.results.map((comment, key) => {
+                        return <Comment comment={comment} ownUser={comment.user} key={key} darkTheme={this.props.darkTheme} />
+                    })}
                 </div>
 
 

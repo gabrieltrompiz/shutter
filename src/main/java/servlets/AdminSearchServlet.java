@@ -18,7 +18,7 @@ import models.Response;
 import models.User;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@WebServlet(urlPatterns = "/search", name = "User Searcher")
+@WebServlet(urlPatterns = "/adminSearch", name = "Special Admin Searcher")
 public class AdminSearchServlet extends HttpServlet {
 
    //Esta vaina puede buscar tanto a users en la lista de amigos como users de todos lados dependiendo del param
@@ -26,8 +26,9 @@ public class AdminSearchServlet extends HttpServlet {
    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
        ObjectMapper mapper = new ObjectMapper();
        String search = req.getParameter("search");
+       String filter = req.getParameter("filter");
 
-       switch(req.getParameter("filter")) {
+       switch(filter) {
            case "users":
                Response<ArrayList<User>> response1 = AdminHandler.searchUsers(search);
                this.respond(response1, resp, mapper);
