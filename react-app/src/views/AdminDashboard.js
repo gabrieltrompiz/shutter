@@ -1,15 +1,36 @@
 import React from 'react'
-import { Menu, Icon, Container, Header, Image } from 'semantic-ui-react'
+import { Menu, Icon, Container, Header, Image, Label } from 'semantic-ui-react'
 import Stats from './Stats';
 import Mail from './Mail';
 import AdminSearch from './AdminSearch';
+import Reports from './Reports'
 
 
 export default class AdminDashboard extends React.Component {
     constructor(props) {
         super(props)
-        this.state = { activeItem: 'Stats' }
+        this.state = { activeItem: 'Stats', reports: [], reportsCount: 0 }
+		this.connectSockets()
     }
+
+	connectSockets = () => {
+		this.reportsSocket = new WebSocket('ws://localhost:8080/reports')
+		this.reportsSocket.onmessage = event => {
+			console.log(JSON.parse(event.data))
+			this.setState({ reports: JSON.parse(event.data) })
+			let count = 0;
+			JSON.parse(event.data).forEach(report => {
+				if(!report.resolved) {
+					count++
+				}
+			})
+			this.setState({ reportsCount: count })
+		}
+	}
+
+	componentWillUnmount = () => {
+		this.reportsSocket.close()
+	}
 
     handleItemClick = (evt, {name}) => {
 		this.setState({ activeItem : name });
@@ -21,6 +42,7 @@ export default class AdminDashboard extends React.Component {
             case 'Stats': return <Stats darkTheme={this.props.darkTheme} logout={this.logout}/>
             case 'Mail': return <Mail darkTheme={this.props.darkTheme} />
             case 'Search': return <AdminSearch darkTheme={this.props.darkTheme} />
+			case 'Reports': return <Reports darkTheme={this.props.darkTheme} reports={this.state.reports} />
             default: break;
         }
 	}
@@ -68,6 +90,7 @@ export default class AdminDashboard extends React.Component {
 						</Menu.Item>
                         <Menu.Item active={this.state.activeItem === 'Reports'} onClick={this.handleItemClick} name='Reports' 
 						style={{ borderColor: dark && this.state.activeItem === 'Reports' ? 'white' : '' }}>
+							{this.state.reportsCount > 0 && <Label color='teal'>{this.state.reportsCount}</Label>}
 							<Header as='h5' style={{ paddingLeft: 10, marginTop: 0.5, color: dark ? 'white' : 'black' }}>
 								<Icon name='warning circle' style={{ float: 'left', fontSize: 16 }}/>
 								Reports

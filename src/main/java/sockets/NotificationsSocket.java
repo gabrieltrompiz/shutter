@@ -57,9 +57,6 @@ public class NotificationsSocket {
         || not.getTypeNotificationId() == 3) && wsSessions.containsKey(not.getNotificationReceiver())) {
             wsSessions.get(not.getNotificationReceiver()).getBasicRemote().sendText(mapper.writeValueAsString(not));
         }
-//        else if(not.getTypeNotificationId() == 6 || not.getTypeNotificationId() == 7) {
-//
-//        }
         this.notifications = NotificationsHandler.getNotifications(id, 20);
         session.getBasicRemote().sendText("Notifications;" + mapper.writeValueAsString(notifications));
     }

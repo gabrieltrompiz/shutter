@@ -25,9 +25,11 @@ export default class Notifications extends React.Component {
 					<p style={styles.text}>You don't have any <br /> notifications.</p>
 				</div>}
 				{this.state.notifications.lenght !== 0 &&
-				this.state.notifications.map((notification, i) => {
+				<div style={{ overflowY: 'scroll', height: '92%'}}>
+				{this.state.notifications.map((notification, i) => {
 					return <Not notification={notification} key={i} darkTheme={dark} notificationSocket={this.props.notificationSocket} updateDashboard={this.props.updateDashboard} ownUser={this.props.user}/>
 				})}
+				</div>}
 			</Segment>
 		);
 	}

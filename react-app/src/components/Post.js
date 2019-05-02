@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Image, Divider, Transition, List, Icon } from 'semantic-ui-react';
+import { Container, Image, Divider, Transition, List, Icon, Segment, TextArea } from 'semantic-ui-react';
 import Comment from './Comment.js';
 import Commenter from './Commenter.js';
 import ReactPlayer from 'react-player';
@@ -10,7 +10,7 @@ export default class Post extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = { typeLikeId: -1, likeId: -1, commentsVisible: false, likesVisible: false, liked: false, constantLikes: 0, likeList: false, constantComments: 0,
-		comments: this.props.post.comments, showMenu: false };
+		comments: this.props.post.comments, showMenu: false, reportVisible: false, reportText: '' };
 	}
 
 	componentDidMount = () => {
@@ -26,6 +26,10 @@ export default class Post extends React.Component {
 			}
 		});
 	}
+
+	handleInput = (event, {name, value}) => {
+        this.setState({ reportText: value })
+    }
 
 	deleteComment = (commentToDelete) => {
 		let commentsState = [...this.state.comments];
@@ -113,7 +117,6 @@ export default class Post extends React.Component {
 							this.props.notificationSocket.send(JSON.stringify(notification))
 						}
 					} else {
-						console.log(response.message);
 						this.setState({ typeLikeId: -1, likeId: -1 })
 					}
 				});
@@ -124,8 +127,6 @@ export default class Post extends React.Component {
 				.then(response => {
 					if(response.status === 200) {
 						this.setState(() => ({ liked: false, constantLikes: this.state.constantLikes - 1, typeLikeId: -1, likeId: -1, likesVisible: false }))
-					} else {
-						console.log(response.message)
 					}
 				})
 
@@ -136,8 +137,6 @@ export default class Post extends React.Component {
 				.then(response => {
 					if(response.status === 200) {
 						this.setState({ typeLikeId: typeLikeId, likesVisible: false })
-					} else {
-						console.log(response.message)
 					}
 				})
 			}
@@ -162,12 +161,13 @@ export default class Post extends React.Component {
 	}
 
 	reportPost = async () => {
-		await fetch('http://localhost:8080/reportPost?id=' + this.props.post.idPost, { credentials: 'include', method: 'POST' })
-			.then(response => {
-				if(response.status === 200) {
-					/*POST REPORTED*/
-				}
-			})
+	    const report = {
+			target: this.props.post.idPost,
+			typeReport: 1,
+			message: this.state.reportText.trim()
+		}
+		this.props.reportsSocket.send(JSON.stringify(report))
+		this.setState({ reportText: '', reportVisible: false, showMenu: false })
 	}
 
 	getIcon = (likeId, styles) => {
@@ -215,7 +215,6 @@ export default class Post extends React.Component {
 						</div>
 					</div>
 					<button style={styles.threeDots} onClick={() => this.setState({ showMenu: !this.state.showMenu })}>
-						{/*{<i className="fas fa-ellipsis-h"></i>}*/}
 						<Icon name={"ellipsis horizontal"}></Icon>
 					</button>
 					<Transition visible={this.state.showMenu} animation='fade left' duration={250} unmountOnHide>
@@ -226,7 +225,7 @@ export default class Post extends React.Component {
 							</button>}
 
 							{this.props.post.user.id !== this.props.ownUser.id &&
-							<button style={styles.menuBtn} onClick={() => this.reportPost()}>
+							<button style={styles.menuBtn} onClick={() => this.setState({ reportVisible: true, showMenu: false })}>
 								Report Post
 							</button>}
 						</div>
@@ -318,17 +317,32 @@ export default class Post extends React.Component {
 						</button>
 					</div>
 				</Transition>
-                {/*No sé si aquí haga falta poner lo del admin porque aja si no tiene el botón no se puede mostrar xd*/}
 				{this.state.commentsVisible && <Divider fitted />}
 				{this.state.commentsVisible &&
 				<Transition.Group as={List}>		
 					{this.state.comments.map((comment, i) => {
-						return (<List.Item key={i} style={{ padding: 0, margin: 0}}><Comment comment={comment}
+						return (<List.Item key={i} style={{ padding: 0, margin: 0}}><Comment comment={comment} reportsSocket={this.props.reportsSocket}
 							 ownUser={this.props.ownUser} darkTheme={dark} deleteComment={this.deleteComment}/></List.Item>)
 					})}
 				</Transition.Group>}
 				{this.state.commentsVisible && <Commenter user={this.props.ownUser} darkTheme={dark} addToConstant={() => this.setState(() => ({ constantComments: this.state.constantComments + 1}))}
 				postId={this.props.post.idPost} comment={this.userCommented} post={this.props.post} notificationSocket={this.props.notificationSocket}/>}
+				{this.state.reportVisible && 
+				<div style={{ display: 'flex', position: 'fixed', width: '100vw', height: '100vh', backgroundColor: 'rgba(0, 0, 0, 0.3)', top: 0, right: 0, left: 0, bottom: 0, zIndex: 3,
+				alignItems: 'center', justifyContent: 'center' }}>
+					<Segment raised style={{ width: 600, height: 300, backgroundColor: dark ? '#1C2938' : 'white' }}>
+						<div style={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
+							<p style={styles.title}>Report an issue</p>
+							<Icon name='times' onClick={() => this.setState({ reportVisible: false })} style={{ color: dark ? 'white' : 'black', fontSize: 24, cursor: 'pointer', alignSelf: 'center' }} />
+						</div>
+						<Divider fitted />
+						<p style={styles.subtitle}>Reason:</p>
+						<TextArea placeholder='Please describe your issue (optional)' style={styles.textArea} onChange={this.handleInput} value={this.state.reportText}/>
+						<div style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
+							<button onClick={() => this.reportPost()} style={styles.reportBtn}>Send Report</button>
+						</div>
+					</Segment>
+				</div>}
 			</Container>
 			);
 	}
@@ -454,6 +468,46 @@ export default class Post extends React.Component {
 				outline: 0,
 				border: 'none',
 				width: '100%',
+				fontFamily: 'Roboto'
+			},
+			title: {
+				fontFamily: 'Heebo',
+				fontSize: 24,
+				fontWeight: 'bolder',
+				color: dark ? 'white' : 'black',
+				marginTop: 0,
+				marginBottom: 2,
+				alignSelf: 'flex-start'
+			},
+			subtitle: {
+				fontFamily: 'Roboto',
+				fontSize: 18,
+				color: dark ? 'white' : 'black',
+				marginLeft: 10,
+				marginTop: 5,
+				marginBottom: 4
+			},
+			textArea: {
+                resize: 'none', 
+                width: 'calc(100% - 25px)',
+                height: '50%', 
+                border: 'none', 
+                backgroundColor: dark ? '#1f2f3f' : '#f0f0f0', 
+                outline: 0, 
+                borderRadius: 5,
+                marginLeft: 15,
+                color: dark ? 'white' : 'black',
+				marginBottom: 15
+            },
+			reportBtn: {
+				outline: 0,
+				cursor: 'pointer',
+				border: 'none',
+				borderRadius: 5,
+				color: dark ? 'white' : 'black',
+				backgroundColor: dark ? '#1f2f3f' : '#e3e3e3',
+				padding: 10,
+				alignSelf: 'flex-end',
 				fontFamily: 'Roboto'
 			}
 		}

@@ -346,7 +346,7 @@ public class UserHandler {
 			PreparedStatement ps = con.prepareStatement(query);
 			ps.setInt(1, comment.getUserId());
 			ps.setInt(2, comment.getCommentId());
-
+			ps.setInt(3, comment.getCommentId());
 			ps.execute();
 			response.setStatus(200);
 			response.setMessage("Comment Deleted");
