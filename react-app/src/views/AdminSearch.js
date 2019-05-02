@@ -32,6 +32,28 @@ export default class AdminSearch extends React.Component {
         }
     };
 
+    deleteComment = async (id) => {
+        await fetch('http://localhost:8080/bans?method=comment&&id=' + id,
+            {credentials: 'include', method: 'POST'})
+            .then(response => response.json())
+            .then(response => {
+                if (response.status === 200) {
+                    console.log('borrar el comment de aqui')
+                } else console.log('cry');
+            });
+    };
+
+    deletePost = async (id) => {
+        await fetch('http://localhost:8080/bans?method=post&&id=' + id,
+            {credentials: 'include', method: 'POST'})
+            .then(response => response.json())
+            .then(response => {
+                if (response.status === 200) {
+                    console.log('borrar el post de aqui');
+                } else console.log('cry');
+            });
+    }
+
     render() {
         const styles = this.getStyles(this.props.darkTheme);
         const dark = this.props.darkTheme;
@@ -62,12 +84,14 @@ export default class AdminSearch extends React.Component {
 
                     {this.state.filter === 'posts' &&
                     this.state.results.map((post, key) => {
-                        return <PostShowcase post={post} key={key} darkTheme={this.props.darkTheme} />
+                        return <PostShowcase post={post} key={key} delete={this.deletePost}
+                             deletable={true} darkTheme={this.props.darkTheme} />
                     })}
 
                     {this.state.filter === 'comments' &&
                     this.state.results.map((comment, key) => {
-                        return <Comment comment={comment} ownUser={comment.user} key={key} darkTheme={this.props.darkTheme} />
+                        return <Comment comment={comment} ownUser={comment.user} key={key} admin={true}
+                            delete={this.deleteComment} darkTheme={this.props.darkTheme} />
                     })}
                 </div>
 

@@ -1,5 +1,6 @@
 import React from 'react'
 import { Container, Image } from 'semantic-ui-react'
+import Button from './Button.js';
 
 export default class PostShowcase extends React.Component {
     constructor(props) {
@@ -7,7 +8,7 @@ export default class PostShowcase extends React.Component {
         this.state = this.props.post
     }
 
-    getBeautifiedDate = () => {
+	getBeautifiedDate = () => {
 		const seconds = Math.floor((Date.now() - this.props.post.creationTime) / 1000)
 		const date = new Date(this.props.post.creationTime)
 		if(seconds < 0) { return '' }
@@ -63,6 +64,9 @@ export default class PostShowcase extends React.Component {
 					</div>
 				</div>
 				<p style={styles.text}>{this.props.post.postText}</p>
+				{this.props.deletable &&
+				<Button outlined color='#FF5252' height={50} width={120}
+						onClick={() => this.props.delete(this.props.post.idPost)}>Delete Post</Button>}
 			</Container>
         );
     }
