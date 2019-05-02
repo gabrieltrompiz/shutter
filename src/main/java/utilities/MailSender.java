@@ -2,10 +2,7 @@ package utilities;
 
 import java.text.MessageFormat;
 
-import javax.servlet.http.HttpServletRequest;
-
 import java.util.Date;
-import java.util.List;
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -14,19 +11,29 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.MimeMessage;
 
-import utilities.PropertiesReader;
-
 public class MailSender extends Thread {
     PropertiesReader props = PropertiesReader.getInstance();
+    private String method;
+    private String name;
+    private String emailTarget;
 
-    public MailSender(HttpServletRequest req, String emailTarget, String name, String method) {
+    public MailSender(String emailTarget, String name, String method) {
+        this.emailTarget = emailTarget;
+        this.name = name;
+        this.method = method;
+
+        run();
+    }
+
+    @SuppressWarnings("Duplicates")
+    public void run() {
         switch(method) {
             case "friendRequest":
-                this.sendFriendRequest(req, emailTarget, name);
+                this.sendFriendRequest(emailTarget, name);
                 break;
 
             case "tag":
-                this.tag(req, emailTarget, name);
+                this.tag(emailTarget, name);
                 break;
 
             default:
@@ -34,19 +41,15 @@ public class MailSender extends Thread {
         }
     }
 
-    private void init() {
-
-    }
-
-    private void tag(HttpServletRequest  req, String email, String name) {
-        Properties properties = System.getProperties();
+    @SuppressWarnings("Duplicates")
+    private void tag(String email, String name) {
+        Properties properties = new Properties();
         properties.put("mail.smtp.host", "smtp.gmail.com");
         properties.setProperty("mail.smtp.starttls.enable", "true");
         properties.setProperty("mail.smtp.port", "587");
-        properties.setProperty("mail.smtp.user", "pandagram.subscribe@gmail.com");
+        properties.setProperty("mail.smtp.user", props.getValue("emailUser"));
         properties.setProperty("mail.smtp.auth", "true");
         Session session = Session.getDefaultInstance(properties);
-        String host = "localhost:" + req.getServerPort();
         String bodyText = MessageFormat.format(props.getValue("friendRequestMailHTML"), name);
 
         try {
@@ -56,6 +59,7 @@ public class MailSender extends Thread {
                     email);
             msg.setSubject("You were tagged on a post");
             msg.setSentDate(new Date());
+            msg.setText(bodyText);
             Transport.send(msg, props.getValue("emailUser"), props.getValue("emailPassword"));
 
         } catch(MessagingException e) {
@@ -63,15 +67,15 @@ public class MailSender extends Thread {
         }
     }
 
-    private void sendFriendRequest(HttpServletRequest  req, String email, String name) {
+    @SuppressWarnings("Duplicates")
+    private void sendFriendRequest(String email, String name) {
         Properties properties = System.getProperties();
         properties.put("mail.smtp.host", "smtp.gmail.com");
         properties.setProperty("mail.smtp.starttls.enable", "true");
         properties.setProperty("mail.smtp.port", "587");
-        properties.setProperty("mail.smtp.user", "pandagram.subscribe@gmail.com");
+        properties.setProperty("mail.smtp.user", props.getValue("emailUser"));
         properties.setProperty("mail.smtp.auth", "true");
         Session session = Session.getDefaultInstance(properties);
-        String host = "localhost:" + req.getServerPort();
         String bodyText = MessageFormat.format(props.getValue("tagMailHTML"), name);
 
         try {

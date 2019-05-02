@@ -17,8 +17,6 @@ export default class AdminSearch extends React.Component {
     handleInput = async (event, {name, value}) => {
         this.setState({ search: value });
 
-        console.log(value.length);
-
         if(value.length >= 3) {
             await fetch('http://localhost:8080/adminSearch?search='
                 + value + '&&filter=' + this.state.filter, {credentials: 'include'})
