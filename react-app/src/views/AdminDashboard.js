@@ -42,7 +42,7 @@ export default class AdminDashboard extends React.Component {
             case 'Stats': return <Stats darkTheme={this.props.darkTheme} logout={this.logout}/>
             case 'Mail': return <Mail darkTheme={this.props.darkTheme} />
             case 'Search': return <AdminSearch darkTheme={this.props.darkTheme} />
-			case 'Reports': return <Reports darkTheme={this.props.darkTheme} reports={this.state.reports} reportsSocket={this.reportsSocket}/>
+			case 'Reports': return <Reports darkTheme={this.props.darkTheme} reports={this.state.reports} />
             default: break;
         }
 	}
@@ -50,6 +50,10 @@ export default class AdminDashboard extends React.Component {
     logout = async () => {
 		await fetch('http://localhost:8080/logout', { credentials: 'include' })
 		this.props.handleLoggedIn(false)
+	}
+
+	sendCustomMessage = async (username, message) => {
+    	
 	}
 
     render() {

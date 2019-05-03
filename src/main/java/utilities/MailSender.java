@@ -37,7 +37,7 @@ public class MailSender extends Thread {
                 break;
 
             case "adminMsg":
-                this.adminMsg(emailTarget, name)
+                this.adminMsg(emailTarget, name);
 
             default:
                 break;

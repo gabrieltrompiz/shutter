@@ -12,8 +12,13 @@ export default class Mail extends React.Component {
         this.setState({ message: value })
     }
 
-    handleUsernaame = (event, {name, value}) => {
+    handleUsername = (event, {name, value}) => {
         this.setState({ message: value })
+    }
+
+    sendMessage = () => {
+        this.props.sendCustomMessage(this.state.username, this.state.message);
+        this.setState({ message: '', username: '' });
     }
 
     render() {
@@ -25,11 +30,11 @@ export default class Mail extends React.Component {
                 <p style={styles.title}>Custom Mail</p>
                 <Divider fitted style={{ marginTop: 2 }} />
                 <Input placeholder='Username' style={{ width: '40%', height: 50, marginTop: 20, fontSize: 18, backgroundColor: dark ? '#15202B' : 'white', borderRadius: 5,
-                    color: dark ? 'white' : 'black' }} onChange={this.handleMessage} autoComplete='off' maxLength={50} value={this.state.message}/>
-                <TextArea onFocus= style={{ resize: 'none', width: '100%', height: 100, backgroundColor: 'transparent',
-                    marginTop: '1.5vh', marginRight: '1vw', paddingLeft: '1vw', paddingTop: '1vh', fontFamily: 'Arial', fontSize: '22px', border: 'none', outline: 0,
-                    color: dark ? '#8899A6' : 'white' ? '#728390' : 'black' }} onChange={this.handleInput} value={this.state.postText}/>
-                <button style={{}}>Send Mail</button>
+                    color: dark ? 'white' : 'black' }} onChange={this.handleUsername} autoComplete='off' maxLength={50} value={this.state.username}/>
+                <TextArea placeholder='Message' style={{ resize: 'none', width: '100%', height: 300, backgroundColor: 'transparent',
+                    marginTop: '1.5vh', marginRight: '1vw', paddingLeft: '1vw', paddingTop: '1vh', fontSize: '18px', outline: 0,
+                    color: dark ? '#8899A6' : 'white' ? '#728390' : 'black' }} onChange={this.handleMessage} value={this.state.message}/>
+                <button style={styles.button} onClick={() => this.sendMessage()}>Send Mail</button>
 
             </Segment>
         );
