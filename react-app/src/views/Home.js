@@ -42,11 +42,12 @@ export default class Home extends React.Component {
 		let postsState = [...this.state.posts]
 		postsState.some((post, i) => {
 			if(post.idPost === postToDelete.idPost) { 
-				postsState = postsState.slice(0, i).concat(postsState.slice(i + 1, postsState.length));
+				postsState = postsState.slice(0, i).concat(postsState.slice(i + 1, postsState.length))
 				return true
 			}
-			return true
+			return false
 		})
+		console.log(postsState)
 		this.setState({ posts: postsState })
 	}
 

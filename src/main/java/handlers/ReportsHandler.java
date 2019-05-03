@@ -126,10 +126,11 @@ public class ReportsHandler {
                 post.setIdPost(rs.getInt(1));
                 user.setId(rs.getInt(2));
                 post.setTypePost(rs.getInt(3));
-                post.setCreationTime(rs.getTimestamp(5));
-                user.setUsername(rs.getString(6));
-                user.setName(rs.getString(7));
-                user.setLastName(rs.getString(8));
+                post.setPostText(rs.getString(4));
+                post.setCreationTime(rs.getTimestamp(6));
+                user.setUsername(rs.getString(7));
+                user.setName(rs.getString(8));
+                user.setLastName(rs.getString(9));
                 post.setUser(user);
             }
         } catch (SQLException e) {

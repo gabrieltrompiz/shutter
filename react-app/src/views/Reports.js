@@ -24,12 +24,14 @@ export default class Reports extends React.Component {
                 {this.state.reports.length === 0 && 
 				<div style={styles.empty}>
 					<i className="fas fa-inbox" style={styles.icon}></i>
-					<p style={styles.text}>You don't have any <br /> notifications.</p>
+					<p style={styles.text}>You don't have any <br /> reports.</p>
 				</div>}
+				<div style={{ width: '100%', height: '93%', overflowY: 'scroll' }}>
                 {this.state.reports.length !== 0 &&
                 this.state.reports.map((report, i) => {
-                    return <Rep report={report} key={i} darkTheme={dark}/>
+                    return <Rep report={report} key={i} darkTheme={dark} reportsSocket={this.props.reportsSocket}/>
                 })}
+				</div>
             </Segment>
         )
     }
