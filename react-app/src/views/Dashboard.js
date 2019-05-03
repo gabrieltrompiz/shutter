@@ -14,7 +14,7 @@ export default class Dashboard extends React.Component {
 		this.notificationSocket = null;
 		this.userSocket = null;
 		this.reportsSocket = null;
-		this.connectSockets()
+		this.connectSockets();
 	}
 
 	componentDidMount = async () => {
@@ -135,7 +135,7 @@ export default class Dashboard extends React.Component {
 				return (
 					<div style={{ display: 'flex' }}>
 						<Home user={this.props.user} changeView={this.handleChangeView} changeUser={this.props.changeUser} handleLoggedIn={this.props.handleLoggedIn} darkTheme={this.props.darkTheme} reload={this.state.reloadFeed}
-						notificationSocket={this.notificationSocket} reportsSocket={this.reportsSocket}/>
+						notificationSocket={this.notificationSocket} reportsSocket={this.reportsSocket} friendList={this.state.ownFriendList}/>
 						<Inbox darkTheme={this.props.darkTheme} friends={this.state.onlineUsers} changeUser={this.changeUser} changeView={this.handleChangeView}/>
 					</div>);
 			

@@ -54,7 +54,7 @@ export default class Home extends React.Component {
 		const styles = this.getStyles(this.props.darkTheme)
 		return(
 			<div style={{ backgroundColor: 'transparent', width: '67%', height: '97vh' }}>
-				<Poster user={this.state.user} updateFeed={this.updateFeed} darkTheme={this.props.darkTheme}/>
+				<Poster user={this.state.user} updateFeed={this.updateFeed} darkTheme={this.props.darkTheme} friendList={this.props.friendList}/>
 				{this.state.posts.map(post => {
 					return(
 						<Post post={post} key={post.idPost} darkTheme={this.props.darkTheme} ownUser={this.props.user} deletePost={this.deletePost} notificationSocket={this.props.notificationSocket}

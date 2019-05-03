@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextArea, Container, Image, Divider, Icon, Loader } from 'semantic-ui-react';
+import { TextArea, Container, Image, Divider, Icon, Loader, Transition } from 'semantic-ui-react';
 import ReactAudioPlayer from 'react-audio-player'
 import ReactPlayer from 'react-player';
 import Slider from 'react-slick'
@@ -7,11 +7,19 @@ import Slider from 'react-slick'
 export default class Poster extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { typePost: 1, postText: 'What\'s on your mind, ' + this.props.user.name + '?', files: [], loading: false, empty: true }
+		this.state = { typePost: 1, postText: 'What\'s on your mind, ' + this.props.user.name + '?',
+			files: [], loading: false, empty: true, taggedFriends: [], arrobaChar: -1, actualTag: '' }
 	}
 
 	handleInput = (event, {name, value}) => {
-		this.setState({ postText: value, empty: false })
+		this.setState({ arrobaChar: value.lastIndexOf('@') });
+		if(this.state.arrobaChar !== -1) {
+			this.setState({ actualTag: value.substring(this.state.arrobaChar + 1) });
+		}
+
+		this.setState({ postText: value, empty: false });
+		console.log(this.state.arrobaChar);
+		console.log(this.state.actualTag);
 	}
 
 	checkFocus = () => {
@@ -89,6 +97,14 @@ export default class Poster extends React.Component {
 					<TextArea onFocus={() => this.checkFocus()} onBlur={() => this.checkFocusOut()} style={{ resize: 'none', width: '100%', height: 100, backgroundColor: 'transparent',
 			        marginTop: '1.5vh', marginRight: '1vw', paddingLeft: '1vw', paddingTop: '1vh', fontFamily: 'Arial', fontSize: '22px', border: 'none', outline: 0,
 					color: dark ? empty ? '#8899A6' : 'white' : empty ? '#728390' : 'black' }} onChange={this.handleInput} value={this.state.postText}/>
+					<Transition animation='fade up' visible={this.state.arrobaChar !== -1} duration={250} unmountOnHide>
+						<div style={{position: 'absolute', left: '50%', top: 100, backgroundColor: dark ? '#1f2f3f' : '#e3e3e3', zIndex: 2, width: 150, padding: 15, borderRadius: 5}}>
+							{this.state.arrobaChar !== -1 ? this.props.friendList.forEach(i => {
+								if (i.username.startsWith(this.state.actualTag) || i.name.startsWith(this.state.actualTag))
+									return i;
+							}) : null}
+						</div>
+					</Transition>
 				</div>			
 				<Divider style={{ marginLeft: 12, marginRight: 12 }}/>
 				<div style={{ display: 'flex', width: '100%', paddingLeft: 15 }}>
