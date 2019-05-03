@@ -6,6 +6,8 @@ import configurators.HttpSessionConfigurator;
 import handlers.FriendsHandler;
 import handlers.NotificationsHandler;
 import models.Notification;
+import models.User;
+import utilities.MailSender;
 
 import javax.servlet.http.HttpSession;
 import javax.websocket.*;
@@ -55,6 +57,10 @@ public class NotificationsSocket {
         }
         else if((not.getTypeNotificationId() == 5 || not.getTypeNotificationId() == 1 || not.getTypeNotificationId() == 2
         || not.getTypeNotificationId() == 3) && wsSessions.containsKey(not.getNotificationReceiver())) {
+            if (not.getTypeNotificationId() == 1) {
+                User user = FriendsHandler.getUserById(not.getNotificationReceiver());
+                MailSender sender = new MailSender(user.getEmail(), user.getName() + user.getLastName(), "friendRequest");
+            }
             wsSessions.get(not.getNotificationReceiver()).getBasicRemote().sendText(mapper.writeValueAsString(not));
         }
         this.notifications = NotificationsHandler.getNotifications(id, 20);

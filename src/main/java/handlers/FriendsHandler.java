@@ -105,6 +105,30 @@ public class FriendsHandler {
         return response;
     }
 
+    public static User getUserById(int id) {
+        User user = new User();
+        Connection con = poolManager.getConn();
+        String query = prop.getValue("getUserById");
+        try {
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, id);
+
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()) {
+                user.setName(rs.getString(1));
+                user.setLastName(rs.getString(2));
+                user.setEmail(rs.getString(3));
+            }
+
+        } catch(SQLException e) {
+            e.printStackTrace();
+            user = null;
+        } finally {
+            poolManager.returnConn(con);
+        }
+        return user;
+    }
+
     public static Response<Boolean> checkFriendRequest(int userId, int friendId) {
         Response<Boolean> response = new Response<>();
         Connection con = poolManager.getConn();

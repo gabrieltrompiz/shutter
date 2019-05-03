@@ -1,4 +1,4 @@
-package utilities;
+package test;
 
 import java.text.MessageFormat;
 
@@ -10,6 +10,8 @@ import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.MimeMessage;
+
+import utilities.PropertiesReader;
 
 public class MailSender extends Thread {
     PropertiesReader props = PropertiesReader.getInstance();
@@ -85,7 +87,7 @@ public class MailSender extends Thread {
                     email);
             msg.setSubject("You have a Friend Request on Pandagram");
             msg.setSentDate(new Date());
-            msg.setText(bodyText, "UTF-8","html");
+            msg.setText(bodyText);
             Transport.send(msg, props.getValue("emailUser"), props.getValue("emailPassword"));
 
         } catch(MessagingException e) {

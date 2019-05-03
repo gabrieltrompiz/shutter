@@ -4,7 +4,6 @@ import Home from './Home';
 import Notifications from './Notifications';
 import Profile from './Profile';
 import Search from './Search';
-import Settings from './Settings';
 import EditProfile from './EditProfile';
 import Inbox from './/Inbox.js';
 
@@ -159,9 +158,6 @@ export default class Dashboard extends React.Component {
 			case 'Search':
 				return <Search user={this.props.user} changeView={this.handleChangeView} changeUser={this.changeUser} darkTheme={this.props.darkTheme}/>;
 			
-			case 'Settings':
-				return <Settings darkTheme={this.props.darkTheme}/>;
-			
 			default:
 				throw new Error();
 		}
@@ -209,13 +205,6 @@ export default class Dashboard extends React.Component {
 							<Header as='h5' style={{ paddingLeft: 10, marginTop: 0.5, color: dark ? 'white' : 'black' }}>
 								<Icon name='search' style={{ float: 'left', fontSize: 16 }}/>
 								Search
-							</Header>
-						</Menu.Item>
-						<Menu.Item active={this.state.activeItem === 'Settings'} onClick={this.handleItemClick} name='Settings' 
-						style={{ borderColor: dark && this.state.activeItem === 'Settings' ? 'white' : '' }}>
-							<Header as='h5' style={{ paddingLeft: 10, marginTop: 0.5, color: dark ? 'white' : 'black'  }}>
-								<Icon name='cog' style={{ float: 'left', fontSize: 16 }}/>
-								Settings
 							</Header>
 						</Menu.Item>
 						<Menu.Item  onClick={this.props.switchTheme}>
