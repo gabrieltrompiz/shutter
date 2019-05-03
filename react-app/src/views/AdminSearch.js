@@ -17,39 +17,38 @@ export default class AdminSearch extends React.Component {
     handleInput = async (event, {name, value}) => {
         this.setState({ search: value });
 
-        if(value.length >= 3) {
-            await fetch('http://localhost:8080/adminSearch?search='
-                + value + '&&filter=' + this.state.filter, {credentials: 'include'})
-                .then(response => response.json())
-                .then(response => {
-                    if(response.status === 200) {
-                        this.setState({ results: response.data })
-                        console.log(response);
-                    }
-                });
+        if(value.length >= 1) {
+            await fetch('http://localhost:8080/adminSearch?search=' + value + '&filter=' + this.state.filter, {credentials: 'include'})
+            .then(response => response.json())
+            .then(response => {
+                if(response.status === 200) {
+                    this.setState({ results: response.data })
+                }
+            });
+        } else {
+            this.setState({ results: [] })
         }
     };
 
     deleteComment = async (id) => {
-        await fetch('http://localhost:8080/bans?method=comment&&id=' + id,
-            {credentials: 'include', method: 'POST'})
-            .then(response => response.json())
-            .then(response => {
-                if (response.status === 200) {
-                    console.log('borrar el comment de aqui')
-                } else console.log('cry');
-            });
+        await fetch('http://localhost:8080/bans?method=comment&id=' + id, { credentials: 'include', method: 'POST' })
+        .then(response => response.json())
+        .then(response => {
+            if (response.status === 200) {
+                console.log('borrar el comment de aqui')
+            } else console.log('cry');
+        });
     };
 
     deletePost = async (id) => {
-        await fetch('http://localhost:8080/bans?method=post&&id=' + id,
-            {credentials: 'include', method: 'POST'})
-            .then(response => response.json())
-            .then(response => {
-                if (response.status === 200) {
-                    console.log('borrar el post de aqui');
-                } else console.log('cry');
-            });
+        await fetch('http://localhost:8080/bans?method=post&id=' + id, { credentials: 'include', method: 'POST' })
+        .then(response => response.json())
+        .then(response => {
+            if (response.status === 200) {
+                console.log('borrar el post de aqui');
+            } else console.log('cry');
+        });
+        this.handleInput('xd', { name: 'xd', value: this.state.search })
     }
 
     render() {
@@ -63,14 +62,10 @@ export default class AdminSearch extends React.Component {
                     <Icon name='filter' style={{ color: dark ? 'white' : 'black' }}/>
                     <span>Filter: </span>
                     <Form.Select options={optionsFilter} placeholder='Filter' name='filter' onChange={this.handleForm} value={this.state.filter} compact
-                                 style={{ color: dark ? 'white' : 'black', backgroundColor: dark ? '#1c2938' : '#f0f0f0', border: dark ? '0.5px solid transparent' : 'none', outline: 0, margin: 20,
-                                     fontWeight: 'bold', fontFamily: 'Heebo', fontSize: 16, width: 150 }} />
-                    <Input placeholder='Search' style={{ width: '43%', height: 40, fontSize: 18, backgroundColor: dark ? '#15202B' : 'white', borderRadius: 5,
-                        color: dark ? 'white' : 'black' }} onChange={this.handleInput} autoComplete='off' maxLength={50} value={this.state.search}/>
-                    <button style={styles.button}>
-                        <Icon name='refresh' />
-                        Refresh
-                    </button>
+                    style={{ color: dark ? 'white' : 'black', backgroundColor: dark ? '#1c2938' : '#f0f0f0', border: dark ? '0.5px solid transparent' : 'none', outline: 0, margin: 20,
+                    fontWeight: 'bold', fontFamily: 'Heebo', fontSize: 16, width: 150 }} />
+                    <Input placeholder='Search' style={{ width: '60%', height: 40, fontSize: 18, backgroundColor: dark ? '#1c2938' : 'white', borderRadius: 5,
+                    color: dark ? 'white' : 'black' }} onChange={this.handleInput} autoComplete='off' maxLength={50} value={this.state.search}/>
                 </div>
                 <Divider fitted />
 
@@ -89,7 +84,7 @@ export default class AdminSearch extends React.Component {
                     {this.state.filter === 'comments' &&
                     this.state.results.map((comment, key) => {
                         return <Comment comment={comment} ownUser={comment.user} key={key} admin={true}
-                            delete={this.deleteComment} darkTheme={this.props.darkTheme} />
+                            delete={this.deleteComment} darkTheme={this.props.darkTheme} search />
                     })}
                 </div>
 

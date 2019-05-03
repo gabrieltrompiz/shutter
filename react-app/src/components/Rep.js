@@ -1,11 +1,17 @@
 import React from 'react'
-import { Image } from 'semantic-ui-react';
+import { Image, Icon, Transition } from 'semantic-ui-react';
+import Post from './Post';
+import Comment from './Comment';
 
 export default class Rep extends React.Component {
     constructor(props) {
         super(props)
         this.state = this.props.report
     }
+
+	componentDidMount = () => {
+		this.setState({ showMenu: false })
+	}
 
     getBeautifiedDate = () => {
 		const seconds = Math.floor((Date.now() - this.state.date) / 1000)
@@ -42,19 +48,51 @@ export default class Rep extends React.Component {
 		}
 	}
 
+	markAsRead = () => {
+		this.props.reportsSocket.send("Resolve;" + this.state.reportId)
+	}
+
+	delete = () => {
+		const suffix = this.state.typeReport === 1 ? 'DeletePost;' : 'DeleteComment;'
+		this.props.reportsSocket.send(suffix + this.state.target)
+	}
+
     render() {
         const dark = this.props.darkTheme
         const source = 'http://localhost:8080/files?type=avatar&file=' + this.state.user.username + '.png'
         const styles = this.getStyles(dark)
         return(
             <div>
-				<div style={{ backgroundColor: dark ? '#1c2938' : '#f0f0f0', height: 'auto', width: '100%', display: 'flex', borderRadius: 5, border: 'none', marginTop: 10, position: 'relative' }}>
+				<div style={{ backgroundColor: dark ? '#192432' : '#f9f9f9', height: 'auto', width: '100%', display: 'flex', borderRadius: 5, border: 'none', marginTop: 10, position: 'relative' }}>
                     <Image
 						src={source}
 						style={{ width: 60, height: 60, borderRadius: '100%', margin: 10 }}
 					/>
-                    <div style={{ paddingTop: 10 }}>
+					<button style={styles.threeDots} onClick={() => this.setState({ showMenu: !this.state.showMenu })}>
+                        <Icon name={"ellipsis horizontal"} style={{ fontSize: 20 }}></Icon>
+                    </button>
+					<Transition visible={this.state.showMenu} animation='fade left' duration={250} unmountOnHide>
+                        <div style={styles.menu}>
+                            <button style={styles.menuBtn} onClick={() => this.delete()}>
+                                Delete {this.state.typeReport === 1 ? "Post" : 'Comment'}
+                            </button>
+                            <button style={styles.menuBtn} onClick={() => this.markAsRead()}>
+                                Mark as Solved
+                            </button>
+                        </div>
+                    </Transition>
+                    <div style={{ paddingTop: 10, width: '80%' }}>
 						<p style={styles.date}>{this.getBeautifiedDate()}</p>
+						<p style={styles.name}>
+							{this.state.user.name + " " + this.state.user.lastName + " reported a " + (this.state.typeReport === 1 ? 'post.' : 'comment.')}
+						</p>
+						<div style={{ width: '100%' }}>
+							{this.state.typeReport === 1 &&
+							<Post post={this.state.post} admin ownUser={{ id: 0 }} darkTheme={dark} />}
+							{this.state.typeReport === 2 && 
+							<Comment comment={this.state.comment} admin ownUser={{ id: 0 }} darkTheme={dark} />}
+							<p style={styles.name}>Reason: {this.state.message.trim() === '' ? '(No reason given)' : this.state.message}</p>
+						</div>
                     </div>
                 </div>
             </div>
@@ -68,7 +106,8 @@ export default class Rep extends React.Component {
 				fontWeight: 'bolder',
 				fontSize: 14,
 				color: dark ? 'white' : 'black',
-				marginBottom: 0
+				marginBottom: 0,
+				paddingBottom: 5
 			},
 			date: {
 				fontFamily: 'Heebo',
@@ -83,24 +122,40 @@ export default class Rep extends React.Component {
 				color: dark ? '#8596A3' : 'grey',
 				fontSize: 14
 			},
-			btnCheck: {
-				outline: 0,
-				border: 'none',
-				backgroundColor: 'transparent',
-				cursor: 'pointer',
-				fontFamily: 'Roboto',
-				color: 'green',
-				marginRight: 5
-			},
-			btnReject: {
-				outline: 0,
-				border: 'none',
-				backgroundColor: 'transparent',
-				cursor: 'pointer',
-				fontFamily: 'Roboto',
-				color: 'red',
-				marginRight: 10
-			}
+			threeDots: {
+                outline: 0,
+                border: 'none',
+                backgroundColor: 'transparent',
+                color: dark ? 'white' : 'black',
+                textAlign: 'center',
+                height: 'fit-content',
+                cursor: 'pointer',
+				position: 'absolute',
+				right: 10,
+				top: 10
+            },
+			menuBtn: {
+                backgroundColor: 'transparent',
+                cursor: 'pointer',
+                color: dark ? 'white' : 'black',
+                textAlign: 'center',
+                outline: 0,
+                border: 'none',
+                fontFamily: 'Heebo',
+				fontWeight: 'bold',
+				width: '90%',
+				height: 30,
+				borderRadius: 5
+            },
+			menu: {
+                position: 'absolute',
+                right: 25,
+                backgroundColor: dark ? '#1C2938' : '#e3e3e3',
+                zIndex: 2,
+                width: 150,
+                padding: 10,
+                borderRadius: 5
+            },
         }
         return styles
     }

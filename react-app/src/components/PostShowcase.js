@@ -1,7 +1,5 @@
 import React from 'react'
-import { Container, Image } from 'semantic-ui-react'
-import Button from './Button.js';
-
+import { Container, Image, Icon } from 'semantic-ui-react'
 export default class PostShowcase extends React.Component {
     constructor(props) {
         super(props)
@@ -65,8 +63,10 @@ export default class PostShowcase extends React.Component {
 				</div>
 				<p style={styles.text}>{this.props.post.postText}</p>
 				{this.props.deletable &&
-				<Button outlined color='#FF5252' height={50} width={120}
-						onClick={() => this.props.delete(this.props.post.idPost)}>Delete Post</Button>}
+				<div style={{ width: 'fit-content', height: 40, color: 'red', fontFamily: 'Roboto', cursor: 'pointer', 
+                position: 'absolute', right: 10, top: '40%' }} onClick={() => this.props.delete(this.props.post.idPost)}>
+                    <Icon name='delete'/>Delete
+                </div>}
 			</Container>
         );
     }

@@ -40,6 +40,7 @@ public class RegisterServlet extends HttpServlet {
         HttpSession session = req.getSession(true);
         session.setAttribute("user_id", user.getId());
         session.setAttribute("username", user.getLowercaseUsername());
+        session.setAttribute("type", user.getTypeId()   );
         is.close();
         out.close();
 	}

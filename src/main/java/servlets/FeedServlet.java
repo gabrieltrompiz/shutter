@@ -28,7 +28,7 @@ public class FeedServlet extends HttpServlet {
 		try {
 			Integer from = Integer.parseInt(req.getParameter("from"));
 			response = PostsHandler.getPosts(id, from);
-		} catch(NumberFormatException e) {
+		} catch(Exception e) {
 			response = PostsHandler.getPosts(id, 0);
 		}
 		mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);

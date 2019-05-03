@@ -587,6 +587,7 @@ public class AdminHandler {
             ps.setInt(1, id);
             ps.setInt(2, id);
             ps.setInt(3, id);
+            ps.setInt(4, id);
             int affectedRows = ps.executeUpdate();
             if(affectedRows == 0) {
                 response.setMessage("Could not delete post");
@@ -610,11 +611,10 @@ public class AdminHandler {
         Response<?> response = new Response<>();
         Connection con = poolManager.getConn();
         String query = prop.getValue("deleteCommentAdmin");
-
         try {
             PreparedStatement ps = con.prepareStatement(query);
             ps.setInt(1, id);
-
+            ps.setInt(2, id);
             ps.execute();
             response.setStatus(200);
             response.setMessage("Comment Deleted");

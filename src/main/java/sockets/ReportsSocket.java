@@ -3,7 +3,10 @@ package sockets;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import configurators.HttpSessionConfigurator;
+import handlers.AdminHandler;
+import handlers.PostsHandler;
 import handlers.ReportsHandler;
+import handlers.UserHandler;
 import models.Report;
 
 import javax.servlet.http.HttpSession;
@@ -16,6 +19,7 @@ import java.util.ArrayList;
 @ServerEndpoint(value = "/reports", configurator = HttpSessionConfigurator.class)
 public class ReportsSocket {
 
+    private Integer id;
     private static ArrayList<Report> reports;
     private static ArrayList<Session> admins = new ArrayList<>();
     private HttpSession httpSession;
@@ -25,13 +29,10 @@ public class ReportsSocket {
         ObjectMapper mapper = new ObjectMapper();
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         this.httpSession = (HttpSession) config.getUserProperties().get(HttpSession.class.getName());
-        Integer typeId = Integer.parseInt(httpSession.getAttribute("type").toString());
-        if(typeId == 2) {
+        this.id = Integer.parseInt(httpSession.getAttribute("type").toString());
+        if(this.id == 2) {
             admins.add(session);
             reports = ReportsHandler.getReports();
-            reports.forEach(report -> {
-                System.out.println(report.getDate());
-            });
             session.getBasicRemote().sendText(mapper.writeValueAsString(reports));
         }
     }
@@ -40,18 +41,23 @@ public class ReportsSocket {
     public void onMessage(String message, Session session) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        Integer typeId = Integer.parseInt(httpSession.getAttribute("type").toString());
-        if (typeId == 1) {
+        if (this.id == 1) {
             System.out.println(message);
             Report report = mapper.readValue(message, Report.class);
             report.setSender(Integer.parseInt(this.httpSession.getAttribute("user_id").toString()));
             ReportsHandler.addReport(report);
-            reports = ReportsHandler.getReports();
         }
         else if(message.startsWith("Resolve")) {
             Integer reportId = Integer.parseInt(message.split(";")[1]);
             ReportsHandler.setResolved(reportId);
+        } else if(message.startsWith("DeleteComment")) {
+            Integer commentId = Integer.parseInt(message.split(";")[1]);
+            AdminHandler.deleteComment(commentId);
+        } else if(message.startsWith("DeletePost")) {
+            Integer postId = Integer.parseInt(message.split(";")[1]);
+            AdminHandler.deletePost(postId);
         }
+        reports = ReportsHandler.getReports();
         for (Session sess : admins) {
             if(sess.isOpen())
                 sess.getBasicRemote().sendText(mapper.writeValueAsString(reports));
@@ -59,8 +65,7 @@ public class ReportsSocket {
     }
     @OnClose
     public void onClose(Session session) throws IOException {
-        Integer typeId = Integer.parseInt(this.httpSession.getAttribute("type").toString());
-        if(typeId == 2) {
+        if(this.id == 2) {
             admins.remove(session);
         }
     }

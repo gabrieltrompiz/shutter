@@ -1,7 +1,6 @@
 import React from 'react';
-import { Image } from 'semantic-ui-react';
+import { Image, Icon } from 'semantic-ui-react';
 import {Container} from "semantic-ui-react";
-import Button from './Button.js';
 
 export default class UserShowcase extends React.Component {
     constructor(props) {
@@ -11,14 +10,13 @@ export default class UserShowcase extends React.Component {
 
     banUser = async () => {
         let method = this.state.banned ? 'unbanUser': 'banUser';
-        await fetch('http://localhost:8080/bans?method=' + method + '&&id=' + this.props.user.id,
-            {credentials: 'include', method: 'POST'})
-            .then(response => response.json())
-            .then(response => {
-                if (response.status === 200) {
-                    this.setState({ banned: !this.state.banned });
-                } else console.log('cry');
-            });
+        await fetch('http://localhost:8080/bans?method=' + method + '&&id=' + this.props.user.id, { credentials: 'include', method: 'POST' })
+        .then(response => response.json())
+        .then(response => {
+            if (response.status === 200) {
+                this.setState({ banned: !this.state.banned });
+            } else console.log('cry');
+        });
     };
 
     render() {
@@ -27,20 +25,22 @@ export default class UserShowcase extends React.Component {
         const source = 'http://localhost:8080/files?type=avatar&file=' + this.props.user.username + '.png'
         return(
             <Container style={{ width: '100%', height: 'auto', backgroundColor: dark ? '#1c2938' : 'white', borderColor: dark ? '#1C2938' : '#DDDFE2',
-                borderRadius: 5, borderWidth: 1.5, borderStyle: 'solid', breakInside: 'avoid', display: 'inline-block', position: 'relative', padding: 10 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            borderRadius: 5, borderWidth: 1.5, borderStyle: 'solid', breakInside: 'avoid', display: 'inline-block', position: 'relative', padding: 10, marginBottom: 10 }}>
+                <div style={{ display: 'flex' }}>
                     <Image
                         src={source}
-                        style={{ width: 100, height: 100, borderRadius: '100%' }}
+                        style={{ width: 40, height: 40, borderRadius: '100%' }}
                     />
-
                     <div style={{ paddingTop: 5 }}>
                         <span style={styles.name}>{this.props.user.name + " " + this.props.user.lastName}</span>
                         <span style={styles.username}>{"· @" + this.props.user.username}</span><br/>
                     </div>
 
-                    <Button outlined color='#FF5252' height={50} width={120}
-                        onClick={() => this.banUser()}>{this.state.banned ? 'Unban' : 'Ban'}</Button>
+                    <div style={{ width: 'fit-content', height: 40, color: this.state.banned ? 'green' : 'red', fontFamily: 'Roboto', cursor: 'pointer', 
+                    position: 'absolute', right: 10, top: 18 }} onClick={() => this.banUser()}>
+                        <Icon name={this.state.banned ? 'check'  :'delete'} />
+                        {this.state.banned ? 'Unban' : 'Ban'}
+                    </div>
 
                 </div>
             </Container>

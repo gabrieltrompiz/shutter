@@ -38,7 +38,7 @@ export default class Post extends React.Component {
 				commentsState = commentsState.slice(0, i).concat(commentsState.slice(i + 1, commentsState.length));
 				return true
 			}
-			return true
+			return false
 		})
 		this.setState({ comments: commentsState });
 	}
@@ -214,9 +214,9 @@ export default class Post extends React.Component {
 							<span style={styles.date}>{this.state.date}</span>
 						</div>
 					</div>
-					<button style={styles.threeDots} onClick={() => this.setState({ showMenu: !this.state.showMenu })}>
+					{!this.props.admin && <button style={styles.threeDots} onClick={() => this.setState({ showMenu: !this.state.showMenu })}>
 						<Icon name={"ellipsis horizontal"}></Icon>
-					</button>
+					</button>}
 					<Transition visible={this.state.showMenu} animation='fade left' duration={250} unmountOnHide>
 						<div style={styles.menu}>
 							{this.props.post.user.id === this.props.ownUser.id &&
