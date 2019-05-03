@@ -29,6 +29,9 @@ public class ReportsSocket {
         if(typeId == 2) {
             admins.add(session);
             reports = ReportsHandler.getReports();
+            reports.forEach(report -> {
+                System.out.println(report.getDate());
+            });
             session.getBasicRemote().sendText(mapper.writeValueAsString(reports));
         }
     }

@@ -45,10 +45,8 @@ export default class Comment extends React.Component {
                         <p style={styles.text}>{this.props.comment.commentText}</p>
                     </div>
                     {!this.props.admin &&
-                    <button style={styles.threeDots}
-                            onClick={() => this.setState({ showMenu: !this.state.showMenu })}>
+                    <button style={styles.threeDots} onClick={() => this.setState({ showMenu: !this.state.showMenu })}>
                         <Icon name={"ellipsis horizontal"}></Icon>
-
                         <Transition visible={this.state.showMenu} animation='fade left' duration={250} unmountOnHide>
                             <div style={styles.menu}>
                                 {this.props.comment.userId === this.props.ownUser.id &&
