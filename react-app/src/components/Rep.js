@@ -5,7 +5,6 @@ export default class Rep extends React.Component {
     constructor(props) {
         super(props)
         this.state = this.props.report
-        console.log(this.state)
     }
 
     getBeautifiedDate = () => {

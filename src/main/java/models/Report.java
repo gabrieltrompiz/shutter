@@ -1,20 +1,21 @@
 package models;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 public class Report {
     private Integer reportId;
     private Integer sender;
     private Integer target;
     private Integer typeReport;
-    private Date date;
+    private Timestamp date;
     private String message;
     private Boolean resolved;
     private User user;
     private Post post;
     private Comment comment;
 
-    public Date getDate() {
+    public Timestamp getDate() {
         return date;
     }
 
@@ -52,7 +53,7 @@ public class Report {
         return post;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Timestamp date) {
         this.date = date;
     }
 

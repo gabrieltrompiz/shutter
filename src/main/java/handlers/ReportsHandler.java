@@ -31,7 +31,7 @@ public class ReportsHandler {
                 report.setSender(rs.getInt(2));
                 report.setTarget(rs.getInt((3)));
                 report.setTypeReport(rs.getInt(4));
-                report.setDate(rs.getDate(5));
+                report.setDate(rs.getTimestamp(5));
                 report.setMessage(rs.getString(6));
                 report.setResolved(rs.getBoolean(7));
                 user.setId(report.getSender());
