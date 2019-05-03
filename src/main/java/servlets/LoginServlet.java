@@ -32,7 +32,11 @@ public class LoginServlet extends HttpServlet {
     user.setPassword(Encryptor.getSHA256(user.getPassword(), user.getLowercaseUsername()));
 
     Response<User> response = UserHandler.login(user);
-    if(response.getStatus() == 200) {
+    if(!((User) response.getData()).getEnabled()) {
+      response.setStatus(403);
+      response.setMessage("You are banned.");
+    }
+    else if(response.getStatus() == 200) {
       HttpSession session = req.getSession();
       session.setAttribute("user_id", user.getId());
       session.setAttribute("username", user.getLowercaseUsername());

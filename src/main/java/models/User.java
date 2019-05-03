@@ -62,7 +62,7 @@ public class User {
     return sex;
   }
 
-  public Boolean isEnabled() {
+  public Boolean getEnabled() {
     return enabled;
   }
 

@@ -59,7 +59,7 @@ public class NotificationsSocket {
         || not.getTypeNotificationId() == 3) && wsSessions.containsKey(not.getNotificationReceiver())) {
             if (not.getTypeNotificationId() == 1) {
                 User user = FriendsHandler.getUserById(not.getNotificationReceiver());
-                MailSender sender = new MailSender(user.getEmail(), user.getName() + user.getLastName(), "friendRequest");
+                new MailSender(user.getEmail(), user.getName() + user.getLastName(), "friendRequest");
             }
             wsSessions.get(not.getNotificationReceiver()).getBasicRemote().sendText(mapper.writeValueAsString(not));
         }

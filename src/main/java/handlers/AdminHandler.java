@@ -1,6 +1,7 @@
 package handlers;
 
 import models.*;
+import utilities.MailSender;
 import utilities.PoolManager;
 import utilities.PropertiesReader;
 
@@ -628,6 +629,30 @@ public class AdminHandler {
             poolManager.returnConn(con);
         }
         return response;
+    }
+
+    public static boolean sendMessage(String username, String message) {
+        Connection con = poolManager.getConn();
+        String query = prop.getValue("getEmailByUsername");
+        boolean done = false;
+        try {
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setString(1, username);
+
+            String email = "";
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()) {
+                email = rs.getString(1);
+                done = true;
+            }
+
+            MailSender sender = new MailSender(email, message, " adminMsg");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            poolManager.returnConn(con);
+        }
+        return done;
     }
 
 }

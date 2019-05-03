@@ -80,7 +80,7 @@ public class UserHandler {
 			pstmt.setString(9, user.getAvatar());
 			pstmt.setInt(10, user.getTypeId());
 			pstmt.setBoolean(11, user.getSex());
-			pstmt.setBoolean(12, user.isEnabled());
+			pstmt.setBoolean(12, user.getEnabled());
 			pstmt.execute();
 			ResultSet rs = pstmt.getGeneratedKeys();
 			rs.next();
