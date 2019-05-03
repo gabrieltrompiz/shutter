@@ -36,6 +36,9 @@ public class MailSender extends Thread {
                 this.tag(emailTarget, name);
                 break;
 
+            case "adminMsg":
+                this.adminMsg(emailTarget, name)
+
             default:
                 break;
         }
@@ -84,6 +87,32 @@ public class MailSender extends Thread {
             msg.setRecipients(Message.RecipientType.TO,
                     email);
             msg.setSubject("You have a Friend Request on Pandagram");
+            msg.setSentDate(new Date());
+            msg.setText(bodyText, "UTF-8","html");
+            Transport.send(msg, props.getValue("emailUser"), props.getValue("emailPassword"));
+
+        } catch(MessagingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @SuppressWarnings("Duplicates")
+    private void adminMsg(String email, String name) {
+        Properties properties = System.getProperties();
+        properties.put("mail.smtp.host", "smtp.gmail.com");
+        properties.setProperty("mail.smtp.starttls.enable", "true");
+        properties.setProperty("mail.smtp.port", "587");
+        properties.setProperty("mail.smtp.user", props.getValue("emailUser"));
+        properties.setProperty("mail.smtp.auth", "true");
+        Session session = Session.getDefaultInstance(properties);
+        String bodyText = MessageFormat.format(props.getValue("tagMailHTML"), name);
+
+        try {
+            MimeMessage msg = new MimeMessage(session);
+            msg.setFrom(props.getValue("emailUser"));
+            msg.setRecipients(Message.RecipientType.TO,
+                    email);
+            msg.setSubject("You have a Received a Message from an Admin on Pandagram");
             msg.setSentDate(new Date());
             msg.setText(bodyText, "UTF-8","html");
             Transport.send(msg, props.getValue("emailUser"), props.getValue("emailPassword"));
